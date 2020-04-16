@@ -14,8 +14,6 @@ public class MainMenu implements Screen {
     private Stage stage;
 
     public MainMenu(){
-        //parent = box2dTutorial;
-
         /// create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -26,7 +24,8 @@ public class MainMenu implements Screen {
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
+
+        //table.setDebug(true);
         stage.addActor(table);
 
         // temporary until we have asset manager in
@@ -34,6 +33,8 @@ public class MainMenu implements Screen {
 
         // Create Image
         Image chicken = new Image(new Texture(Gdx.files.internal(("chicken.png"))));
+        chicken.setWidth(129);
+        chicken.setHeight(200);
 
         // Create Text
         Label title = new Label("Ultimate Chicken Horse 2", skin);
@@ -43,8 +44,8 @@ public class MainMenu implements Screen {
         Label createRoom = new Label("Create Room", skin);
 
         // Add to table
-        table.add(title).expandX().center();
-        table.add(chicken).width(129).height(200).center();
+        table.add(title).expandX().right().padRight(10);
+        table.add(chicken).expandX().left().padLeft(10);
         table.row();
 
         //create buttons
