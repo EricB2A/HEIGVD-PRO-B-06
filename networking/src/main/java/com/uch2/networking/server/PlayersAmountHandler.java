@@ -46,16 +46,27 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
             players.add(ctx.channel());
             if(players.size() == MAX_PLAYERS){
                 full = true;
-                gameStarted = true;
-                System.out.println("2 joueurs connectés. Lancer la partie.");
-
-                for(Channel ch : players){
-                    ch.writeAndFlush(Unpooled.wrappedBuffer(("Lancement de la partie!\n").getBytes()));
-                }
-                //TODO ben lancer la partie du coup
+                startGame();
             }
         }
 
+    }
+
+    private void startGame(){
+        if(players.size() > MAX_PLAYERS) throw new RuntimeException("Nombre de joueurs trop élevé");
+
+        gameStarted = true;
+        System.out.println("2 joueurs connectés. Lancer la partie.");
+
+        //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
+        for(Channel ch : players){
+            ch.writeAndFlush(Unpooled.wrappedBuffer(("Lancement de la partie!\n").getBytes()));
+            ch.pipeline().addLast(new MovementHandler(players));
+        }
+
+        //Démarre les ticks de serveur
+        TickManager.getInstance().setPlayers(players);
+        TickManager.getInstance().start(0, 1000);
     }
 
     @Override
