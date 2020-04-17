@@ -12,13 +12,14 @@ import java.util.TimerTask;
 public class SendUpdate extends TimerTask {
     private ChannelGroup players;
 
-    public SendUpdate(ChannelGroup players){
+    public SendUpdate(ChannelGroup players, Object toSend){  //TODO remplacer Object toSend par un GameState
         this.players = players;
     }
     @Override
     public void run() {
         String str;
         for(Channel ch : players){
+            //TODO : remplacer par un envoi du gameState "toSend" sérialisé
             str = "coucou \n";
             ch.writeAndFlush(Unpooled.copiedBuffer(str, CharsetUtil.UTF_8));
         }
