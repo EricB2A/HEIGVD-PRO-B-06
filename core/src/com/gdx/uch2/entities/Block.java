@@ -9,6 +9,7 @@ public class Block {
 
     Vector2 	position = new Vector2();
     Rectangle 	bounds = new Rectangle();
+    private boolean solid;
 
     public Block(Vector2 pos) {
         this.position = pos;

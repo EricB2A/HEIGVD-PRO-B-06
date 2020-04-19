@@ -86,7 +86,7 @@ public class World {
 
     private void createWorld() {
         level = LevelLoader.loadLevel(1);
-        player = new Player(level.getSpanPosition());
+        player = new Player(new Vector2(level.getSpanPosition()));
     }
 
 //    private void createDemoWorld() {

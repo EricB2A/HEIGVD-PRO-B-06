@@ -31,6 +31,8 @@ public class WorldRenderer {
 
     /** Textures **/
     private TextureRegion blockTexture;
+    private TextureRegion spawnTexture;
+    private TextureRegion finishTexture;
     private TextureRegion playerFrame;
     private TextureRegion playerJumpLeft;
     private TextureRegion playerFallLeft;
@@ -79,6 +81,8 @@ public class WorldRenderer {
         TextureAtlas playerAtlas = new TextureAtlas(Gdx.files.internal(Constants.PLAYER_1_ATLAS));
         TextureAtlas blocksAtlas = new TextureAtlas(Gdx.files.internal(Constants.BLOCKS_ATLAS));
         blockTexture = blocksAtlas.findRegion("box");
+        spawnTexture = blocksAtlas.findRegion("signRight");
+        finishTexture = blocksAtlas.findRegion("signExit");
 
         Array<TextureAtlas.AtlasRegion> idleRightFrames = new Array<TextureAtlas.AtlasRegion>();
         Array<TextureAtlas.AtlasRegion> idleLeftFrames = new Array<TextureAtlas.AtlasRegion>();
@@ -129,6 +133,9 @@ public class WorldRenderer {
 //            spriteBatch.draw(blockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
             spriteBatch.draw(blockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
         }
+
+        spriteBatch.draw(spawnTexture, world.getLevel().getSpanPosition().x, world.getLevel().getSpanPosition().y, Block.SIZE, Block.SIZE);
+        spriteBatch.draw(finishTexture, world.getLevel().getFinishPosition().x, world.getLevel().getFinishPosition().y, Block.SIZE, Block.SIZE);
     }
 
     private void drawPlayer() {
