@@ -7,6 +7,7 @@ public class Constants {
     public static final Color BACKGROUND_COLOR = Color.SKY;
 
     public static final String PLAYER_1_ATLAS = "DinoSprites - doux.atlas";
+    public static final String BLOCKS_ATLAS = "levels/blocks.atlas";
 
     public static final float WORLD_SIZE = 128;
 
