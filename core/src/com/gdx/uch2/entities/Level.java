@@ -8,6 +8,7 @@ public class Level {
     private int height;
     private Block[][] blocks;
     private Vector2 spanPosition;
+    private Vector2 finishPosition;
 
     public int getWidth() {
         return width;
@@ -48,6 +49,15 @@ public class Level {
     public void setSpanPosition(Vector2 spanPosition) {
         this.spanPosition = spanPosition;
     }
+
+    public Vector2 getFinishPosition() {
+        return finishPosition;
+    }
+
+    public void setFinishPosition(Vector2 finishPosition) {
+        this.finishPosition = finishPosition;
+    }
+
 
     private void loadDemoLevel() {
         width = 10;

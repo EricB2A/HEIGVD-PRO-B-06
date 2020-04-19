@@ -178,7 +178,7 @@ public class PlayerController {
         }
 
         // reset the x position of the collision box
-        playerRect.x = player.getPosition().x;
+        playerRect.x = player.getBounds().x;
 
         // the same thing but on the vertical Y axis
         startX = (int) player.getBounds().x;
@@ -206,12 +206,15 @@ public class PlayerController {
             }
         }
         // reset the collision box's position on Y
-        playerRect.y = player.getPosition().y;
+        playerRect.y = player.getBounds().y;
 
         // update Player's position
-        player.getPosition().add(player.getVelocity());
-        player.getBounds().x = player.getPosition().x;
-        player.getBounds().y = player.getPosition().y;
+
+        // player.getPosition().add(player.getVelocity());
+        // player.getBounds().x = player.getPosition().x;
+        // player.getBounds().y = player.getPosition().y;
+
+        player.translate(player.getVelocity());
 
         // un-scale velocity (not in frame time)
         player.getVelocity().scl(1 / delta);

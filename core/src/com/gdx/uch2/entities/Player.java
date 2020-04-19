@@ -19,8 +19,11 @@ public class Player {
     public static final float SPEED = 6f;	// unit per second
     public static final float JUMP_VELOCITY = 4f;
     public static final float SIZE = 2f;
+    public static final float HITBOX_WIDTH = 0.7f;
+    public static final float HITBOX_HEIGHT = 1.4f;
+    public static final Vector2 OFFSET = new Vector2(0.65f, 0.25f);
 
-    Vector2 	position = new Vector2();
+    Vector2 	position = new Vector2(0f, 0f);
     Vector2 	acceleration = new Vector2();
     Vector2 	velocity = new Vector2();
     Rectangle 	bounds = new Rectangle();
@@ -30,9 +33,9 @@ public class Player {
     boolean		longJump = false;
 
     public Player(Vector2 position) {
-        this.position = position;
-        this.bounds.height = SIZE / 1.1f;
-        this.bounds.width = SIZE / 2.3f;
+        this.bounds.height = HITBOX_HEIGHT;
+        this.bounds.width = HITBOX_WIDTH;
+        setPosition(position);
     }
 
 
@@ -85,8 +88,14 @@ public class Player {
 
     public void setPosition(Vector2 position) {
         this.position = position;
-        this.bounds.setX(position.x);
-        this.bounds.setY(position.y);
+        this.bounds.x = position.x + OFFSET.x;
+        this.bounds.y = position.y + OFFSET.y;
+    }
+
+    public void translate(Vector2 v) {
+        this.position.add(v);
+        this.bounds.x += v.x;
+        this.bounds.y += v.y;
     }
 
 

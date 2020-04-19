@@ -19,7 +19,8 @@ public class LevelLoader {
 
     private static final int    BLOCK           = 0x000000; // black
     private static final int    EMPTY           = 0xffffff; // white
-    private static final int    START_POS       = 0x0000ff; // blue
+    private static final int    START_POS       = 0x00ff00; // green
+    private static final int    FINISH_POS         = 0xff0000; // red
 
     public static Level loadLevel(int number) {
         Level level = new Level();
@@ -49,6 +50,8 @@ public class LevelLoader {
                     blocks[col][iRow] = new Block(new Vector2(col, iRow));
                 } else if (pixel == START_POS) {
                     level.setSpanPosition(new Vector2(col, iRow));
+                } else if (pixel == FINISH_POS) {
+                    level.setFinishPosition(new Vector2(col, iRow));
                 }
             }
         }

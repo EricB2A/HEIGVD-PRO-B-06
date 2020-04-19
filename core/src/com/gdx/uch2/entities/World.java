@@ -49,8 +49,8 @@ public class World {
 //        }
 //
 //        return blocks;
-        int x = (int)player.getPosition().x - width;
-        int y = (int)player.getPosition().y - height;
+        int x = (int)player.getBounds().x - width;
+        int y = (int)player.getBounds().y - height;
         if (x < 0) {
             x = 0;
         }

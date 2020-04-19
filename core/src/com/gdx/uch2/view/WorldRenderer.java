@@ -30,8 +30,6 @@ public class WorldRenderer {
     ShapeRenderer debugRenderer = new ShapeRenderer();
 
     /** Textures **/
-    private TextureRegion playerIdleLeft;
-    private TextureRegion playerIdleRight;
     private TextureRegion blockTexture;
     private TextureRegion playerFrame;
     private TextureRegion playerJumpLeft;
@@ -42,6 +40,8 @@ public class WorldRenderer {
     /** Animations **/
     private Animation walkLeftAnimation;
     private Animation walkRightAnimation;
+    private Animation idleRightAnimation;
+    private Animation idleLeftAnimation;
 
     private SpriteBatch spriteBatch;
     private boolean debug = false;
@@ -78,29 +78,34 @@ public class WorldRenderer {
     private void loadTextures() {
         TextureAtlas playerAtlas = new TextureAtlas(Gdx.files.internal(Constants.PLAYER_1_ATLAS));
         TextureAtlas blocksAtlas = new TextureAtlas(Gdx.files.internal(Constants.BLOCKS_ATLAS));
-        playerIdleRight = playerAtlas.findRegion("idle1");
-        playerIdleLeft = new TextureRegion(playerIdleRight);
-        playerIdleLeft.flip(true, false);
         blockTexture = blocksAtlas.findRegion("box");
 
-        Array<TextureAtlas.AtlasRegion> walkingRightFrames = new Array<TextureAtlas.AtlasRegion>();
-        for(int i = 1; i <= 7; i++){
-            walkingRightFrames.add(playerAtlas.findRegion("walk-right" + i));
+        Array<TextureAtlas.AtlasRegion> idleRightFrames = new Array<TextureAtlas.AtlasRegion>();
+        Array<TextureAtlas.AtlasRegion> idleLeftFrames = new Array<TextureAtlas.AtlasRegion>();
+        for(int i = 1; i <= 4; i++){
+            idleRightFrames.add(playerAtlas.findRegion("idle" + i));
+            TextureAtlas.AtlasRegion tmp = new TextureAtlas.AtlasRegion(idleRightFrames.get(i-1));
+            tmp.flip(true, false);
+            idleLeftFrames.add(tmp);
         }
-        walkRightAnimation = new Animation(Constants.LOOP_SPEED, walkingRightFrames, Animation.PlayMode.LOOP);
+        idleRightAnimation = new Animation(Constants.LOOP_SPEED, idleRightFrames, Animation.PlayMode.LOOP);
+        idleLeftAnimation = new Animation(Constants.LOOP_SPEED, idleLeftFrames, Animation.PlayMode.LOOP);
 
+        Array<TextureAtlas.AtlasRegion> walkingRightFrames = new Array<TextureAtlas.AtlasRegion>();
         Array<TextureAtlas.AtlasRegion> walkingLeftFrames = new Array<TextureAtlas.AtlasRegion>();
         for(int i = 1; i <= 7; i++){
+            walkingRightFrames.add(playerAtlas.findRegion("walk-right" + i));
             TextureAtlas.AtlasRegion tmp = new TextureAtlas.AtlasRegion(walkingRightFrames.get(i-1));
             tmp.flip(true, false);
             walkingLeftFrames.add(tmp);
         }
+        walkRightAnimation = new Animation(Constants.LOOP_SPEED, walkingRightFrames, Animation.PlayMode.LOOP);
         walkLeftAnimation = new Animation(Constants.LOOP_SPEED, walkingLeftFrames, Animation.PlayMode.LOOP);
 
-        playerJumpRight = playerAtlas.findRegion("idle1");
+        playerJumpRight = playerAtlas.findRegion("jump1");
         playerJumpLeft = new TextureRegion(playerJumpRight);
         playerJumpLeft.flip(true, false);
-        playerFallRight = playerAtlas.findRegion("idle1");
+        playerFallRight = playerAtlas.findRegion("jump2");
         playerFallLeft = new TextureRegion(playerFallRight);
         playerFallLeft.flip(true, false);
     }
@@ -112,9 +117,10 @@ public class WorldRenderer {
         drawBlocks();
         drawPlayer();
         spriteBatch.end();
-        drawCollisionBlocks();
-        if (debug)
+        if (debug) {
             drawDebug();
+            drawCollisionBlocks();
+        }
     }
 
 
@@ -127,7 +133,7 @@ public class WorldRenderer {
 
     private void drawPlayer() {
         Player player = world.getPlayer();
-        playerFrame = player.isFacingLeft() ? playerIdleLeft : playerIdleRight;
+        playerFrame = (TextureRegion) (player.isFacingLeft() ? idleLeftAnimation.getKeyFrame(player.getStateTime(), true) : idleRightAnimation.getKeyFrame(player.getStateTime(), true));
         if(player.getState().equals(State.WALKING)) {
             playerFrame = (TextureRegion) (player.isFacingLeft() ? walkLeftAnimation.getKeyFrame(player.getStateTime(), true) : walkRightAnimation.getKeyFrame(player.getStateTime(), true));
         } else if (player.getState().equals(State.JUMPING)) {

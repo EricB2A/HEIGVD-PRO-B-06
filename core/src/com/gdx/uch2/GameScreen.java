@@ -19,7 +19,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
     @Override
     public void show() {
         world = new World();
-        renderer = new WorldRenderer(world, true);
+        renderer = new WorldRenderer(world, false);
         controller = new PlayerController(world);
         Gdx.input.setInputProcessor(this);
     }

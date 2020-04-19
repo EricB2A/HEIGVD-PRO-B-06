@@ -1,173 +1,173 @@
 
 player.png
-size: 512,32
+size: 1024,32
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-idle-1
+dash1
   rotate: false
-  xy: 456, 0
+  xy: 288, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-idle-2
+dash2
   rotate: false
-  xy: 480, 0
+  xy: 314, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile000
+dash3
   rotate: false
-  xy: 48, 0
+  xy: 340, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile003
+dash4
   rotate: false
-  xy: 48, 0
+  xy: 366, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile010
+dash5
   rotate: false
-  xy: 48, 0
+  xy: 392, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile013
+dash6
   rotate: false
-  xy: 48, 0
+  xy: 418, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile004
+dash7
   rotate: false
-  xy: 96, 0
+  xy: 444, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile005
+hit2
   rotate: false
-  xy: 120, 0
+  xy: 522, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile006
+hit3
   rotate: false
-  xy: 144, 0
+  xy: 2, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile007
+hit4
   rotate: false
-  xy: 168, 0
+  xy: 28, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile008
+idle2
   rotate: false
-  xy: 192, 0
+  xy: 470, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile009
+idle3
   rotate: false
-  xy: 216, 0
+  xy: 106, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile011
+idle4
   rotate: false
-  xy: 264, 0
+  xy: 132, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile012
+hit1
   rotate: false
-  xy: 288, 0
+  xy: 132, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile014
+idle1
   rotate: false
-  xy: 312, 0
+  xy: 132, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile015
+walk-right7
   rotate: false
-  xy: 336, 0
+  xy: 132, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile016
+jump1
   rotate: false
-  xy: 360, 0
+  xy: 54, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile017
+jump2
   rotate: false
-  xy: 384, 0
+  xy: 80, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile018
+walk-right1
   rotate: false
-  xy: 408, 0
+  xy: 158, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile019
+walk-right2
   rotate: false
-  xy: 432, 0
+  xy: 184, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile020
+walk-right3
   rotate: false
-  xy: 0, 0
+  xy: 210, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile021
+walk-right4
   rotate: false
-  xy: 24, 0
+  xy: 236, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile022
+walk-right5
   rotate: false
-  xy: 240, 0
+  xy: 496, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
-tile023
+walk-right6
   rotate: false
-  xy: 72, 0
+  xy: 262, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
