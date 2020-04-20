@@ -1,5 +1,8 @@
 package com.uch2.networking.server;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.uch2.networking.GameState;
+import com.uch2.networking.kryo.NettyKryoProtocolInitalizer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -14,6 +17,7 @@ public class GameServer {
 
     public GameServer(int port){
         this.port = port;
+        GameState.setUpKryo();
     }
 
     public void run() throws Exception{
@@ -29,7 +33,8 @@ public class GameServer {
                         public void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new PlayersAmountHandler());
                         }
-                    }).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
+                    }).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true)
+                    .childHandler(new NettyKryoProtocolInitalizer());
 
 
             ChannelFuture f = b.bind(port).sync();
@@ -42,7 +47,6 @@ public class GameServer {
 
     public static void main(String[] args) throws Exception {
         int port = 12345;
-
 
         new GameServer(port).run();
     }

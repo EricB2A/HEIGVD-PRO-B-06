@@ -1,5 +1,9 @@
 package com.uch2.networking.client;
 
+import com.uch2.networking.GameState;
+import com.uch2.networking.kryo.NettyKryoDecoder;
+import com.uch2.networking.kryo.NettyKryoEncoder;
+import com.uch2.networking.kryo.ObjectClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -13,6 +17,7 @@ public class GameClient implements Runnable {
     public void run(){
         String host = "localhost";
         int port = 12345;
+        GameState.setUpKryo();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try{
@@ -23,6 +28,9 @@ public class GameClient implements Runnable {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 public void initChannel(SocketChannel ch) throws Exception{
                     ch.pipeline().addLast(new GameClientHandler());
+                    ch.pipeline().addLast(new NettyKryoDecoder());
+                    ch.pipeline().addLast(new NettyKryoEncoder());
+                    ch.pipeline().addLast(new ObjectClientHandler());
                 }
             });
 

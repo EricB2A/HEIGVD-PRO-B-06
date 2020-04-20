@@ -14,9 +14,8 @@ public class RunClient {
         List<GameClient> clients = new LinkedList<GameClient>();
         clients.add(c);
         clients.add(d);
-        clients.add(e);
-        clients.add(f);
-
+        //clients.add(e);
+        //clients.add(f);
 
         for(GameClient cli : clients){
             System.out.println("Tentative de connexion");
