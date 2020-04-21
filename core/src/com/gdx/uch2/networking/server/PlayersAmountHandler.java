@@ -3,9 +3,7 @@ package com.gdx.uch2.networking.server;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
-import io.netty.util.concurrent.GlobalEventExecutor;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +64,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
         for(ChannelHandlerContext ctx : players){
             ctx.writeAndFlush(Unpooled.wrappedBuffer(("Lancement de la partie!\n").getBytes()));
-            ctx.pipeline().addLast(new MovementHandler(players));
+            ctx.pipeline().addLast(new MovementHandler());
         }
 
         //Démarre les ticks de serveur
@@ -77,7 +75,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(final ChannelHandlerContext ctx){
         //Supprime le joueur
-        players.remove(ctx.channel());
+        players.remove(ctx);
     }
 
 

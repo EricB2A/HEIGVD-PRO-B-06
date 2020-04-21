@@ -9,7 +9,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.unix.Buffer;
 import io.netty.util.CharsetUtil;
 
 import java.util.List;
@@ -27,11 +26,11 @@ public class SendUpdate extends TimerTask {
         String str;
         PlayerState[] ppp = new PlayerState[]{new PlayerState(6, 6, 6)};
         GameState state2 = new GameState(ppp);
-        
+
         for(ChannelHandlerContext ch : players){
             NettyKryoEncoder kkk = new NettyKryoEncoder();
             ByteBuf out = Unpooled.buffer(1024);
-            kkk.encode(state2, out);
+            kkk.encode(state2, out, 'a');
             ch.writeAndFlush(out);
 
             //TODO : remplacer par un envoi du gameState "toSend" sérialisé

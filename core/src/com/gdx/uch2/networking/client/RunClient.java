@@ -17,12 +17,13 @@ public class RunClient {
         clients.add(e);
         clients.add(f);
 
-        //c.run();
+        c.run();
+        /*
         for(GameClient cli : clients){
             System.out.println("Tentative de connexion");
             new Thread(cli).start();
             TimeUnit.SECONDS.sleep(2);
-        }
+        }*/
 
     }
 }

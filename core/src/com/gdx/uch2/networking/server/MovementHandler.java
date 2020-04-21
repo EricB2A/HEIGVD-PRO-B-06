@@ -11,16 +11,12 @@ import io.netty.channel.group.ChannelGroup;
 import java.util.List;
 
 public class MovementHandler extends ChannelInboundHandlerAdapter {
-    private List<ChannelHandlerContext> players;
-
-    public MovementHandler(List<ChannelHandlerContext> players){
-        this.players = players;
-    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        //TODO désérialiser msg (ça se fait tout seul depuis le pipeline?)
         if(!(msg instanceof UserActionSequence)) return;
-        //TODO désérialiser msg
+
         applyActions((UserActionSequence) msg, TickManager.getInstance().getGameState());
     }
 

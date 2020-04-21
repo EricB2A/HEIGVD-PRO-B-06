@@ -13,20 +13,26 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+
         ByteBuf m = (ByteBuf) msg;
-        NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
-        List<Object> oof = new ArrayList<>();
-        try {
-            while (m.isReadable()) {
-                //System.out.println("prout");
-                System.out.print(m.readByte());
-                nettyKryoDecoder.decode((ByteBuf) msg, oof);
-                System.out.flush();
+        if(m.readChar() == 'a'){
+            NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
+            List<Object> oof = new ArrayList<>();
+            try {
+                while (m.isReadable()) {
+                    //System.out.println("prout");
+                    System.out.print(m.readByte());
+                    nettyKryoDecoder.decode((ByteBuf) msg, oof);
+                    System.out.flush();
+                }
+                System.out.println("===========================0");
+            } finally {
+                ReferenceCountUtil.release(msg);
             }
-            System.out.println("===========================0");
-        } finally {
-            ReferenceCountUtil.release(msg);
+        }else{
+            System.out.println("pas un Gamestate");
         }
+
     }
 
     @Override

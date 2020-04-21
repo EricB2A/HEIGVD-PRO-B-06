@@ -19,11 +19,12 @@ public class NettyKryoEncoder {
 
 	}
 
-	public void encode(Object msg, ByteBuf out) {
+	public void encode(Object msg, ByteBuf out, char prelude) {
 		
 		if(kryo == null) kryo = new Kryo();
 
         Output output = new Output(200);
+        output.writeChar(prelude);
         try { 
 	        kryo.writeClassAndObject(output, msg);
 	        output.flush();  
