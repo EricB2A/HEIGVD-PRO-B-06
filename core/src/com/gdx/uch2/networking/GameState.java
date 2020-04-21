@@ -9,6 +9,9 @@ public class GameState {
     private Map<Integer,PlayerState> playersStates;
     static private Kryo kryo;
 
+    public GameState(){
+    }
+
     public GameState(PlayerState[] playerStates){
         playersStates = new TreeMap<>();
         for(int i = 0; i < playerStates.length; ++i){

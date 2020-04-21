@@ -20,12 +20,11 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
             List<Object> oof = new ArrayList<>();
             try {
                 while (m.isReadable()) {
-                    //System.out.println("prout");
-                    System.out.print(m.readByte());
                     nettyKryoDecoder.decode((ByteBuf) msg, oof);
                     System.out.flush();
                 }
                 System.out.println("===========================0");
+                System.out.println(oof.get(0).toString());
             } finally {
                 ReferenceCountUtil.release(msg);
             }
