@@ -1,4 +1,4 @@
-package com.uch2.networking;
+package com.gdx.uch2.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 

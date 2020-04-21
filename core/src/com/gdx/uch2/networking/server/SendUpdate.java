@@ -1,8 +1,8 @@
-package com.uch2.networking.server;
+package com.gdx.uch2.networking.server;
 
 
 import com.esotericsoftware.kryo.Kryo;
-import com.uch2.networking.GameState;
+import com.gdx.uch2.networking.GameState;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;

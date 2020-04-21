@@ -1,4 +1,4 @@
-package com.uch2.networking.server;
+package com.gdx.uch2.networking.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

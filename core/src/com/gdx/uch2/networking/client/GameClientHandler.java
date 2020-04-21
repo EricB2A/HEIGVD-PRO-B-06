@@ -1,4 +1,4 @@
-package com.uch2.networking.client;
+package com.gdx.uch2.networking.client;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

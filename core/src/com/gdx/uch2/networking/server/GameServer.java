@@ -1,7 +1,7 @@
-package com.uch2.networking.server;
+package com.gdx.uch2.networking.server;
 
-import com.uch2.networking.GameState;
-import com.uch2.networking.kryo.NettyKryoProtocolInitalizer;
+import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.kryo.NettyKryoProtocolInitalizer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

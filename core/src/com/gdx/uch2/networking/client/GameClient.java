@@ -1,9 +1,9 @@
-package com.uch2.networking.client;
+package com.gdx.uch2.networking.client;
 
-import com.uch2.networking.GameState;
-import com.uch2.networking.kryo.NettyKryoDecoder;
-import com.uch2.networking.kryo.NettyKryoEncoder;
-import com.uch2.networking.kryo.ObjectStateHandler;
+import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
+import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
+import com.gdx.uch2.networking.kryo.ObjectStateHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

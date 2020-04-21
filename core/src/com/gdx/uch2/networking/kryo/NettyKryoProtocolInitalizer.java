@@ -1,4 +1,4 @@
-package com.uch2.networking.kryo;
+package com.gdx.uch2.networking.kryo;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

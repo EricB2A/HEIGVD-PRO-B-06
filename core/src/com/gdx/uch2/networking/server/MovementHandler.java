@@ -1,4 +1,4 @@
-package com.uch2.networking.server;
+package com.gdx.uch2.networking.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
