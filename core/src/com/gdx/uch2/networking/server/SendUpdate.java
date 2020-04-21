@@ -1,8 +1,7 @@
 package com.gdx.uch2.networking.server;
 
 
-import com.esotericsoftware.kryo.Kryo;
-import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.PlayerState;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.group.ChannelGroup;
@@ -19,7 +18,7 @@ public class SendUpdate extends TimerTask {
     @Override
     public void run() {
         String str;
-        GameState state2 = new GameState(2, 2, 2);
+        PlayerState state2 = new PlayerState(2, 2, 2);
         for(Channel ch : players){
             //TODO : remplacer par un envoi du gameState "toSend" sérialisé
             str = "coucou \n";

@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import com.gdx.uch2.networking.kryo.ObjectStateHandler;

@@ -2,16 +2,23 @@ package com.gdx.uch2.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 
-public class GameState {
+import java.util.Map;
+import java.util.TreeMap;
 
-    private int playedID;
-    private int posX;
-    private int posY;
+public class GameState {
+    private Map<Integer,PlayerState> playersStates;
     static private Kryo kryo;
+
+    public GameState(PlayerState[] playerStates){
+        playersStates = new TreeMap<>();
+        for(int i = 0; i < playerStates.length; ++i){
+            this.playersStates.put(playerStates[i].getPlayedID(), playerStates[i]); //TODO clone playerStates[i]
+        }
+    }
 
     public static void setUpKryo() {
         Kryo kryo = new Kryo();
-        kryo.register(GameState.class);
+        kryo.register(PlayerState.class);
         GameState.kryo = kryo;
     }
 
@@ -19,45 +26,19 @@ public class GameState {
         return GameState.kryo;
     }
 
-    /**
-     * Ne pas supprimmer.
-     */
-    public GameState(){
-    }
-    
-    public GameState(int playedID, int posX, int posY) {
-        this.playedID = playedID;
-        this.posX = posX;
-        this.posY = posY;
+    public int getPosX(int playerID) {
+        return playersStates.get(playerID).getPosX();
     }
 
-    public int getPlayedID() {
-        return playedID;
+    public void setPosX(int posX, int playerID) {
+        playersStates.get(playerID).setPosX(posX);
     }
 
-    public void setPlayedID(int playedID) {
-        this.playedID = playedID;
+    public int getPosY(int playerID) {
+        return playersStates.get(playerID).getPosY();
     }
 
-    public int getPosX() {
-        return posX;
+    public void setPosY(int posY, int playerID) {
+        playersStates.get(playerID).setPosY(posY);
     }
-
-    public void setPosX(int posX) {
-        this.posX = posX;
-    }
-
-    public int getPosY() {
-        return posY;
-    }
-
-    public void setPosY(int posY) {
-        this.posY = posY;
-    }
-
-    @Override
-    public String toString() {
-        return "Joueur#" + playedID + ", x=" + posX + ", y=" + posY;
-    }
-
 }

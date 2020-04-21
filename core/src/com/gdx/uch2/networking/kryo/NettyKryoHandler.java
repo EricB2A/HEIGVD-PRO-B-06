@@ -1,6 +1,8 @@
 package com.gdx.uch2.networking.kryo;
 
+import com.badlogic.gdx.Game;
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.PlayerState;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -12,7 +14,11 @@ public class NettyKryoHandler extends SimpleChannelInboundHandler<GameState>{
 	protected void channelRead0(ChannelHandlerContext ctx, GameState msg) throws Exception {
 		
 		System.out.println("STATE " + msg);
-		GameState state = new GameState(1, 1, 1);
+		PlayerState[] states = new PlayerState[2];
+		states[0] = new PlayerState(1, 1, 1);
+		states[1] = new PlayerState(2, 10, 10);
+
+		GameState state = new GameState(states);
 		System.out.println("SERVER::write message !! ");
 		ctx.write(state);
 		

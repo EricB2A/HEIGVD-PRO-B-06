@@ -1,5 +1,7 @@
 package com.gdx.uch2.networking.server;
 
+import com.badlogic.gdx.Game;
+import com.gdx.uch2.networking.GameState;
 import io.netty.channel.group.ChannelGroup;
 
 import java.util.Timer;
@@ -11,12 +13,12 @@ public class TickManager {
 
     private Timer timer;
     private ChannelGroup players;
-    private Object gameState; //TODO remplacer par un objet GameState
+    private GameState gameState;
 
     private TickManager(){
     }
 
-    public boolean setNewState(Object newState){ //TODO remplacer par un objet GameState
+    public boolean setNewState(GameState newState){
         if(newState != gameState){
             gameState = newState;
             return true;
@@ -37,6 +39,10 @@ public class TickManager {
     public void start(int delay, int tickDuration){
         this.timer = new Timer();
         timer.schedule(new SendUpdate(players, gameState), delay, tickDuration);
+    }
+
+    public GameState getGameState(){
+        return gameState;
     }
 
 

@@ -1,6 +1,8 @@
 package com.gdx.uch2.networking.server;
 
+import com.badlogic.gdx.Game;
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoProtocolInitalizer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
