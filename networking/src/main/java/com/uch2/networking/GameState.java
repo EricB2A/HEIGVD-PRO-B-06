@@ -1,21 +1,14 @@
 package com.uch2.networking;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufInputStream;
-import io.netty.buffer.Unpooled;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.nio.ByteBuffer;
 
 public class GameState {
+
     private int playedID;
     private int posX;
     private int posY;
     static private Kryo kryo;
+
     public static void setUpKryo() {
         Kryo kryo = new Kryo();
         kryo.register(GameState.class);
@@ -26,9 +19,10 @@ public class GameState {
         return GameState.kryo;
     }
 
-    //TODO constructeur vide 
+    /**
+     * Ne pas supprimmer.
+     */
     public GameState(){
-
     }
     
     public GameState(int playedID, int posX, int posY) {

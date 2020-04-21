@@ -1,6 +1,5 @@
 package com.uch2.networking.server;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.uch2.networking.GameState;
 import com.uch2.networking.kryo.NettyKryoProtocolInitalizer;
 import io.netty.bootstrap.ServerBootstrap;

@@ -3,7 +3,7 @@ package com.uch2.networking.client;
 import com.uch2.networking.GameState;
 import com.uch2.networking.kryo.NettyKryoDecoder;
 import com.uch2.networking.kryo.NettyKryoEncoder;
-import com.uch2.networking.kryo.ObjectClientHandler;
+import com.uch2.networking.kryo.ObjectStateHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -30,7 +30,7 @@ public class GameClient implements Runnable {
                     ch.pipeline().addLast(new GameClientHandler());
                     ch.pipeline().addLast(new NettyKryoDecoder());
                     ch.pipeline().addLast(new NettyKryoEncoder());
-                    ch.pipeline().addLast(new ObjectClientHandler());
+                    ch.pipeline().addLast(new ObjectStateHandler());
                 }
             });
 

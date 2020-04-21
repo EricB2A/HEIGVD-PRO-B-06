@@ -19,17 +19,14 @@ public class NettyKryoDecoder extends ByteToMessageDecoder {
 		if(kryo == null) kryo = new Kryo();
 		int length = msg.readableBytes();
 		
-		if(length == 0) return ; // when connectino close request .. 
+		if(length == 0) return ;
 		
 		Input input = null;
 		try {
 			byte[] bytes = new byte[msg.readableBytes()];
 			msg.readBytes(bytes);
-			System.out.println(new String(bytes));
-
+			// System.out.println(new String(bytes));
 			input = new Input(300);
-			//byte[] b = new byte[length];
-			//input.setBuffer(msg.readBytes(length).array());
 			input.setBuffer(bytes);
 			out.add(kryo.readClassAndObject(input));
 		} finally {  
