@@ -29,9 +29,9 @@ public class GameClient implements Runnable {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 public void initChannel(SocketChannel ch) throws Exception{
                     ch.pipeline().addLast(new GameClientHandler());
-                    ch.pipeline().addLast(new NettyKryoDecoder());
-                    ch.pipeline().addLast(new NettyKryoEncoder());
-                    ch.pipeline().addLast(new ObjectStateHandler());
+                    //ch.pipeline().addLast(new NettyKryoDecoder());
+                    //ch.pipeline().addLast(new NettyKryoEncoder());
+                    //ch.pipeline().addLast(new ObjectStateHandler());
                 }
             });
 
@@ -42,7 +42,6 @@ public class GameClient implements Runnable {
         catch (Exception ex){
             ex.printStackTrace();
         }
-
         finally {
             workerGroup.shutdownGracefully();
         }

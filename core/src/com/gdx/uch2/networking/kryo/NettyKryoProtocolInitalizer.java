@@ -9,9 +9,9 @@ public class NettyKryoProtocolInitalizer extends ChannelInitializer<SocketChanne
 	@Override
 	protected void initChannel(SocketChannel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
-		pipeline.addLast("decoder", new NettyKryoDecoder());
-		pipeline.addLast("encoder", new NettyKryoEncoder());
-		pipeline.addLast("nettyKryoHandler", new NettyKryoHandler());
+		//pipeline.addLast("decoder", new NettyKryoDecoder());
+		//pipeline.addLast("encoder", new NettyKryoEncoder());
+		//pipeline.addLast("nettyKryoHandler", new NettyKryoHandler());
 		
 	}
 

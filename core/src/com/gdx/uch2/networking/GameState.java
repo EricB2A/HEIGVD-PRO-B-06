@@ -16,6 +16,13 @@ public class GameState {
         }
     }
 
+    @Override
+    public String toString() {
+        return "GameState{" +
+                "playersStates=" + playersStates +
+                '}';
+    }
+
     public static void setUpKryo() {
         Kryo kryo = new Kryo();
         kryo.register(PlayerState.class);
