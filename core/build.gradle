@@ -6,3 +6,15 @@ sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 eclipse.project.name = appName + "-core"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.48.Final'
+    compile group: 'com.esotericsoftware', name: 'kryo', version: '4.0.0'
+    //compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+}
