@@ -8,10 +8,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.group.ChannelGroup;
 
-public class MovementHandler extends ChannelInboundHandlerAdapter {
-    private ChannelGroup players;
+import java.util.List;
 
-    public MovementHandler(ChannelGroup players){
+public class MovementHandler extends ChannelInboundHandlerAdapter {
+    private List<ChannelHandlerContext> players;
+
+    public MovementHandler(List<ChannelHandlerContext> players){
         this.players = players;
     }
 

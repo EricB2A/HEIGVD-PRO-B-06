@@ -7,9 +7,13 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
     //2 premiers joueurs à se connecter.
-    static ChannelGroup players = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    static List<ChannelHandlerContext> players = new ArrayList<>();
+
 
     //indique si la partie est pleine
     static boolean full = false;
@@ -36,6 +40,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
                 public void operationComplete(ChannelFuture future) throws Exception {
                     assert f == future;
                     ctx.close();
+
                 }
             });
 
@@ -43,7 +48,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         //Envoie le message de welcome et lance la partie si 2 joueurs sont présents
         else{
             ctx.writeAndFlush(Unpooled.wrappedBuffer(welcome.getBytes()));
-            players.add(ctx.channel());
+            players.add(ctx);
             if(players.size() == MAX_PLAYERS){
                 full = true;
                 startGame();
@@ -59,9 +64,9 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         System.out.println("2 joueurs connectés. Lancer la partie.");
 
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
-        for(Channel ch : players){
-            ch.writeAndFlush(Unpooled.wrappedBuffer(("Lancement de la partie!\n").getBytes()));
-            ch.pipeline().addLast(new MovementHandler(players));
+        for(ChannelHandlerContext ctx : players){
+            ctx.writeAndFlush(Unpooled.wrappedBuffer(("Lancement de la partie!\n").getBytes()));
+            ctx.pipeline().addLast(new MovementHandler(players));
         }
 
         //Démarre les ticks de serveur

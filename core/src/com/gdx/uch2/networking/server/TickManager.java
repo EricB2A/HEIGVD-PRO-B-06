@@ -2,8 +2,11 @@ package com.gdx.uch2.networking.server;
 
 import com.badlogic.gdx.Game;
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.PlayerState;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.group.ChannelGroup;
 
+import java.util.List;
 import java.util.Timer;
 
 public class TickManager {
@@ -12,7 +15,7 @@ public class TickManager {
     }
 
     private Timer timer;
-    private ChannelGroup players;
+    private List<ChannelHandlerContext> players;
     private GameState gameState;
 
     private TickManager(){
@@ -31,18 +34,26 @@ public class TickManager {
         return Instance.instance;
     }
 
-    public void setPlayers(ChannelGroup players){
+    public void setPlayers(List<ChannelHandlerContext> players){
         this.players = players;
     }
 
     //Crée le timer et envoie régulièrement un nouveau gameState à tous les channels dans players.
     public void start(int delay, int tickDuration){
+        initGameState(players.size(), 10, 10);
+
         this.timer = new Timer();
         timer.schedule(new SendUpdate(players, gameState), delay, tickDuration);
     }
 
     public GameState getGameState(){
         return gameState;
+    }
+
+    private void initGameState(int nbPlayers, int posX, int posY){
+        for(int i = 0; i < nbPlayers; ++i){
+            PlayerState ps = new PlayerState(i+1, posX, posY); //TODO
+        }
     }
 
 

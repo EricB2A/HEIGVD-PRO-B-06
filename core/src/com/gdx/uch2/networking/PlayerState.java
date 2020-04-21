@@ -4,7 +4,7 @@ import com.esotericsoftware.kryo.Kryo;
 
 public class PlayerState {
 
-    private int playedID;
+    private int playerID;
     private int posX;
     private int posY;
     static private Kryo kryo;
@@ -16,18 +16,18 @@ public class PlayerState {
     public PlayerState(){
     }
     
-    public PlayerState(int playedID, int posX, int posY) {
-        this.playedID = playedID;
+    public PlayerState(int playerID, int posX, int posY) {
+        this.playerID = playerID;
         this.posX = posX;
         this.posY = posY;
     }
 
     public int getPlayedID() {
-        return playedID;
+        return playerID;
     }
 
-    public void setPlayedID(int playedID) {
-        this.playedID = playedID;
+    public void setPlayerID(int playerID) {
+        this.playerID = playerID;
     }
 
     public int getPosX() {
@@ -48,7 +48,7 @@ public class PlayerState {
 
     @Override
     public String toString() {
-        return "Joueur#" + playedID + ", x=" + posX + ", y=" + posY;
+        return "Joueur#" + playerID + ", x=" + posX + ", y=" + posY;
     }
 
 }
