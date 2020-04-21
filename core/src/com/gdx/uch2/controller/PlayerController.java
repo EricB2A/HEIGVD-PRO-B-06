@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.gdx.uch2.entities.Block;
@@ -18,12 +19,12 @@ public class PlayerController {
     }
 
     private static final long LONG_JUMP_PRESS 	= 200;
-    private static final float ACCELERATION 	= 40;
-    private static final float GRAVITY 			= -40f;
-    private static final float MAX_JUMP_SPEED	= 10f;
-    private static final float DAMP 			= 0.9f;
-    private static final float MAX_VEL 			= 8f;
-    private static final float SLIDING_JUMP_RECOIL = 8f;
+    private static final float ACCELERATION 	= 30;
+    private static final float GRAVITY 			= -32f;
+    private static final float MAX_JUMP_SPEED	= 9f;
+    private static final float DAMP 			= 0.8f;
+    private static final float MAX_VEL 			= 7f;
+    private static final float SLIDING_JUMP_RECOIL = 2.6f;
     private static final long SLIDING_JUMP_RECOIL_TIME = 250;
 
     private World 	world;
@@ -33,6 +34,7 @@ public class PlayerController {
     private boolean grounded = false;
     private boolean sliding = false;
     private long recoilBeginTime;
+    private boolean finished = false;
 
     // This is the rectangle pool used in collision detection
     // Good to avoid instantiation each frame
@@ -96,12 +98,9 @@ public class PlayerController {
 
     /** The main update method **/
     public void update(float delta) {
-        // Processing the input - setting the states of Player
-        processInput();
-
-        // If Player is grounded then reset the state to IDLE
-        if (grounded && player.getState().equals(State.JUMPING)) {
-            player.setState(State.IDLE);
+        if (!finished) {
+            // Processing the input - setting the states of Player
+            processInput();
         }
 
         // Setting initial vertical acceleration
@@ -116,8 +115,15 @@ public class PlayerController {
         // checking collisions with the surrounding blocks depending on Player's velocity
         checkCollisionWithBlocks(delta);
 
+        // If Player is grounded then reset the state to IDLE
+        if (grounded && player.getState().equals(State.JUMPING)) {
+            player.setState(State.IDLE);
+        }
+
         // apply damping to halt Player nicely
-        player.getVelocity().x *= DAMP;
+        if (player.getState() == State.IDLE) {
+            player.getVelocity().x *= DAMP;
+        }
 
         // ensure terminal velocity is not exceeded
         if (player.getVelocity().x > MAX_VEL) {
@@ -132,6 +138,13 @@ public class PlayerController {
 
     }
 
+    private void finish() {
+        finished = true;
+//        player.getVelocity().set(0,0);
+//        player.getAcceleration().set(0,0);
+        player.setState(State.IDLE);
+    }
+
     /** Collision checking **/
     private void checkCollisionWithBlocks(float delta) {
         // scale velocity to frame units
@@ -141,6 +154,12 @@ public class PlayerController {
         Rectangle playerRect = rectPool.obtain();
         // set the rectangle to player's bounding box
         playerRect.set(player.getBounds().x, player.getBounds().y, player.getBounds().width, player.getBounds().height);
+
+        // Check victory
+        if (playerRect.overlaps(world.getLevel().getFinishBlocks().getBounds())) {
+            finish();
+//            return;
+        }
 
         // we first check the movement on the horizontal X axis
         int startX, endX;
@@ -173,7 +192,13 @@ public class PlayerController {
                 }
                 player.getVelocity().x = 0;
                 world.getCollisionRects().add(block.getBounds());
-                break;
+
+                // Mortel des 4 côtés c'est chaud...
+//                if (block.isLethal()) {
+//                    finish();
+//                    return;
+//                }
+//                break;
             }
         }
 
@@ -183,7 +208,7 @@ public class PlayerController {
         // the same thing but on the vertical Y axis
         startX = (int) player.getBounds().x;
         endX = (int) (player.getBounds().x + player.getBounds().width);
-        if (player.getVelocity().y < 0) {
+        if (player.getVelocity().y <= 0) {
             startY = endY = (int) Math.floor(player.getBounds().y + player.getVelocity().y);
         } else {
             startY = endY = (int) Math.floor(player.getBounds().y + player.getBounds().height + player.getVelocity().y);
@@ -193,16 +218,29 @@ public class PlayerController {
 
         playerRect.y += player.getVelocity().y;
 
+        State backup = player.getState();
+        player.setState(State.JUMPING);
+        grounded = false;
         for (Block block : collidable) {
             if (block == null) continue;
             if (playerRect.overlaps(block.getBounds())) {
                 if (player.getVelocity().y < 0) {
+                    // Fix oscillating state at landing
+                    player.translate(new Vector2(0, block.getBounds().y + block.getBounds().height - player.getBounds().y));
+
+                    player.setState(backup);
                     grounded = true;
                     sliding = false;
                 }
+
                 player.getVelocity().y = 0;
                 world.getCollisionRects().add(block.getBounds());
-                break;
+
+                if (block.isLethal()) {
+                    finish();
+//                    return;
+                }
+//                break;
             }
         }
         // reset the collision box's position on Y
@@ -264,6 +302,7 @@ public class PlayerController {
         }
 
         float tmp;
+        boolean flag = player.isFacingLeft();
         if (keys.get(Keys.LEFT)) {
             // left is pressed
             player.setFacingLeft(true);
@@ -276,6 +315,7 @@ public class PlayerController {
             player.setFacingLeft(false);
             if (!player.getState().equals(State.JUMPING)) {
                 player.setState(State.WALKING);
+
             }
             tmp = ACCELERATION;
         } else {
@@ -286,11 +326,16 @@ public class PlayerController {
 
         }
 
-        if (System.currentTimeMillis() - recoilBeginTime >= SLIDING_JUMP_RECOIL_TIME) {
+        if (System.currentTimeMillis() - recoilBeginTime >= SLIDING_JUMP_RECOIL_TIME
+         || flag != player.isFacingLeft()) {
             player.getAcceleration().x = tmp;
         }
 
         return false;
+    }
+
+    public boolean isDone() {
+        return finished;
     }
 
 }

@@ -26,4 +26,8 @@ public class Block {
     public Rectangle getBounds() {
         return bounds;
     }
+
+    public boolean isLethal() {
+        return false;
+    }
 }

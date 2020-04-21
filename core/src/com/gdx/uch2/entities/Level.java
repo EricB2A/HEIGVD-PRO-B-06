@@ -54,6 +54,10 @@ public class Level {
         return finishPosition;
     }
 
+    public Block getFinishBlocks() {
+        return new Block(finishPosition);
+    }
+
     public void setFinishPosition(Vector2 finishPosition) {
         this.finishPosition = finishPosition;
     }

@@ -10,6 +10,8 @@ public class UltimateChickenHorse2 extends Game {
 
 	@Override
 	public void create() {
-		setScreen(new GameScreen());
+		ScreenManager.getInstance().initialize(this);
+		MainMenu main = new MainMenu();
+		setScreen(main);
 	}
 }

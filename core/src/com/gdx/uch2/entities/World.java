@@ -22,6 +22,8 @@ public class World {
 
     Level level;
 
+    public static World currentWorld;
+
     // Getters -----------
 //    public Array<Block> getBlocks() {
 //        return blocks;
@@ -86,8 +88,14 @@ public class World {
 
     private void createWorld() {
         level = LevelLoader.loadLevel(1);
+        resetPlayer();
+    }
+
+    public void resetPlayer() {
         player = new Player(new Vector2(level.getSpanPosition()));
     }
+
+
 
 //    private void createDemoWorld() {
 //        player = new Player(new Vector2(7, 2));

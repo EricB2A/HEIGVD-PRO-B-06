@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Player;
@@ -31,6 +32,7 @@ public class WorldRenderer {
 
     /** Textures **/
     private TextureRegion blockTexture;
+    private TextureRegion lethalBlockTexture;
     private TextureRegion spawnTexture;
     private TextureRegion finishTexture;
     private TextureRegion playerFrame;
@@ -56,8 +58,8 @@ public class WorldRenderer {
         this.width = w;
         this.height = h;
         float ppu = Math.min(width / CAMERA_WIDTH, height / CAMERA_HEIGHT);
-        ppuX = ppu;
-        ppuY = ppu;
+        ppuX = width / CAMERA_WIDTH;
+        ppuY = height / CAMERA_HEIGHT;
     }
     public boolean isDebug() {
         return debug;
@@ -81,6 +83,7 @@ public class WorldRenderer {
         TextureAtlas playerAtlas = new TextureAtlas(Gdx.files.internal(Constants.PLAYER_1_ATLAS));
         TextureAtlas blocksAtlas = new TextureAtlas(Gdx.files.internal(Constants.BLOCKS_ATLAS));
         blockTexture = blocksAtlas.findRegion("box");
+        lethalBlockTexture = blocksAtlas.findRegion("boxExplosive");
         spawnTexture = blocksAtlas.findRegion("signRight");
         finishTexture = blocksAtlas.findRegion("signExit");
 
@@ -127,11 +130,28 @@ public class WorldRenderer {
         }
     }
 
+    public void renderBackground() {
+        spriteBatch.setProjectionMatrix(cam.combined);
+        spriteBatch.begin();
+        drawBlocks();
+        spriteBatch.end();
+    }
+
+    // Scaling pixel -> level unit
+    public void scale(Vector2 v) {
+        v.x = v.x / ppuX;
+        v.y = v.y / ppuY;
+    }
+
 
     private void drawBlocks() {
         for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
 //            spriteBatch.draw(blockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
-            spriteBatch.draw(blockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
+            if (block.isLethal()) {
+                spriteBatch.draw(lethalBlockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
+            } else {
+                spriteBatch.draw(blockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
+            }
         }
 
         spriteBatch.draw(spawnTexture, world.getLevel().getSpanPosition().x, world.getLevel().getSpanPosition().y, Block.SIZE, Block.SIZE);

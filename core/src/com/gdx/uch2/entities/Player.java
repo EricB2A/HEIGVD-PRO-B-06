@@ -13,7 +13,7 @@ import com.gdx.uch2.util.Constants;
 
 public class Player {
     public enum State {
-        IDLE, WALKING, JUMPING, SLIDING
+        IDLE, WALKING, JUMPING, DEAD
     }
 
     public static final float SPEED = 6f;	// unit per second
@@ -28,7 +28,7 @@ public class Player {
     Vector2 	velocity = new Vector2();
     Rectangle 	bounds = new Rectangle();
     State		state = State.IDLE;
-    boolean		facingLeft = true;
+    boolean		facingLeft = false;
     float		stateTime = 0;
     boolean		longJump = false;
 

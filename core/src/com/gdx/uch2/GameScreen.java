@@ -1,10 +1,13 @@
 package com.gdx.uch2;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.controller.PlayerController;
+import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.view.WorldRenderer;
 import com.badlogic.gdx.Input.Keys;
@@ -16,11 +19,15 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
     private int width, height;
 
-    @Override
-    public void show() {
-        world = new World();
+    public GameScreen(World world) {
+        this.world = world;
         renderer = new WorldRenderer(world, false);
         controller = new PlayerController(world);
+    }
+
+    @Override
+    public void show() {
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -42,7 +49,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public void dispose() {
-        Gdx.input.setInputProcessor(null);
+
     }
 
     // * InputProcessor methods ***************************//
@@ -80,22 +87,13 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
-        if (x < width / 2 && y > height / 2) {
-            controller.leftPressed();
-        }
-        if (x > width / 2 && y > height / 2) {
-            controller.rightPressed();
-        }
-        return true;
+        return false;
     }
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if (x < width / 2 && y > height / 2) {
-            controller.leftReleased();
-        }
-        if (x > width / 2 && y > height / 2) {
-            controller.rightReleased();
+        if (button == Input.Buttons.LEFT && controller.isDone()) {
+            ScreenManager.getInstance().showScreen(ScreenManager.getInstance().getPlacementScreen());
         }
         return true;
     }
