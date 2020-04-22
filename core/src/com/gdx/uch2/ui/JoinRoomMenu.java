@@ -6,15 +6,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 
-public class MainMenu implements Screen {
+public class JoinRoomMenu implements Screen {
     private Stage stage;
 
-    public MainMenu() {
-        /// create stage and set it as input processor
+    public JoinRoomMenu(){
+        // create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
     }
@@ -38,38 +37,64 @@ public class MainMenu implements Screen {
         // Create Text
         Label titleLabel = new Label("Ultimate Chicken Horse 2", skin);
         titleLabel.setFontScale(2);
+        Label nicknameLabel = new Label("Nickname:", skin);
+        Label ipLabel = new Label("ip:", skin);
+        Label portLabel = new Label("port:", skin);
+
+        // Create TextField
+        TextField nicknameTF = new TextField("Player 1", skin);
+        TextField ipTF = new TextField("127.0.0.1", skin);
+        TextField portTF = new TextField("404", skin);
+        nicknameTF.setMaxLength(20);
+        ipTF.setMaxLength(15);
+        portTF.setMaxLength(5);
 
         // Title
         HorizontalGroup titleGroup = new HorizontalGroup();
-        titleGroup.space(10).expand(true);
+        titleGroup.space(10);
         titleGroup.addActor(titleLabel);
         titleGroup.addActor(chickenImg);
         table.add(titleGroup).colspan(2).center();
         table.row();
 
-        // Create buttons
-        TextButton joinButton = new TextButton("Join", skin);
-        TextButton createButton = new TextButton("Create", skin);
-        TextButton quitButton = new TextButton("Quit", skin);
+        // Nickname
+        HorizontalGroup nicknameGroup = new HorizontalGroup();
+        nicknameGroup.space(10);
+        nicknameGroup.addActor(nicknameLabel);
+        nicknameGroup.addActor(nicknameTF);
+        table.add(nicknameGroup).colspan(2).center();
+        table.row();
 
-        // Add buttons to table
+        // IP
+        HorizontalGroup ipGroup = new HorizontalGroup();
+        ipGroup.space(10);
+        ipGroup.addActor(ipLabel);
+        ipGroup.addActor(ipTF);
+        table.add(ipGroup).colspan(2).center();
+        table.row();
+
+        // Port
+        HorizontalGroup portGroup = new HorizontalGroup();
+        portGroup.space(10);
+        portGroup.addActor(portLabel);
+        portGroup.addActor(portTF);
+        table.add(portGroup).colspan(2).center();
+        table.row();
+
+        //create buttons
+        TextButton joinButton = new TextButton("Join", skin);
+        TextButton mainMenuButton = new TextButton("Go back", skin);
+
+        //add buttons to table
         table.add(joinButton).width(200).colspan(2);
         table.row();
-        table.add(createButton).width(200).colspan(2);
-        table.row();
-        table.add(quitButton).width(200).colspan(2);
+        table.add(mainMenuButton).width(200).colspan(2);
 
-        // Create button listeners
-        quitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.exit();
-            }
-        });
-        joinButton.addListener(new InputListener(){
+        // create button listeners
+        mainMenuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Screen s = new JoinRoomMenu();
+                Screen s = new MainMenu();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
@@ -78,10 +103,10 @@ public class MainMenu implements Screen {
                 return true;
             }
         });
-        createButton.addListener(new InputListener(){
+        joinButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Screen s = new CreateRoomMenu();
+                Screen s = new PlacementScreen();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
@@ -129,3 +154,4 @@ public class MainMenu implements Screen {
         stage.dispose();
     }
 }
+
