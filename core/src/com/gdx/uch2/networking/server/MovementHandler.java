@@ -34,9 +34,6 @@ public class MovementHandler extends ChannelInboundHandlerAdapter {
         }else{
             System.out.println("pas une séquence d'actions");
         }
-
-
-        applyActions((UserActionSequence) msg, ServerGameStateTickManager.getInstance().getGameState());
     }
 
     private void applyAction(UserAction action, GameState state, int playerID){

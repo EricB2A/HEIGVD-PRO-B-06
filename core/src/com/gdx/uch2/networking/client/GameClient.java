@@ -5,7 +5,6 @@ import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import com.gdx.uch2.networking.kryo.NettyKryoProtocolInitalizer;
-import com.gdx.uch2.networking.kryo.ObjectStateHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

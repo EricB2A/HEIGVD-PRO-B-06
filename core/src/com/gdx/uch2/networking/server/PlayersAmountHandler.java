@@ -69,7 +69,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
 
         //Démarre les ticks de serveur
         ServerGameStateTickManager.getInstance().setPlayers(players);
-        ServerGameStateTickManager.getInstance().start(0, 1000);
+        ServerGameStateTickManager.getInstance().start(1000, 1000);
     }
 
     @Override
