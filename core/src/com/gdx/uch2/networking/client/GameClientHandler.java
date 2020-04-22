@@ -11,8 +11,16 @@ import java.util.List;
 
 public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
+    private boolean isSending;
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+
+        if(!isSending){//TODO placer ça autre part
+            startSending(ctx);
+            isSending = true;
+        }
+
 
         ByteBuf m = (ByteBuf) msg;
         if(m.readChar() == 'a'){
@@ -23,7 +31,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
                     nettyKryoDecoder.decode((ByteBuf) msg, oof);
                     System.out.flush();
                 }
-                System.out.println("===========================0");
+                //System.out.println("===========================0");
                 System.out.println(oof.get(0).toString());
             } finally {
                 ReferenceCountUtil.release(msg);
@@ -32,6 +40,12 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
             System.out.println("pas un Gamestate");
         }
 
+    }
+
+    private void startSending(ChannelHandlerContext ctx){
+        ClientActionsTickManager.getInstance().initSequence(1);
+        ClientActionsTickManager.getInstance().setContext(ctx);
+        ClientActionsTickManager.getInstance().start(1000, 200);
     }
 
     @Override

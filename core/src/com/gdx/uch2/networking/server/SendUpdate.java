@@ -1,15 +1,10 @@
 package com.gdx.uch2.networking.server;
 
 
-import com.gdx.uch2.networking.GameState;
-import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.util.CharsetUtil;
 
 import java.util.List;
 import java.util.TimerTask;
@@ -23,14 +18,13 @@ public class SendUpdate extends TimerTask {
 
     @Override
     public void run() {
-        //String str;
-        PlayerState[] ppp = new PlayerState[]{new PlayerState(6, 6, 6)};
-        GameState state2 = new GameState(ppp);
+        //PlayerState[] ppp = new PlayerState[]{new PlayerState(6, 6, 6)};
+        //GameState state2 = new GameState(ppp);
 
         for(ChannelHandlerContext ch : players){
             NettyKryoEncoder kkk = new NettyKryoEncoder();
             ByteBuf out = Unpooled.buffer(1024);
-            kkk.encode(TickManager.getInstance().getGameState(), out, 'a');
+            kkk.encode(ServerGameStateTickManager.getInstance().getGameState(), out, 'a');
             ch.writeAndFlush(out);
 
         }

@@ -1,24 +1,22 @@
 package com.gdx.uch2.networking.server;
 
-import com.badlogic.gdx.Game;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.PlayerState;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.group.ChannelGroup;
 
 import java.util.List;
 import java.util.Timer;
 
-public class TickManager {
+public class ServerGameStateTickManager {
     private static class Instance{
-        static final TickManager instance = new TickManager();
+        static final ServerGameStateTickManager instance = new ServerGameStateTickManager();
     }
 
     private Timer timer;
     private List<ChannelHandlerContext> players;
     private GameState gameState;
 
-    private TickManager(){
+    private ServerGameStateTickManager(){
     }
 
     public boolean setNewState(GameState newState){
@@ -30,7 +28,7 @@ public class TickManager {
         }
     }
 
-    public static TickManager getInstance(){
+    public static ServerGameStateTickManager getInstance(){
         return Instance.instance;
     }
 
