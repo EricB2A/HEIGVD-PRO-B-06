@@ -1,0 +1,174 @@
+
+player.png
+size: 1024,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+dash1
+  rotate: false
+  xy: 288, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+dash2
+  rotate: false
+  xy: 314, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+dash3
+  rotate: false
+  xy: 340, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+dash4
+  rotate: false
+  xy: 366, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+dash5
+  rotate: false
+  xy: 392, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+dash6
+  rotate: false
+  xy: 418, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+dash7
+  rotate: false
+  xy: 444, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+hit2
+  rotate: false
+  xy: 522, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+hit3
+  rotate: false
+  xy: 2, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+hit4
+  rotate: false
+  xy: 28, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+idle2
+  rotate: false
+  xy: 470, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+idle3
+  rotate: false
+  xy: 106, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+idle4
+  rotate: false
+  xy: 132, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+hit1
+  rotate: false
+  xy: 132, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+idle1
+  rotate: false
+  xy: 132, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+walk-right7
+  rotate: false
+  xy: 132, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+jump1
+  rotate: false
+  xy: 54, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+jump2
+  rotate: false
+  xy: 80, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+walk-right1
+  rotate: false
+  xy: 158, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+walk-right2
+  rotate: false
+  xy: 184, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+walk-right3
+  rotate: false
+  xy: 210, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+walk-right4
+  rotate: false
+  xy: 236, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+walk-right5
+  rotate: false
+  xy: 496, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+walk-right6
+  rotate: false
+  xy: 262, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1

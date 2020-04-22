@@ -4,23 +4,25 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.gdx.uch2.ScreenManager;
 
 public class MainMenu implements Screen {
     private Stage stage;
+    private TextButton join;
 
     public MainMenu(){
         /// create stage and set it as input processor
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
+
     }
 
     @Override
     public void show() {
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         table.setFillParent(true);
@@ -49,7 +51,7 @@ public class MainMenu implements Screen {
         table.row();
 
         //create buttons
-        TextButton join = new TextButton("Join", skin);
+        join = new TextButton("Join", skin);
         TextButton create = new TextButton("Create", skin);
         TextButton quit = new TextButton("Quit", skin);
 
@@ -65,6 +67,18 @@ public class MainMenu implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
+            }
+        });
+        join.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Screen s = new PlacementScreen();
+                ScreenManager.getInstance().setPlacementScreen(s);
+                ScreenManager.getInstance().showScreen(s);
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
             }
         });
 
