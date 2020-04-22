@@ -43,7 +43,7 @@ public class TickManager {
         initGameState(players.size(), 10, 10); //TODO initialiser la partie selon des paramètres moins arbitraires
 
         this.timer = new Timer();
-        timer.schedule(new SendUpdate(players, gameState), delay, tickDuration);
+        timer.schedule(new SendUpdate(players), delay, tickDuration);
     }
 
     public GameState getGameState(){
@@ -51,9 +51,11 @@ public class TickManager {
     }
 
     private void initGameState(int nbPlayers, int posX, int posY){
+        PlayerState[] newPlayers = new PlayerState[nbPlayers];
         for(int i = 0; i < nbPlayers; ++i){
-            PlayerState ps = new PlayerState(i+1, posX, posY); //TODO faire qqch de propre avec les IDs
+            newPlayers[i] = new PlayerState(i+1, posX, posY); //TODO faire qqch de propre avec les IDs
         }
+        gameState = new GameState(newPlayers);
     }
 
 

@@ -17,27 +17,22 @@ import java.util.TimerTask;
 public class SendUpdate extends TimerTask {
     private List<ChannelHandlerContext> players;
 
-    public SendUpdate(List<ChannelHandlerContext> players, Object toSend){  //TODO remplacer Object toSend par un GameState
+    public SendUpdate(List<ChannelHandlerContext> players){  //TODO remplacer Object toSend par un GameState
         this.players = players;
     }
 
     @Override
     public void run() {
-        String str;
+        //String str;
         PlayerState[] ppp = new PlayerState[]{new PlayerState(6, 6, 6)};
         GameState state2 = new GameState(ppp);
 
         for(ChannelHandlerContext ch : players){
             NettyKryoEncoder kkk = new NettyKryoEncoder();
             ByteBuf out = Unpooled.buffer(1024);
-            kkk.encode(state2, out, 'a');
+            kkk.encode(TickManager.getInstance().getGameState(), out, 'a');
             ch.writeAndFlush(out);
 
-            //TODO : remplacer par un envoi du gameState "toSend" sérialisé
-            str = "coucou \n";
-            //ch.writeAndFlush(Unpooled.copiedBuffer(str, CharsetUtil.UTF_8));
-
-            ch.writeAndFlush(state2);
         }
     }
 }
