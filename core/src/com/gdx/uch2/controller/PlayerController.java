@@ -19,20 +19,21 @@ public class PlayerController {
     }
 
     private static final long LONG_JUMP_PRESS 	= 200;
-    private static final float ACCELERATION 	= 30;
-    private static final float GRAVITY 			= -32f;
+    private static final float ACCELERATION 	= 50;
+    private static final float GRAVITY 			= -36f;
     private static final float MAX_JUMP_SPEED	= 9f;
     private static final float DAMP 			= 0.8f;
-    private static final float MAX_VEL 			= 7f;
-    private static final float SLIDING_JUMP_RECOIL = 2.6f;
-    private static final long SLIDING_JUMP_RECOIL_TIME = 250;
+    private static final float MAX_VEL 			= 5.6f;
+    private static final float SLIDING_JUMP_RECOIL = 5.5f;
+    private static final float SLIDING_FRICTION =  18f;
+    private static final long SLIDING_JUMP_RECOIL_TIME = 100;
 
     private World 	world;
     private Player 	player;
     private long	jumpPressedTime;
+    private boolean jumpingActive;
     private boolean jumpingPressed;
     private boolean grounded = false;
-    private boolean sliding = false;
     private long recoilBeginTime;
     private boolean finished = false;
 
@@ -72,6 +73,7 @@ public class PlayerController {
     }
 
     public void jumpPressed() {
+        jumpingPressed = true;
         keys.get(keys.put(Keys.JUMP, true));
     }
 
@@ -89,7 +91,7 @@ public class PlayerController {
 
     public void jumpReleased() {
         keys.get(keys.put(Keys.JUMP, false));
-        jumpingPressed = false;
+        jumpingActive = false;
     }
 
     public void fireReleased() {
@@ -103,8 +105,15 @@ public class PlayerController {
             processInput();
         }
 
+        // Fix resume mess after long inactivity
+        delta = Math.min(delta, 0.025f);
+
         // Setting initial vertical acceleration
         player.getAcceleration().y = GRAVITY;
+
+        if (player.getState() == State.SLIDING) {
+            player.getAcceleration().y += SLIDING_FRICTION;
+        }
 
         // Convert acceleration to frame time
         player.getAcceleration().scl(delta);
@@ -116,7 +125,7 @@ public class PlayerController {
         checkCollisionWithBlocks(delta);
 
         // If Player is grounded then reset the state to IDLE
-        if (grounded && player.getState().equals(State.JUMPING)) {
+        if (grounded && (player.getState().equals(State.JUMPING) || player.getState() == State.SLIDING)) {
             player.setState(State.IDLE);
         }
 
@@ -182,16 +191,23 @@ public class PlayerController {
         // clear collision boxes in world
         world.getCollisionRects().clear();
 
-        sliding = false;
+
         // if player collides, make his horizontal velocity 0
         for (Block block : collidable) {
             if (block == null) continue;
             if (playerRect.overlaps(block.getBounds())) {
                 if(!grounded) {
-                    sliding = true;
+                    player.setState(State.SLIDING);
                 }
-                player.getVelocity().x = 0;
+
                 world.getCollisionRects().add(block.getBounds());
+
+                // Fix oscillating state at colliding
+                if (player.getVelocity().x < 0) {
+                    player.translate(new Vector2(block.getBounds().x + block.getBounds().width - player.getBounds().x, 0));
+                } else if (player.getVelocity().x > 0){
+                    player.translate(new Vector2(block.getBounds().x - player.getBounds().x - player.getBounds().width, 0));
+                }
 
                 // Mortel des 4 côtés c'est chaud...
 //                if (block.isLethal()) {
@@ -199,6 +215,8 @@ public class PlayerController {
 //                    return;
 //                }
 //                break;
+
+                player.getVelocity().x = 0;
             }
         }
 
@@ -219,7 +237,8 @@ public class PlayerController {
         playerRect.y += player.getVelocity().y;
 
         State backup = player.getState();
-        player.setState(State.JUMPING);
+        if (player.getState() != State.SLIDING)
+            player.setState(State.JUMPING);
         grounded = false;
         for (Block block : collidable) {
             if (block == null) continue;
@@ -230,7 +249,6 @@ public class PlayerController {
 
                     player.setState(backup);
                     grounded = true;
-                    sliding = false;
                 }
 
                 player.getVelocity().y = 0;
@@ -274,29 +292,40 @@ public class PlayerController {
     /** Change Player's state and parameters based on input controls **/
     private boolean processInput() {
         if (keys.get(Keys.JUMP)) {
-            if (!player.getState().equals(State.JUMPING) || sliding) {
-                jumpingPressed = true;
+            if (jumpingPressed && (!player.getState().equals(State.JUMPING))) {
+                jumpingActive = true;
+                jumpingPressed = false;
                 jumpPressedTime = System.currentTimeMillis();
-                player.setState(State.JUMPING);
+
                 player.getVelocity().y = MAX_JUMP_SPEED;
                 grounded = false;
-                if (sliding) {
-                    sliding = false;
+
+                if (player.getState() == State.SLIDING) {
                     recoilBeginTime = System.currentTimeMillis();
                     player.getAcceleration().x = 0;
+
+                    float factor = 1;
                     if (player.isFacingLeft()) {
-                        player.getVelocity().x = SLIDING_JUMP_RECOIL;
+                        if (!keys.get(Keys.LEFT)) {
+                            factor = 9;
+                            player.setFacingLeft(false);
+                        }
+                        player.getVelocity().x = SLIDING_JUMP_RECOIL * factor;
                     } else {
-                        player.getVelocity().x = -SLIDING_JUMP_RECOIL;
+                        if (!keys.get(Keys.RIGHT)) {
+                            factor = 3;
+                            player.setFacingLeft(true);
+                        }
+                        player.getVelocity().x = -SLIDING_JUMP_RECOIL * factor;
                     }
                 }
-            } else {
-                if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
-                    jumpingPressed = false;
+
+                player.setState(State.JUMPING);
+            } else if (jumpingActive){
+                if ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS) {
+                    jumpingActive = false;
                 } else {
-                    if (jumpingPressed) {
-                        player.getVelocity().y = MAX_JUMP_SPEED;
-                    }
+                    player.getVelocity().y = MAX_JUMP_SPEED;
                 }
             }
         }
@@ -319,7 +348,7 @@ public class PlayerController {
             }
             tmp = ACCELERATION;
         } else {
-            if (!player.getState().equals(State.JUMPING)) {
+            if (!player.getState().equals(State.JUMPING) && player.getState() != State.SLIDING) {
                 player.setState(State.IDLE);
             }
             tmp = 0;
