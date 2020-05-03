@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking.server;
 
 
+import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -24,7 +25,7 @@ public class SendUpdate extends TimerTask {
         for(ChannelHandlerContext ch : players){
             NettyKryoEncoder kkk = new NettyKryoEncoder();
             ByteBuf out = Unpooled.buffer(1024);
-            kkk.encode(ServerGameStateTickManager.getInstance().getGameState(), out, 'a');
+            kkk.encode(ServerGameStateTickManager.getInstance().getGameState(), out, MessageType.GameStateUpdate.getChar());
             ch.writeAndFlush(out);
 
         }

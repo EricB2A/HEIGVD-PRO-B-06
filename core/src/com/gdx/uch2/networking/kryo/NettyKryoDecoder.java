@@ -34,8 +34,11 @@ public class NettyKryoDecoder {
 			input = new Input(300);
 			input.setBuffer(bytes);
 			out.add(kryo.readClassAndObject(input));
-		} finally {  
-			input.close();
+		} finally {
+			if(input != null){
+				input.close();
+			}
+
 		}
 	        
 	}
