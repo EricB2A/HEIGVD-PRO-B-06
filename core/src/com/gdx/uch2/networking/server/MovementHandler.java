@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking.server;
 
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.UserAction;
 import com.gdx.uch2.networking.UserActionSequence;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
@@ -18,7 +19,7 @@ public class MovementHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
         ByteBuf m = (ByteBuf) msg;
-        if(m.readChar() == 'b'){
+        if(m.readChar() == MessageType.UserAction.getChar()){
             NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
             List<Object> objects = new ArrayList<>();
             try {

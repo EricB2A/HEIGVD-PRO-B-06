@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.client;
 
+import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.UserAction;
 import com.gdx.uch2.networking.UserActionSequence;
 import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
@@ -25,7 +26,7 @@ public class SendActions  extends TimerTask {
 
         NettyKryoEncoder encoder = new NettyKryoEncoder();
         ByteBuf out = Unpooled.buffer(1024);
-        encoder.encode(as, out, 'b');
+        encoder.encode(as, out, MessageType.UserAction.getChar());
         ctx.channel().writeAndFlush(out);
         //System.out.println("sent action");
     }

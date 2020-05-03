@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.client;
 
+import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -23,7 +24,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
 
         ByteBuf m = (ByteBuf) msg;
-        if(m.getChar(0) == 'a'){
+        if(m.getChar(0) == MessageType.GameStateUpdate.getChar()){
             m.readChar();
             NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
             List<Object> oof = new ArrayList<>();
