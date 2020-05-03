@@ -13,6 +13,7 @@ import java.util.List;
 public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private boolean isSending;
+    private int playerID;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -24,6 +25,9 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
 
         ByteBuf m = (ByteBuf) msg;
+
+
+        //Si on reçoit un état de jeu du serveur
         if(m.getChar(0) == MessageType.GameStateUpdate.getChar()){
             m.readChar();
             NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
@@ -37,7 +41,15 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
             } finally {
                 ReferenceCountUtil.release(msg);
             }
-        }else{
+        }else
+        if(m.getChar(0) == MessageType.GameStart.getChar()){
+            m.readChar();
+            playerID = m.readInt();
+            System.out.println("PlayerID = " + playerID);
+        }
+
+         //Sinon, on essaie de lire du texte
+        else{
             try {
                 while (m.isReadable()) {
                     System.out.print((char) m.readByte());

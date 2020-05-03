@@ -1,5 +1,7 @@
 package com.gdx.uch2.networking.server;
 
+import com.esotericsoftware.kryo.io.Output;
+import com.gdx.uch2.networking.MessageType;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -7,6 +9,8 @@ import io.netty.channel.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static io.netty.buffer.Unpooled.buffer;
 
 public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
     //2 premiers joueurs à se connecter.
@@ -62,9 +66,17 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         System.out.println("2 joueurs connectés. Lancer la partie.");
 
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
+        int playerID = 1;
         for(ChannelHandlerContext ctx : players){
-            ctx.writeAndFlush(Unpooled.wrappedBuffer(("Lancement de la partie!\n").getBytes()));
+            ByteBuf out = buffer(1024);
+            out.writeChar(MessageType.GameStart.getChar());
+            out.writeInt(playerID);
+            ctx.writeAndFlush(out);
+
+
+            //ctx.writeAndFlush(Unpooled.wrappedBuffer(("Lancement de la partie!\n").getBytes()));
             ctx.pipeline().addLast(new MovementHandler());
+            playerID++;
         }
 
         //Démarre les ticks de serveur
