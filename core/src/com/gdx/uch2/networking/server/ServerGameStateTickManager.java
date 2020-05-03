@@ -50,8 +50,9 @@ public class ServerGameStateTickManager {
 
     private void initGameState(int nbPlayers, int posX, int posY){
         PlayerState[] newPlayers = new PlayerState[nbPlayers];
+
         for(int i = 0; i < nbPlayers; ++i){
-            newPlayers[i] = new PlayerState(i+1, posX, posY); //TODO faire qqch de propre avec les IDs
+            newPlayers[i] = new PlayerState(i, posX, posY); //Place tous les joueurs au même endroit
         }
         gameState = new GameState(newPlayers);
     }
