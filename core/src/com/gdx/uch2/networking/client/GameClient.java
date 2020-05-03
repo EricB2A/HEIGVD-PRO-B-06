@@ -1,10 +1,6 @@
 package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.networking.GameState;
-import com.gdx.uch2.networking.PlayerState;
-import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
-import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
-import com.gdx.uch2.networking.kryo.NettyKryoProtocolInitalizer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -29,10 +25,6 @@ public class GameClient implements Runnable {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 public void initChannel(SocketChannel ch) throws Exception{
                     ch.pipeline().addLast(new GameClientHandler());
-                    ch.pipeline().addLast(new NettyKryoProtocolInitalizer());
-                    //ch.pipeline().addLast(new NettyKryoDecoder());
-                    //ch.pipeline().addLast(new NettyKryoEncoder());
-                    //ch.pipeline().addLast(new ObjectStateHandler());
                 }
             });
 

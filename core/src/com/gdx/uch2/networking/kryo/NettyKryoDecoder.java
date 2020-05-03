@@ -30,7 +30,6 @@ public class NettyKryoDecoder {
 		try {
 			byte[] bytes = new byte[msg.readableBytes()];
 			msg.readBytes(bytes);
-			// System.out.println(new String(bytes));
 			input = new Input(300);
 			input.setBuffer(bytes);
 			out.add(kryo.readClassAndObject(input));

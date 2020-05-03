@@ -35,11 +35,6 @@ public class NettyKryoEncoder {
         
         byte[] byteArray = output.toBytes();
         out.writeBytes(byteArray);
-
-        /*
-        ctx.write(Unpooled.copiedBuffer(out));
-		ctx.writeAndFlush(Unpooled.EMPTY_BUFFER);
-         */
 	}
 
 

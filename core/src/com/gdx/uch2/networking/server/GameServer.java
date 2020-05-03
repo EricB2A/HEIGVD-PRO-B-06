@@ -1,9 +1,6 @@
 package com.gdx.uch2.networking.server;
 
-import com.badlogic.gdx.Game;
 import com.gdx.uch2.networking.GameState;
-import com.gdx.uch2.networking.PlayerState;
-import com.gdx.uch2.networking.kryo.NettyKryoProtocolInitalizer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -33,7 +30,7 @@ public class GameServer {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new PlayersAmountHandler());
-                            ch.pipeline().addLast(new NettyKryoProtocolInitalizer());
+                            //ch.pipeline().addLast(new NettyKryoProtocolInitalizer());
                         }
                     }).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
                     //.childHandler(new NettyKryoProtocolInitalizer());
