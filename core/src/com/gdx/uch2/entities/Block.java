@@ -11,6 +11,13 @@ public class Block {
     Rectangle 	bounds = new Rectangle();
     private boolean solid;
 
+    /*
+    Ne pas enlever
+     */
+    public Block(){
+
+    }
+
     public Block(Vector2 pos) {
         this.position = pos;
         this.bounds.setX(pos.x);

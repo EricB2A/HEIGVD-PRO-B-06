@@ -75,7 +75,8 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
 
 
             //ctx.writeAndFlush(Unpooled.wrappedBuffer(("Lancement de la partie!\n").getBytes()));
-            ctx.pipeline().addLast(new MovementHandler());
+            //ctx.pipeline().addLast(new MovementHandler());
+            ctx.pipeline().addLast(new LevelEditingHandler(players));
             playerID++;
         }
 

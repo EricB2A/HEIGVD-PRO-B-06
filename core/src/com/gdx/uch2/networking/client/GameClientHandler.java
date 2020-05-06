@@ -14,6 +14,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private boolean isSending;
     private int playerID;
+    //TODO NettyKryoDecoder privé au lieu d'en déclarer un dans chaque if
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -26,26 +27,40 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
         ByteBuf m = (ByteBuf) msg;
 
-
         //Si on reçoit un état de jeu du serveur
         if(m.getChar(0) == MessageType.GameStateUpdate.getChar()){
             m.readChar();
             NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
             List<Object> oof = new ArrayList<>();
             try {
-                while (m.isReadable()) {
+                //while (m.isReadable()) {
                     nettyKryoDecoder.decode((ByteBuf) msg, oof);
                     System.out.flush();
-                }
+                //}
                 System.out.println(oof.get(0).toString());
             } finally {
                 ReferenceCountUtil.release(msg);
             }
         }else
+            //Si on reçoit un message de début de partie
         if(m.getChar(0) == MessageType.GameStart.getChar()){
             m.readChar();
             playerID = m.readInt();
             System.out.println("PlayerID = " + playerID);
+        }else
+            //Si on reçoit un message de placement de block
+        if(m.getChar(0) == MessageType.BlockPlaced.getChar()){
+            m.readChar();
+            NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
+            List<Object> obj = new ArrayList<>();
+            try {
+                //while (m.isReadable()) {
+                    nettyKryoDecoder.decode(m, obj);
+                //}
+                System.out.println("block placé : " + obj.get(0).toString());
+            } finally {
+                ReferenceCountUtil.release(msg);
+            }
         }
 
          //Sinon, on essaie de lire du texte
@@ -65,7 +80,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private void startSending(ChannelHandlerContext ctx){
         ClientActionsTickManager.getInstance().initSequence(1);
         ClientActionsTickManager.getInstance().setContext(ctx);
-        ClientActionsTickManager.getInstance().start(1000, 200);
+        ClientActionsTickManager.getInstance().start(1000, 500);
     }
 
     @Override

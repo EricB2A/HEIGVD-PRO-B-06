@@ -1,6 +1,9 @@
 package com.gdx.uch2.networking.client;
 
+import com.badlogic.gdx.math.Vector2;
+import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.MessageType;
+import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.UserAction;
 import com.gdx.uch2.networking.UserActionSequence;
 import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
@@ -25,9 +28,18 @@ public class SendActions  extends TimerTask {
         as.addAction(UserAction.RIGHT);
 
         NettyKryoEncoder encoder = new NettyKryoEncoder();
-        ByteBuf out = Unpooled.buffer(1024);
+        ByteBuf out = Unpooled.buffer(4096);
         encoder.encode(as, out, MessageType.UserAction.getChar());
+
+        /* //Envoie un placement de bloc périodiquement
+        Block b = new Block(new Vector2(4, 6));
+        ObjectPlacement op = new ObjectPlacement(2, b, false);
+        encoder.encode(op, out, MessageType.BlockPlaced.getChar());
+
+
+         */
+
+
         ctx.channel().writeAndFlush(out);
-        //System.out.println("sent action");
     }
 }

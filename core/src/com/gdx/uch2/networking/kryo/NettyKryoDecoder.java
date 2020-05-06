@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking.kryo;
 
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.ObjectPlacement;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -17,6 +18,7 @@ public class NettyKryoDecoder {
 	public NettyKryoDecoder() {
 		this.kryo = new Kryo();
 		this.kryo.register(GameState.class);
+		this.kryo.register(ObjectPlacement.class);
 	}
 
 	public void decode( ByteBuf msg, List<Object> out) {
@@ -27,13 +29,22 @@ public class NettyKryoDecoder {
 		if(length == 0) return ;
 		
 		Input input = null;
+		ByteBuf msgCopy = null;
 		try {
-			byte[] bytes = new byte[msg.readableBytes()];
-			msg.readBytes(bytes);
-			input = new Input(300);
-			input.setBuffer(bytes);
+			byte[] bytes = new byte[length];
+			msgCopy = msg.copy();
+			msgCopy.readBytes(bytes);
+			//msg.readBytes(msg.readableBytes());
+			input = new Input(bytes);
 			out.add(kryo.readClassAndObject(input));
-		} finally {
+		}
+		catch(Exception ex){
+			ex.printStackTrace();
+		}
+		finally {
+			if(msgCopy != null)
+				msgCopy.release();
+
 			if(input != null){
 				input.close();
 			}
