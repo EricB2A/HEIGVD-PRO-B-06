@@ -4,7 +4,9 @@ public enum MessageType {
     GameStateUpdate,
     UserAction,
     GameStart,
-    BlockPlaced;
+    BlockPlaced,
+    PlayerStateUpdate
+    ;
 
     public char getChar(){
         return (char)this.ordinal();

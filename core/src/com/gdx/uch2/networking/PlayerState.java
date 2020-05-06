@@ -22,7 +22,7 @@ public class PlayerState {
         this.posY = posY;
     }
 
-    public int getPlayedID() {
+    public int getPlayerID() {
         return playerID;
     }
 

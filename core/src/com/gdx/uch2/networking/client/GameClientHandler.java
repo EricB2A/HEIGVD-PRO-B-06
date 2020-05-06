@@ -78,9 +78,9 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void startSending(ChannelHandlerContext ctx){
-        ClientActionsTickManager.getInstance().initSequence(1);
-        ClientActionsTickManager.getInstance().setContext(ctx);
-        ClientActionsTickManager.getInstance().start(1000, 500);
+        ClientPlayerStateTickManager.getInstance().initSequence(1);
+        ClientPlayerStateTickManager.getInstance().setContext(ctx);
+        ClientPlayerStateTickManager.getInstance().start(1000, 500);
     }
 
     @Override

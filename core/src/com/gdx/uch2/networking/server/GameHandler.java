@@ -15,6 +15,8 @@ import java.util.List;
 public class GameHandler extends ChannelInboundHandlerAdapter {
 
     private List<ChannelHandlerContext> players;
+    private NettyKryoEncoder encoder = new NettyKryoEncoder();
+    private NettyKryoDecoder decoder = new NettyKryoDecoder();
 
     public GameHandler(List<ChannelHandlerContext> players){
         this.players = players;
@@ -24,22 +26,21 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 
         ByteBuf m = (ByteBuf) msg;
-        if(m.readChar() == MessageType.UserAction.getChar()){
-            NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
+        if(m.readChar() == MessageType.PlayerStateUpdate.getChar()){
             List<Object> objects = new ArrayList<>();
             try {
-                nettyKryoDecoder.decode((ByteBuf) msg, objects);
-                System.out.println("sequence d'actions reçue");
-                applyActions((UserActionSequence) objects.get(0), ServerGameStateTickManager.getInstance().getGameState());
+                decoder.decode((ByteBuf) msg, objects);
+                System.out.println("playerState reçu");
+                PlayerState state = (PlayerState) objects.get(0);
+                sendPlayerStateToAllOtherPlayers(state.getPlayerID(), state);
             } finally {
                 ReferenceCountUtil.release(msg);
             }
         }else
         if(m.readChar() == MessageType.BlockPlaced.getChar()){
-            NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
             List<Object> objects = new ArrayList<>();
             try {
-                nettyKryoDecoder.decode(m, objects);
+                decoder.decode(m, objects);
                 System.out.println("Placement de block reçu");
                 sendBlockToAllPlayers((ObjectPlacement) (objects.get(0)));
             } finally {
@@ -87,10 +88,19 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
 
     private void sendBlockToAllPlayers(ObjectPlacement object){
         for(ChannelHandlerContext ctx : players){
-            NettyKryoEncoder encoder = new NettyKryoEncoder();
             ByteBuf out = Unpooled.buffer(1024);
             encoder.encode(object, out, MessageType.BlockPlaced.getChar());
             ctx.channel().writeAndFlush(out);
+        }
+    }
+
+    private void sendPlayerStateToAllOtherPlayers(int playerID, PlayerState state){
+        for(int i = 0; i < players.size(); ++i){
+            if(i != playerID){
+                ByteBuf out = Unpooled.buffer(1024);
+                encoder.encode(state, out, MessageType.PlayerStateUpdate.getChar());
+                players.get(i).channel().writeAndFlush(out);
+            }
         }
     }
 
