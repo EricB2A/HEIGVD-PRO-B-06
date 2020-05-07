@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Player {
     public enum State {
-        IDLE, WALKING, JUMPING, DEAD
+        IDLE, WALKING, JUMPING, SLIDING
     }
 
     public static final float SPEED = 6f;	// unit per second
