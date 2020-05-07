@@ -19,14 +19,15 @@ public class PlayerController {
     }
 
     private static final long LONG_JUMP_PRESS 	= 200;
-    private static final float ACCELERATION 	= 50;
+    private static final float ACCELERATION 	= 20;
     private static final float GRAVITY 			= -36f;
     private static final float MAX_JUMP_SPEED	= 9f;
     private static final float DAMP 			= 0.8f;
     private static final float MAX_VEL 			= 5.6f;
-    private static final float SLIDING_JUMP_RECOIL = 5.5f;
-    private static final float SLIDING_FRICTION =  18f;
-    private static final long SLIDING_JUMP_RECOIL_TIME = 100;
+    private static final float MAX_FALL_VEL 	= -30;
+    private static final float SLIDING_JUMP_RECOIL = 2f;
+    private static final float SLIDING_FRICTION =  12f;
+    private static final long SLIDING_JUMP_RECOIL_TIME = 0;
 
     private World 	world;
     private Player 	player;
@@ -142,6 +143,10 @@ public class PlayerController {
             player.getVelocity().x = -MAX_VEL;
         }
 
+        if (player.getVelocity().y < MAX_FALL_VEL) {
+            player.getVelocity().y = MAX_FALL_VEL;
+        }
+
         // simply updates the state time
         player.update(delta);
 
@@ -249,6 +254,8 @@ public class PlayerController {
 
                     player.setState(backup);
                     grounded = true;
+                } else if(player.getVelocity().y > 0) {
+                    jumpingActive = false;
                 }
 
                 player.getVelocity().y = 0;
@@ -304,19 +311,16 @@ public class PlayerController {
                     recoilBeginTime = System.currentTimeMillis();
                     player.getAcceleration().x = 0;
 
-                    float factor = 1;
                     if (player.isFacingLeft()) {
                         if (!keys.get(Keys.LEFT)) {
-                            factor = 9;
                             player.setFacingLeft(false);
                         }
-                        player.getVelocity().x = SLIDING_JUMP_RECOIL * factor;
+                        player.getVelocity().x = MAX_JUMP_SPEED;
                     } else {
                         if (!keys.get(Keys.RIGHT)) {
-                            factor = 3;
                             player.setFacingLeft(true);
                         }
-                        player.getVelocity().x = -SLIDING_JUMP_RECOIL * factor;
+                        player.getVelocity().x = -MAX_JUMP_SPEED;
                     }
                 }
 

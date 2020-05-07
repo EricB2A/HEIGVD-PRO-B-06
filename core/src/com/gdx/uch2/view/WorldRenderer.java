@@ -163,7 +163,7 @@ public class WorldRenderer {
         playerFrame = (TextureRegion) (player.isFacingLeft() ? idleLeftAnimation.getKeyFrame(player.getStateTime(), true) : idleRightAnimation.getKeyFrame(player.getStateTime(), true));
         if(player.getState().equals(State.WALKING)) {
             playerFrame = (TextureRegion) (player.isFacingLeft() ? walkLeftAnimation.getKeyFrame(player.getStateTime(), true) : walkRightAnimation.getKeyFrame(player.getStateTime(), true));
-        } else if (player.getState().equals(State.JUMPING)) {
+        } else if (player.getState().equals(State.JUMPING) || player.getState().equals(State.SLIDING)) {
             if (player.getVelocity().y > 0) {
                 playerFrame = player.isFacingLeft() ? playerJumpLeft : playerJumpRight;
             } else {
