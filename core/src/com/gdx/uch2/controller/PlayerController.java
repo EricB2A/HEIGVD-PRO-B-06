@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.Player.State;
+import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
 
 public class PlayerController {
@@ -140,8 +141,6 @@ public class PlayerController {
 
     private void finish() {
         finished = true;
-//        player.getVelocity().set(0,0);
-//        player.getAcceleration().set(0,0);
         player.setState(State.IDLE);
     }
 
@@ -190,15 +189,8 @@ public class PlayerController {
                 if(!grounded) {
                     sliding = true;
                 }
-                player.getVelocity().x = 0;
+                block.action(player);
                 world.getCollisionRects().add(block.getBounds());
-
-                // Mortel des 4 côtés c'est chaud...
-//                if (block.isLethal()) {
-//                    finish();
-//                    return;
-//                }
-//                break;
             }
         }
 
@@ -236,11 +228,10 @@ public class PlayerController {
                 player.getVelocity().y = 0;
                 world.getCollisionRects().add(block.getBounds());
 
-                if (block.isLethal()) {
-                    finish();
-//                    return;
+                if (block instanceof Trap) {
+                    block.action(player);
+                    //finish();
                 }
-//                break;
             }
         }
         // reset the collision box's position on Y

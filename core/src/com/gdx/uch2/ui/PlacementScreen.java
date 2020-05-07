@@ -63,10 +63,10 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.NUM_1) {
+        if (keycode == Input.Keys.NUM_1 || keycode == Input.Keys.NUMPAD_1) {
             blockType = 1;
         }
-        if (keycode == Input.Keys.NUM_2){
+        if (keycode == Input.Keys.NUM_2 || keycode == Input.Keys.NUMPAD_2){
             blockType = 2;
         }
         return true;

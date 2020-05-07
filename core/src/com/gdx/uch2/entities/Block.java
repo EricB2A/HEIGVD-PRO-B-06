@@ -30,4 +30,6 @@ public class Block {
     public boolean isLethal() {
         return false;
     }
+
+    public void action(Player player) { player.getVelocity().x = 0; }
 }

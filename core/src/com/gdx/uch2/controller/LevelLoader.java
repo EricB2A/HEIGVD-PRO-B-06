@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Level;
 
+import java.util.Arrays;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tamas
@@ -39,7 +41,6 @@ public class LevelLoader {
                 blocks[col][row] = null;
             }
         }
-
 
         for (int row = 0; row < level.getHeight(); row++) {
             for (int col = 0; col < level.getWidth(); col++) {
