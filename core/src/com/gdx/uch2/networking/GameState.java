@@ -15,7 +15,7 @@ public class GameState {
     public GameState(PlayerState[] playerStates){
         playersStates = new TreeMap<>();
         for(int i = 0; i < playerStates.length; ++i){
-            this.playersStates.put(playerStates[i].getPlayedID(), playerStates[i]); //TODO clone playerStates[i]
+            this.playersStates.put(playerStates[i].getPlayerID(), playerStates[i]); //TODO clone playerStates[i]
         }
     }
 

@@ -36,6 +36,12 @@ public class ServerGameStateTickManager {
         this.players = players;
     }
 
+    public void setPlayerState(PlayerState newState){
+        int id = newState.getPlayerID();
+        gameState.setPosX(newState.getPosX(), id);
+        gameState.setPosY(newState.getPosX(), id);
+    }
+
     //Crée le timer et envoie régulièrement un nouveau gameState à tous les channels dans players.
     public void start(int delay, int tickDuration){
         initGameState(players.size(), 10, 10); //TODO initialiser la partie selon des paramètres moins arbitraires

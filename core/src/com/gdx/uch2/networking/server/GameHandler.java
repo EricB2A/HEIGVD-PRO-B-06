@@ -32,7 +32,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
                 decoder.decode((ByteBuf) msg, objects);
                 System.out.println("playerState reçu");
                 PlayerState state = (PlayerState) objects.get(0);
-                sendPlayerStateToAllOtherPlayers(state.getPlayerID(), state);
+                ServerGameStateTickManager.getInstance().setPlayerState(state);
             } finally {
                 ReferenceCountUtil.release(msg);
             }
@@ -60,6 +60,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
 
     }
 
+    /*
     private void applyAction(UserAction action, GameState state, int playerID){
         //TODO minimal, appliquer les actions plus précisément
         switch (action){
@@ -85,7 +86,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
             applyAction(a, state, sequence.getPlayerID());
         }
     }
-
+*/
     private void sendBlockToAllPlayers(ObjectPlacement object){
         for(ChannelHandlerContext ctx : players){
             ByteBuf out = Unpooled.buffer(1024);
@@ -94,6 +95,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
+    /*
     private void sendPlayerStateToAllOtherPlayers(int playerID, PlayerState state){
         for(int i = 0; i < players.size(); ++i){
             if(i != playerID){
@@ -103,7 +105,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
             }
         }
     }
-
+*/
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause){
         cause.printStackTrace();
