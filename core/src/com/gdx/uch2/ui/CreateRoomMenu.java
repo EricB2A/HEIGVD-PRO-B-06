@@ -1,5 +1,6 @@
 package com.gdx.uch2.ui;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,6 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
+import com.gdx.uch2.networking.client.GameClient;
+import com.gdx.uch2.networking.server.GameServer;
+
+import javax.sound.sampled.Port;
 
 public class CreateRoomMenu implements Screen {
     private Stage stage;
@@ -47,7 +52,7 @@ public class CreateRoomMenu implements Screen {
         // Create TextField
         TextField nicknameTF = new TextField("Player 1", skin);
         TextField ipTF = new TextField("127.0.0.1", skin);
-        TextField portTF = new TextField("404", skin);
+        final TextField portTF = new TextField("404", skin);
         nicknameTF.setMaxLength(20);
         ipTF.setMaxLength(15);
         portTF.setMaxLength(5);
@@ -97,6 +102,10 @@ public class CreateRoomMenu implements Screen {
         mainMenuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                Thread tServer = new Thread(new GameServer(Integer.parseInt(String.valueOf(portTF))));
+                tServer.run();
+                Thread tClient = new Thread(new GameClient());
+                tClient.run();
                 Screen s = new MainMenu();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
