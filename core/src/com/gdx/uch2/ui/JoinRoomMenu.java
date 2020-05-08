@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
+import com.gdx.uch2.networking.client.GameClient;
 
 public class JoinRoomMenu implements Screen {
     private Stage stage;
@@ -44,7 +45,7 @@ public class JoinRoomMenu implements Screen {
         // Create TextField
         TextField nicknameTF = new TextField("Player 1", skin);
         TextField ipTF = new TextField("127.0.0.1", skin);
-        TextField portTF = new TextField("404", skin);
+        final TextField portTF = new TextField("404", skin);
         nicknameTF.setMaxLength(20);
         ipTF.setMaxLength(15);
         portTF.setMaxLength(5);
@@ -106,6 +107,9 @@ public class JoinRoomMenu implements Screen {
         joinButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                int port = Integer.parseInt(String.valueOf(portTF.getText()));
+                Thread tClient = new Thread(new GameClient("localhost", port));
+                tClient.start();
                 Screen s = new PlacementScreen();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);

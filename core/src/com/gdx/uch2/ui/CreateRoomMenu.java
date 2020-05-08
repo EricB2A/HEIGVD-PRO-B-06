@@ -108,7 +108,7 @@ public class CreateRoomMenu implements Screen {
                 tServer.start();
                 Thread tClient = new Thread(new GameClient("localhost", port));
                 tClient.start();
-                Screen s = new MainMenu();
+                Screen s = new PlacementScreen();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
@@ -117,10 +117,10 @@ public class CreateRoomMenu implements Screen {
                 return true;
             }
         });
-        createButton.addListener(new InputListener(){
+        mainMenuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Screen s = new PlacementScreen();
+                Screen s = new MainMenu();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
