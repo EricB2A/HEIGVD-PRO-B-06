@@ -17,6 +17,24 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private int playerID;
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
 
+
+    private void processGameStateUpdate(ByteBuf m){
+        List<Object> objects = new ArrayList<>();
+        decoder.decode(m, objects);
+        System.out.println("Gamestate reçu par le client :" + objects.get(0).toString());
+    }
+
+    private void processGameStart(ByteBuf m){
+        playerID = m.readInt();
+        System.out.println("PlayerID = " + playerID);
+    }
+
+    private void processBlockPlacement(ByteBuf m){
+        List<Object> objects = new ArrayList<>();
+        decoder.decode(m, objects);
+        System.out.println("block placé : " + objects.get(0).toString());
+    }
+
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
 
@@ -25,56 +43,27 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
             isSending = true;
         }
 
-
         ByteBuf m = (ByteBuf) msg;
-
-        //Si on reçoit un état de jeu du serveur
-        if(m.getChar(0) == MessageType.GameStateUpdate.getChar()){
-            m.readChar();
-            //NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
-            List<Object> oof = new ArrayList<>();
-            try {
-                //while (m.isReadable()) {
-                    decoder.decode((ByteBuf) msg, oof);
-                    System.out.flush();
-                //}
-                System.out.println(oof.get(0).toString());
-            } finally {
-                ReferenceCountUtil.release(msg);
+        m.readChar();
+        try{
+            if(m.getChar(0) == MessageType.GameStateUpdate.getChar()){
+                processGameStateUpdate(m);
             }
-        }else
-            //Si on reçoit un message de début de partie
-        if(m.getChar(0) == MessageType.GameStart.getChar()){
-            m.readChar();
-            playerID = m.readInt();
-            System.out.println("PlayerID = " + playerID);
-        }else
-            //Si on reçoit un message de placement de block
-        if(m.getChar(0) == MessageType.BlockPlaced.getChar()){
-            m.readChar();
-            //NettyKryoDecoder nettyKryoDecoder = new NettyKryoDecoder();
-            List<Object> obj = new ArrayList<>();
-            try {
-                //while (m.isReadable()) {
-                    decoder.decode(m, obj);
-                //}
-                System.out.println("block placé : " + obj.get(0).toString());
-            } finally {
-                ReferenceCountUtil.release(msg);
+            else if(m.getChar(0) == MessageType.GameStart.getChar()){
+                processGameStart(m);
             }
-        }
-         //Sinon, on essaie de lire du texte
-        else{
-            try {
+            else if(m.getChar(0) == MessageType.BlockPlaced.getChar()) {
+                processBlockPlacement(m);
+            }
+            else {
                 while (m.isReadable()) {
                     System.out.print((char) m.readByte());
                     System.out.flush();
                 }
-            } finally {
-                ReferenceCountUtil.release(msg);
             }
+        } finally {
+            ReferenceCountUtil.release(msg);
         }
-
     }
 
     private void startSending(ChannelHandlerContext ctx){
