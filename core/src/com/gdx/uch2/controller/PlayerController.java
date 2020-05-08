@@ -150,7 +150,8 @@ public class PlayerController {
             player.getVelocity().y = MAX_FALL_VEL;
         }
 
-        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1, player.getPosition().x, player.getPosition().y));
+        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1,
+                player.getPosition().x, player.getPosition().y, System.nanoTime()));
         // simply updates the state time
         player.update(delta);
 

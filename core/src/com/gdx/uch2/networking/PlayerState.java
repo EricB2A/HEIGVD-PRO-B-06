@@ -7,6 +7,7 @@ public class PlayerState {
     private int playerID;
     private float posX;
     private float posY;
+    private long time;
     static private Kryo kryo;
 
 
@@ -16,10 +17,11 @@ public class PlayerState {
     public PlayerState(){
     }
     
-    public PlayerState(int playerID, float posX, float posY) {
+    public PlayerState(int playerID, float posX, float posY, long time) {
         this.playerID = playerID;
         this.posX = posX;
         this.posY = posY;
+        this.time = time;
     }
 
     public int getPlayerID() {
@@ -51,4 +53,7 @@ public class PlayerState {
         return "Joueur#" + playerID + ", x=" + posX + ", y=" + posY;
     }
 
+    public long getTime() {
+        return time;
+    }
 }

@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.client;
 
+import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
@@ -26,6 +27,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private void processGameStart(ByteBuf m){
         playerID = m.readInt();
+        OnlinePlayerManager.getInstance().init(playerID);
         System.out.println("PlayerID = " + playerID);
     }
 
@@ -67,7 +69,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void startSending(ChannelHandlerContext ctx){
-        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1, 20, 30));
+        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1, 20, 30, 0));
         ClientPlayerStateTickManager.getInstance().setContext(ctx);
         ClientPlayerStateTickManager.getInstance().start(1000, 500);
     }

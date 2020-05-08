@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.controller.PlayerController;
 import com.gdx.uch2.entities.Block;
+import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.view.WorldRenderer;
 import com.badlogic.gdx.Input.Keys;
@@ -38,6 +39,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         controller.update(delta);
+        OnlinePlayerManager.getInstance().updatePlayers(delta);
         renderer.render();
     }
 

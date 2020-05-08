@@ -119,6 +119,7 @@ public class WorldRenderer {
         spriteBatch.setProjectionMatrix(cam.combined);
         spriteBatch.begin();
         drawBlocks();
+        drawOnlinePlayers();
         drawPlayer();
         spriteBatch.end();
         if (debug) {
@@ -153,6 +154,10 @@ public class WorldRenderer {
 
         spriteBatch.draw(spawnTexture, world.getLevel().getSpanPosition().x, world.getLevel().getSpanPosition().y, Block.SIZE, Block.SIZE);
         spriteBatch.draw(finishTexture, world.getLevel().getFinishPosition().x, world.getLevel().getFinishPosition().y, Block.SIZE, Block.SIZE);
+    }
+
+    private void drawOnlinePlayers() {
+        // TODO
     }
 
     private void drawPlayer() {
