@@ -1,4 +1,4 @@
-package com.gdx.uch2;
+package com.gdx.uch2.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
+import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.controller.PlayerController;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.World;
