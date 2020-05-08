@@ -52,7 +52,7 @@ public class CreateRoomMenu implements Screen {
         // Create TextField
         TextField nicknameTF = new TextField("Player 1", skin);
         TextField ipTF = new TextField("127.0.0.1", skin);
-        final TextField portTF = new TextField("404", skin);
+        final TextField portTF = new TextField("12345", skin);
         nicknameTF.setMaxLength(20);
         ipTF.setMaxLength(15);
         portTF.setMaxLength(5);
@@ -99,14 +99,16 @@ public class CreateRoomMenu implements Screen {
         table.add(mainMenuButton).width(200).colspan(2);
 
         // create button listeners
-        mainMenuButton.addListener(new InputListener(){
+        createButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Thread tServer = new Thread(new GameServer(Integer.parseInt(String.valueOf(portTF))));
-                tServer.run();
-                Thread tClient = new Thread(new GameClient());
-                tClient.run();
-                Screen s = new MainMenu();
+                System.out.println("création de la partie");
+                int port = Integer.parseInt(String.valueOf(portTF.getText()));
+                Thread tServer = new Thread(new GameServer(port));
+                tServer.start();
+                Thread tClient = new Thread(new GameClient("localhost", port));
+                tClient.start();
+                Screen s = new PlacementScreen();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
@@ -115,10 +117,10 @@ public class CreateRoomMenu implements Screen {
                 return true;
             }
         });
-        createButton.addListener(new InputListener(){
+        mainMenuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Screen s = new PlacementScreen();
+                Screen s = new MainMenu();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
