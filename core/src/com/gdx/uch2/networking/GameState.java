@@ -36,19 +36,19 @@ public class GameState {
         return GameState.kryo;
     }
 
-    public int getPosX(int playerID) {
+    public float getPosX(int playerID) {
         return playersStates.get(playerID).getPosX();
     }
 
-    public void setPosX(int posX, int playerID) {
+    public void setPosX(float posX, int playerID) {
         playersStates.get(playerID).setPosX(posX);
     }
 
-    public int getPosY(int playerID) {
+    public float getPosY(int playerID) {
         return playersStates.get(playerID).getPosY();
     }
 
-    public void setPosY(int posY, int playerID) {
+    public void setPosY(float posY, int playerID) {
         playersStates.get(playerID).setPosY(posY);
     }
 }

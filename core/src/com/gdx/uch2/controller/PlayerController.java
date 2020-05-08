@@ -12,6 +12,8 @@ import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.Player.State;
 import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
+import com.gdx.uch2.networking.PlayerState;
+import com.gdx.uch2.networking.client.ClientPlayerStateTickManager;
 
 public class PlayerController {
 
@@ -22,7 +24,7 @@ public class PlayerController {
     private static final long LONG_JUMP_PRESS 	= 200;
     private static final float ACCELERATION 	= 20;
     private static final float GRAVITY 			= -36f;
-    private static final float MAX_JUMP_SPEED	= 9f;
+    private static final float MAX_JUMP_SPEED	= 10f;
     private static final float DAMP 			= 0.8f;
     private static final float MAX_VEL 			= 5.6f;
     private static final float MAX_FALL_VEL 	= -30;
@@ -148,8 +150,10 @@ public class PlayerController {
             player.getVelocity().y = MAX_FALL_VEL;
         }
 
+        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1, player.getPosition().x, player.getPosition().y));
         // simply updates the state time
         player.update(delta);
+
 
     }
 
@@ -200,6 +204,7 @@ public class PlayerController {
         for (Block block : collidable) {
             if (block == null) continue;
             if (playerRect.overlaps(block.getBounds())) {
+                jumpingActive = false;
                 if(!grounded) {
                     player.setState(State.SLIDING);
                 }
@@ -240,14 +245,13 @@ public class PlayerController {
         for (Block block : collidable) {
             if (block == null) continue;
             if (playerRect.overlaps(block.getBounds())) {
+                jumpingActive = false;
                 if (player.getVelocity().y < 0) {
                     // Fix oscillating state at landing
                     player.translate(new Vector2(0, block.getBounds().y + block.getBounds().height - player.getBounds().y));
 
                     player.setState(backup);
                     grounded = true;
-                } else if(player.getVelocity().y > 0) {
-                    jumpingActive = false;
                 }
 
                 player.getVelocity().y = 0;

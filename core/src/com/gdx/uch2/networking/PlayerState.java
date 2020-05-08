@@ -5,8 +5,8 @@ import com.esotericsoftware.kryo.Kryo;
 public class PlayerState {
 
     private int playerID;
-    private int posX;
-    private int posY;
+    private float posX;
+    private float posY;
     static private Kryo kryo;
 
 
@@ -16,7 +16,7 @@ public class PlayerState {
     public PlayerState(){
     }
     
-    public PlayerState(int playerID, int posX, int posY) {
+    public PlayerState(int playerID, float posX, float posY) {
         this.playerID = playerID;
         this.posX = posX;
         this.posY = posY;
@@ -30,19 +30,19 @@ public class PlayerState {
         this.playerID = playerID;
     }
 
-    public int getPosX() {
+    public float getPosX() {
         return posX;
     }
 
-    public void setPosX(int posX) {
+    public void setPosX(float posX) {
         this.posX = posX;
     }
 
-    public int getPosY() {
+    public float getPosY() {
         return posY;
     }
 
-    public void setPosY(int posY) {
+    public void setPosY(float posY) {
         this.posY = posY;
     }
 
