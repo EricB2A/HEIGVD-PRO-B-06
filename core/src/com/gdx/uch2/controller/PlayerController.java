@@ -180,7 +180,6 @@ public class PlayerController {
         // Check victory
         if (playerRect.overlaps(world.getLevel().getFinishBlocks().getBounds())) {
             finish();
-//            return;
         }
 
         // we first check the movement on the horizontal X axis

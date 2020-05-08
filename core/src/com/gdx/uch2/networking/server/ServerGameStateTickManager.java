@@ -58,7 +58,7 @@ public class ServerGameStateTickManager {
         PlayerState[] newPlayers = new PlayerState[nbPlayers];
 
         for(int i = 0; i < nbPlayers; ++i){
-            newPlayers[i] = new PlayerState(i, posX, posY); //Place tous les joueurs au même endroit
+            newPlayers[i] = new PlayerState(i, posX, posY, 0); //Place tous les joueurs au même endroit
         }
         gameState = new GameState(newPlayers);
     }

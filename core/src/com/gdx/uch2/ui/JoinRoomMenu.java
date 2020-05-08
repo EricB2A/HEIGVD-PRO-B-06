@@ -110,7 +110,7 @@ public class JoinRoomMenu implements Screen {
                 int port = Integer.parseInt(String.valueOf(portTF.getText()));
                 Thread tClient = new Thread(new GameClient("localhost", port));
                 tClient.start();
-                Screen s = new PlacementScreen();
+                Screen s = new WaitingRoomMenu();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
