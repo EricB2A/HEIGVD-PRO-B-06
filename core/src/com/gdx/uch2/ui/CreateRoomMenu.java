@@ -99,13 +99,14 @@ public class CreateRoomMenu implements Screen {
         table.add(mainMenuButton).width(200).colspan(2);
 
         // create button listeners
-        mainMenuButton.addListener(new InputListener(){
+        createButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Thread tServer = new Thread(new GameServer(Integer.parseInt(String.valueOf(portTF))));
-                tServer.run();
+                System.out.println("création de la partie");
+                Thread tServer = new Thread(new GameServer(Integer.parseInt(String.valueOf(portTF.getText()))));
+                tServer.start();
                 Thread tClient = new Thread(new GameClient());
-                tClient.run();
+                tClient.start();
                 Screen s = new MainMenu();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
