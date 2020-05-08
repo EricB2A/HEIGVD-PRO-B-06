@@ -10,19 +10,23 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameHandler extends ChannelInboundHandlerAdapter {
 
     private List<ChannelHandlerContext> players;
+    private boolean[] finished;
     private NettyKryoEncoder encoder = new NettyKryoEncoder();
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
+    private GamePhase currentPhase;
 
     public GameHandler(List<ChannelHandlerContext> players){
         this.players = players;
+        finished = new boolean[players.size()];
+        Arrays.fill(finished, false);
+        currentPhase = GamePhase.Editing;
     }
-
-
 
 
     @Override
@@ -30,11 +34,15 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
 
         try{
             ByteBuf m = (ByteBuf) msg;
-            if(m.readChar() == MessageType.PlayerStateUpdate.getChar()){
+            m.readChar();
+            if(m.getChar(0) == MessageType.PlayerStateUpdate.getChar()){
                 processPlayerState(m);
-            }else
-            if(m.readChar() == MessageType.BlockPlaced.getChar()){
+            }
+            else if(m.getChar(0) == MessageType.BlockPlaced.getChar()){
                 processObjectPlacement(m);
+            }
+            else if(m.getChar(0) == MessageType.ReachedEnd.getChar()){
+                processPlayerReachedEnd(m);
             }
             else{
                 while (m.isReadable()) {
@@ -44,6 +52,32 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
             }
         }finally {
             ReferenceCountUtil.release(msg);
+        }
+    }
+
+    private void startMovementPhase(){
+        currentPhase = GamePhase.Moving;
+        Arrays.fill(finished, false);
+    }
+
+    private void startEditingPhase(){
+        currentPhase = GamePhase.Editing;
+    }
+
+    private void processPlayerReachedEnd(ByteBuf m){
+        int playerThatFinished = m.readInt();
+        finished[playerThatFinished] = true;
+        boolean allFinished = true;
+        for (boolean b : finished) {
+            if (!b) {
+                allFinished = false;
+                break;
+            }
+        }
+        System.out.println("Le joueur #" + playerThatFinished + " just arrived at the end!");
+
+        if(allFinished){
+            startEditingPhase();
         }
     }
 

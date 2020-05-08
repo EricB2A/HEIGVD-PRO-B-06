@@ -10,6 +10,8 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.TimerTask;
 
+import static io.netty.buffer.Unpooled.buffer;
+
 public class sendPlayerState extends TimerTask {
 
     private ChannelHandlerContext ctx;
@@ -25,5 +27,14 @@ public class sendPlayerState extends TimerTask {
         ByteBuf out = Unpooled.buffer(1024);
         encoder.encode(ClientPlayerStateTickManager.getInstance().getCurrentState(), out, MessageType.PlayerStateUpdate.getChar());
         ctx.channel().writeAndFlush(out);
+
+        if(ClientPlayerStateTickManager.getInstance().hasFinished()){
+            out = buffer(128);
+            out.writeChar(MessageType.ReachedEnd.getChar());
+            out.writeInt(ClientPlayerStateTickManager.getInstance().getCurrentState().getPlayerID());
+            ctx.channel().writeAndFlush(out);
+            ClientPlayerStateTickManager.getInstance().setHasFinished(false);
+        }
+
     }
 }

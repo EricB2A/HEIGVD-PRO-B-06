@@ -14,6 +14,7 @@ public class ClientPlayerStateTickManager {
     private Timer timer;
     private ChannelHandlerContext ctx;
     private PlayerState currentState;
+    private boolean hasFinished = false;
 
     private ClientPlayerStateTickManager(){
     }
@@ -32,6 +33,14 @@ public class ClientPlayerStateTickManager {
 
     public void setContext(ChannelHandlerContext ctx){
         this.ctx = ctx;
+    }
+
+    public void setHasFinished(boolean value){
+        hasFinished = value;
+    }
+
+    public boolean hasFinished(){
+        return hasFinished;
     }
 
     //Crée le timer et envoie régulièrement une séquence d'acitons au serveur.

@@ -68,7 +68,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
         int playerID = 0;
         for(ChannelHandlerContext ctx : players){
-            ByteBuf out = buffer(1024);
+            ByteBuf out = buffer(128);
             out.writeChar(MessageType.GameStart.getChar());
             out.writeInt(playerID);
             ctx.writeAndFlush(out);

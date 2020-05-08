@@ -2,10 +2,10 @@ package com.gdx.uch2.networking;
 
 public enum MessageType {
     GameStateUpdate,
-    UserAction,
     GameStart,
     BlockPlaced,
-    PlayerStateUpdate
+    PlayerStateUpdate,
+    ReachedEnd
     ;
 
     public char getChar(){

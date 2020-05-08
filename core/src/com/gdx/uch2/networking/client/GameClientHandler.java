@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.client;
 
+import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
@@ -16,7 +17,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private boolean isSending;
     private int playerID;
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
-
+    private GamePhase currentPhase;
 
     private void processGameStateUpdate(ByteBuf m){
         List<Object> objects = new ArrayList<>();
@@ -25,6 +26,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void processGameStart(ByteBuf m){
+        this.currentPhase = GamePhase.Editing;
         playerID = m.readInt();
         System.out.println("PlayerID = " + playerID);
     }
@@ -47,13 +49,17 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         m.readChar();
         try{
             if(m.getChar(0) == MessageType.GameStateUpdate.getChar()){
-                processGameStateUpdate(m);
+                if(currentPhase == GamePhase.Moving){
+                    processGameStateUpdate(m);
+                }
             }
             else if(m.getChar(0) == MessageType.GameStart.getChar()){
                 processGameStart(m);
             }
             else if(m.getChar(0) == MessageType.BlockPlaced.getChar()) {
-                processBlockPlacement(m);
+                if(currentPhase == GamePhase.Editing){
+                    processBlockPlacement(m);
+                }
             }
             else {
                 while (m.isReadable()) {
