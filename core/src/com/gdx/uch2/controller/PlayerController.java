@@ -113,7 +113,7 @@ public class PlayerController {
         // Setting initial vertical acceleration
         player.getAcceleration().y = GRAVITY;
 
-        if (player.getState() == State.SLIDING) {
+        if (player.getState() == State.SLIDING && player.getVelocity().y < 0) {
             player.getAcceleration().y += SLIDING_FRICTION;
         }
 
