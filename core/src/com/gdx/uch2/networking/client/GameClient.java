@@ -11,9 +11,16 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class GameClient implements Runnable {
+
+    private int port;
+    private String hostname;
+
+    public GameClient(String hostname, int port){
+        this.port = port;
+        this.hostname = hostname;
+    }
+
     public void run(){
-        String host = "localhost";
-        int port = 12345;
         GameState.setUpKryo();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -28,7 +35,7 @@ public class GameClient implements Runnable {
                 }
             });
 
-            ChannelFuture f = b.connect(host, port).sync();
+            ChannelFuture f = b.connect(hostname, port).sync();
 
             f.channel().closeFuture().sync();
         }

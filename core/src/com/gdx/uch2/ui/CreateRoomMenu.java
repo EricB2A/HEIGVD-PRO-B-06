@@ -52,7 +52,7 @@ public class CreateRoomMenu implements Screen {
         // Create TextField
         TextField nicknameTF = new TextField("Player 1", skin);
         TextField ipTF = new TextField("127.0.0.1", skin);
-        final TextField portTF = new TextField("404", skin);
+        final TextField portTF = new TextField("12345", skin);
         nicknameTF.setMaxLength(20);
         ipTF.setMaxLength(15);
         portTF.setMaxLength(5);
@@ -103,9 +103,10 @@ public class CreateRoomMenu implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("création de la partie");
-                Thread tServer = new Thread(new GameServer(Integer.parseInt(String.valueOf(portTF.getText()))));
+                int port = Integer.parseInt(String.valueOf(portTF.getText()));
+                Thread tServer = new Thread(new GameServer(port));
                 tServer.start();
-                Thread tClient = new Thread(new GameClient());
+                Thread tClient = new Thread(new GameClient("localhost", port));
                 tClient.start();
                 Screen s = new MainMenu();
                 ScreenManager.getInstance().setPlacementScreen(s);
