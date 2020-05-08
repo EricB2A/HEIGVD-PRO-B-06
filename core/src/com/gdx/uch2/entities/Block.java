@@ -38,5 +38,5 @@ public class Block {
         return false;
     }
 
-    public void action(Player player) { player.getVelocity().x = 0; }
+    public void action(Player player) { }
 }

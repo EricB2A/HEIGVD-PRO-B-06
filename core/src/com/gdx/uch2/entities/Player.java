@@ -94,6 +94,15 @@ public class Player {
         effects.add(effect);
     }
 
+    public boolean hasEffect(Effect effect){
+        for(Effect e : effects) {
+            if(e.equals(effect)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void applyEffects(){
         for(Effect effect : effects) {
             if(effect.isFinished()){
