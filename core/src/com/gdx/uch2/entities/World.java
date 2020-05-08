@@ -13,11 +13,15 @@ import java.util.List;
 
 public class World {
 
-    /** The collision boxes **/
+    /**
+     * The collision boxes
+     **/
     Array<Rectangle> collisionRects = new Array<Rectangle>();
 //    /** The blocks making up the world **/
 //    Array<Block> blocks = new Array<Block>();
-    /** Our player controlled hero **/
+    /**
+     * Our player controlled hero
+     **/
     Player player;
 
     Level level;
@@ -31,15 +35,19 @@ public class World {
     public Player getPlayer() {
         return player;
     }
+
     public Level getLevel() {
         return level;
     }
+
     public Array<Rectangle> getCollisionRects() {
         return collisionRects;
     }
     // --------------------
 
-    /** Return only the blocks that need to be drawn **/
+    /**
+     * Return only the blocks that need to be drawn
+     **/
     public List<Block> getDrawableBlocks(int width, int height) {
 //        List<Block> blocks = new LinkedList<>();
 //        for (int col = 0; col < level.getWidth(); ++col) {
@@ -51,8 +59,8 @@ public class World {
 //        }
 //
 //        return blocks;
-        int x = (int)player.getBounds().x - width;
-        int y = (int)player.getBounds().y - height;
+        int x = (int) player.getBounds().x - width;
+        int y = (int) player.getBounds().y - height;
         if (x < 0) {
             x = 0;
         }
@@ -94,35 +102,4 @@ public class World {
     public void resetPlayer() {
         player = new Player(new Vector2(level.getSpanPosition()));
     }
-
-
-
-//    private void createDemoWorld() {
-//        player = new Player(new Vector2(7, 2));
-//
-//        for (int i = 0; i < 30; i++) {
-//            blocks.add(new Block(new Vector2(i, 0)));
-//            blocks.add(new Block(new Vector2(i, 14)));
-//            if (i < 15) {
-//                blocks.add(new Block(new Vector2(0, i)));
-//                blocks.add(new Block(new Vector2(29, i)));
-//            }
-//
-//            if (i >= 3 && i <= 6) {
-//                blocks.add(new Block(new Vector2(8, i)));
-//            }
-//
-//            if (i >= 5 && i <= 8) {
-//                blocks.add(new Block(new Vector2(i, 3)));
-//            }
-//
-//            if (i >= 13 && i <= 18) {
-//                blocks.add(new Block(new Vector2(i, 6)));
-//            }
-//
-//            if (i >= 23 && i <= 27) {
-//                blocks.add(new Block(new Vector2(i, 8)));
-//            }
-//        }
-//    }
 }

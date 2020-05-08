@@ -3,10 +3,7 @@ package com.gdx.uch2.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -163,14 +160,14 @@ public class WorldRenderer {
         playerFrame = (TextureRegion) (player.isFacingLeft() ? idleLeftAnimation.getKeyFrame(player.getStateTime(), true) : idleRightAnimation.getKeyFrame(player.getStateTime(), true));
         if(player.getState().equals(State.WALKING)) {
             playerFrame = (TextureRegion) (player.isFacingLeft() ? walkLeftAnimation.getKeyFrame(player.getStateTime(), true) : walkRightAnimation.getKeyFrame(player.getStateTime(), true));
-        } else if (player.getState().equals(State.JUMPING)) {
+        } else if (player.getState().equals(State.JUMPING) || player.getState().equals(State.SLIDING)) {
             if (player.getVelocity().y > 0) {
                 playerFrame = player.isFacingLeft() ? playerJumpLeft : playerJumpRight;
             } else {
                 playerFrame = player.isFacingLeft() ? playerFallLeft : playerFallRight;
             }
         }
-//        spriteBatch.draw(playerFrame, player.getPosition().x * ppuX, player.getPosition().y * ppuY, Player.SIZE * ppuX, Player.SIZE * ppuY);
+
         spriteBatch.draw(playerFrame, player.getPosition().x, player.getPosition().y, Player.SIZE, Player.SIZE);
     }
 
