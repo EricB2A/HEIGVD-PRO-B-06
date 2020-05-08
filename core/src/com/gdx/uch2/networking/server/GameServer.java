@@ -13,7 +13,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-public class GameServer {
+public class GameServer implements Runnable {
     private int port;
 
     public GameServer(int port){
@@ -21,7 +21,7 @@ public class GameServer {
         GameState.setUpKryo();
     }
 
-    public void run() throws Exception{
+    public void run() {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
@@ -41,6 +41,8 @@ public class GameServer {
 
             ChannelFuture f = b.bind(port).sync();
             f.channel().closeFuture().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally{
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
