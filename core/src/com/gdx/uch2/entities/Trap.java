@@ -1,14 +1,19 @@
 package com.gdx.uch2.entities;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gdx.uch2.effects.LowGravity;
-import com.gdx.uch2.effects.StrongGravity;
+import com.gdx.uch2.effects.*;
 
 public class Trap extends Block {
-    public Trap(Vector2 pos) {
-        super(pos);
+    Effect effect;
+    public Trap(Vector2 pos, Block.Type type) {
+        super(pos, type);
+        switch (type){
+            case LETHAL: effect = new Kill();
+            case G_DOWN: effect = new LowGravity();
+            case G_UP: effect = new StrongGravity();
+            default: effect = new Kill();
+        }
     }
-    StrongGravity l = new StrongGravity();
 
     @Override
     public boolean isLethal() {
@@ -17,8 +22,7 @@ public class Trap extends Block {
 
     @Override
     public void action(Player player) {
-        if(!player.hasEffect(l))
-            player.addEffect(l);
-        //player.setState(Player.State.DEAD);
+        if(!player.hasEffect(effect))
+            player.addEffect(effect);
     }
 }

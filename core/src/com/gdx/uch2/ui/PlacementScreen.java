@@ -16,7 +16,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private World world;
     private WorldRenderer renderer;
     private String text;
-    private int blockType = 1;
+    private Block.Type blockType;
 
     private int width, height;
 
@@ -61,11 +61,18 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.NUM_1 || keycode == Input.Keys.NUMPAD_1) {
-            blockType = 1;
-        }
-        if (keycode == Input.Keys.NUM_2 || keycode == Input.Keys.NUMPAD_2){
-            blockType = 2;
+        switch(keycode){
+            case Input.Keys.NUM_1:
+            case Input.Keys.NUMPAD_1: blockType = Block.Type.BOX; break;
+            case Input.Keys.NUM_2:
+            case Input.Keys.NUMPAD_2: blockType = Block.Type.BLOCK; break;
+            case Input.Keys.NUM_3:
+            case Input.Keys.NUMPAD_3: blockType = Block.Type.LETHAL; break;
+            case Input.Keys.NUM_4:
+            case Input.Keys.NUMPAD_4: blockType = Block.Type.G_DOWN; break;
+            case Input.Keys.NUM_5:
+            case Input.Keys.NUMPAD_5: blockType = Block.Type.G_UP; break;
+            default: blockType = Block.Type.BOX; break;
         }
         return true;
     }
@@ -89,11 +96,16 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             y = (int) pos.y;
             Block[][] blocks = world.getLevel().getBlocks();
             if (blocks[x][y] == null) {
-                if (blockType == 2) {
-                    blocks[x][y] = new Trap(new Vector2(x, y));
-                } else {
-                    blocks[x][y] = new Block(new Vector2(x, y));
+                Block block;
+                switch (blockType){
+                    case BOX:
+                    case BLOCK: block = new Block(new Vector2(x, y), blockType); break;
+                    case LETHAL:
+                    case G_DOWN:
+                    case G_UP: block = new Trap(new Vector2(x, y), blockType); break;
+                    default: block = new Block(new Vector2(x, y), blockType); break;
                 }
+                blocks[x][y] = block;
                 ScreenManager.getInstance().showScreen(new GameScreen(world));
             }
         }

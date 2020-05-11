@@ -29,7 +29,6 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public void show() {
-
         Gdx.input.setInputProcessor(this);
     }
 

@@ -84,8 +84,8 @@ public class WorldRenderer {
         TextureAtlas blocksAtlas = new TextureAtlas(Gdx.files.internal(Constants.BLOCKS_ATLAS));
         boxTexture = blocksAtlas.findRegion("box");
         blockTexture = blocksAtlas.findRegion("stone");
-        gUpTexture = blocksAtlas.findRegion("LiquidWater");
-        gDownTexture = blocksAtlas.findRegion("LiquidLava");
+        gUpTexture = blocksAtlas.findRegion("liquidWater");
+        gDownTexture = blocksAtlas.findRegion("liquidLava");
         lethalBlockTexture = blocksAtlas.findRegion("boxExplosive");
         spawnTexture = blocksAtlas.findRegion("signRight");
         finishTexture = blocksAtlas.findRegion("signExit");
@@ -152,12 +152,12 @@ public class WorldRenderer {
         for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
             TextureRegion texture;
             switch (block.getType()){
-                case BOX: texture = boxTexture;
-                case BLOCK: texture = blockTexture;
-                case LETHAL: texture = lethalBlockTexture;
-                case G_UP: texture = gUpTexture;
-                case G_DOWN: texture = gDownTexture;
-                default: texture = boxTexture;
+                case BOX: texture = boxTexture; break;
+                case BLOCK: texture = blockTexture; break;
+                case LETHAL: texture = lethalBlockTexture; break;
+                case G_UP: texture = gUpTexture; break;
+                case G_DOWN: texture = gDownTexture; break;
+                default: texture = boxTexture; break;
             }
             spriteBatch.draw(texture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
         }

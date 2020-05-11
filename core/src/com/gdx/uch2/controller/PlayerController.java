@@ -107,7 +107,7 @@ public class PlayerController {
 
     /** The main update method **/
     public void update(float delta) {
-        if (!finished) {
+        if (!finished || player.getState() != State.DEAD) {
             // Processing the input - setting the states of Player
             processInput();
         }
