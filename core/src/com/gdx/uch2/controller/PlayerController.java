@@ -158,8 +158,6 @@ public class PlayerController {
 
         ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1,
                 player.getPosition().x, player.getPosition().y, System.nanoTime()));
-        // simply updates the state time
-        player.update(delta);
     }
 
     private void finish() {

@@ -8,10 +8,10 @@ public class Trap extends Block {
     public Trap(Vector2 pos, Block.Type type) {
         super(pos, type);
         switch (type){
-            case LETHAL: effect = new Kill();
-            case G_DOWN: effect = new LowGravity();
-            case G_UP: effect = new StrongGravity();
-            default: effect = new Kill();
+            case LETHAL: effect = new Kill(); break;
+            case G_DOWN: effect = new LowGravity(); break;
+            case G_UP: effect = new StrongGravity(); break;
+            default: effect = new Kill(); break;
         }
     }
 
