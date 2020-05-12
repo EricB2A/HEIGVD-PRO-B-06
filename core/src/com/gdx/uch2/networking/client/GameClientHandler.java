@@ -11,6 +11,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameClientHandler extends ChannelInboundHandlerAdapter {
@@ -27,7 +28,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void processGameStart(ByteBuf m){
-        this.currentPhase = GamePhase.Editing;
+        startEditingPhase();
         playerID = m.readInt();
         OnlinePlayerManager.getInstance().init(playerID);
         System.out.println("PlayerID = " + playerID);
@@ -78,6 +79,15 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1, 20, 30, 0));
         ClientPlayerStateTickManager.getInstance().setContext(ctx);
         ClientPlayerStateTickManager.getInstance().start(1000, 500);
+    }
+
+
+    private void startMovementPhase(){
+        currentPhase = GamePhase.Moving;
+    }
+
+    private void startEditingPhase(){
+        currentPhase = GamePhase.Editing;
     }
 
     @Override

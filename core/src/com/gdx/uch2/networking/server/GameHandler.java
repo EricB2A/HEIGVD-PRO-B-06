@@ -64,6 +64,15 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
         currentPhase = GamePhase.Editing;
     }
 
+    private void computePoints(){
+        //TODO
+    }
+
+    private void resetPlayersPositions(){
+        for(ChannelHandlerContext ctx)
+        ServerGameStateTickManager.getInstance().setNewState();
+    }
+
     private void processPlayerReachedEnd(ByteBuf m){
         int playerThatFinished = m.readInt();
         finished[playerThatFinished] = true;
@@ -74,9 +83,10 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
                 break;
             }
         }
-        System.out.println("Le joueur #" + playerThatFinished + " just arrived at the end!");
+        System.out.println("Le joueur #" + playerThatFinished + " est arrivé à la fin!");
 
         if(allFinished){
+            computePoints();
             startEditingPhase();
         }
     }

@@ -44,7 +44,7 @@ public class JoinRoomMenu implements Screen {
 
         // Create TextField
         TextField nicknameTF = new TextField("Player 1", skin);
-        TextField ipTF = new TextField("127.0.0.1", skin);
+        final TextField ipTF = new TextField("127.0.0.1", skin);
         final TextField portTF = new TextField("404", skin);
         nicknameTF.setMaxLength(20);
         ipTF.setMaxLength(15);
@@ -108,7 +108,7 @@ public class JoinRoomMenu implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 int port = Integer.parseInt(String.valueOf(portTF.getText()));
-                Thread tClient = new Thread(new GameClient("localhost", port));
+                Thread tClient = new Thread(new GameClient(ipTF.getText(), port));
                 tClient.start();
                 Screen s = new WaitingRoomMenu();
                 ScreenManager.getInstance().setPlacementScreen(s);

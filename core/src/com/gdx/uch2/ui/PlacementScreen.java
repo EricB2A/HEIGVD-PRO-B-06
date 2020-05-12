@@ -12,6 +12,8 @@ import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.view.WorldRenderer;
 
+import static com.gdx.uch2.entities.Block.Type.BOX;
+
 public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private World world;
     private WorldRenderer renderer;
@@ -63,7 +65,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     public boolean keyUp(int keycode) {
         switch(keycode){
             case Input.Keys.NUM_1:
-            case Input.Keys.NUMPAD_1: blockType = Block.Type.BOX; break;
+            case Input.Keys.NUMPAD_1: blockType = BOX; break;
             case Input.Keys.NUM_2:
             case Input.Keys.NUMPAD_2: blockType = Block.Type.BLOCK; break;
             case Input.Keys.NUM_3:
@@ -72,7 +74,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             case Input.Keys.NUMPAD_4: blockType = Block.Type.G_DOWN; break;
             case Input.Keys.NUM_5:
             case Input.Keys.NUMPAD_5: blockType = Block.Type.G_UP; break;
-            default: blockType = Block.Type.BOX; break;
+            default: blockType = BOX; break;
         }
         return true;
     }
@@ -97,6 +99,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             Block[][] blocks = world.getLevel().getBlocks();
             if (blocks[x][y] == null) {
                 Block block;
+                if(blockType == null) blockType = BOX; //TODO fix car il y avait une nullpointer exception à la ligne suivante
                 switch (blockType){
                     case BOX:
                     case BLOCK: block = new Block(new Vector2(x, y), blockType); break;

@@ -164,7 +164,7 @@ public class PlayerController {
     private void finish() {
         if(!finished){
             System.out.println("FINISH");
-            ClientPlayerStateTickManager.getInstance().setHasFinished(true);
+            ClientPlayerStateTickManager.getInstance().sendFinish();
             finished = true;
         }
         player.setState(State.IDLE);
