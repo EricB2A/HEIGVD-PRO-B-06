@@ -10,6 +10,7 @@ import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
+import com.gdx.uch2.networking.client.ClientPlayerStateTickManager;
 import com.gdx.uch2.view.WorldRenderer;
 
 import static com.gdx.uch2.entities.Block.Type.BOX;
@@ -99,7 +100,6 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             Block[][] blocks = world.getLevel().getBlocks();
             if (blocks[x][y] == null) {
                 Block block;
-                if(blockType == null) blockType = BOX; //TODO fix car il y avait une nullpointer exception à la ligne suivante
                 switch (blockType){
                     case BOX:
                     case BLOCK: block = new Block(new Vector2(x, y), blockType); break;
@@ -110,6 +110,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 }
                 blocks[x][y] = block;
                 ScreenManager.getInstance().showScreen(new GameScreen(world));
+                ClientPlayerStateTickManager.getInstance().sendBlockPlacement(block);
             }
         }
         return true;

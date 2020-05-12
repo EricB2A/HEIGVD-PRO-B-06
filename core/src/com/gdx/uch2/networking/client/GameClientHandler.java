@@ -17,9 +17,10 @@ import java.util.List;
 public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private boolean isSending;
-    private int playerID;
+    private int playerID = -1;
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
     private GamePhase currentPhase;
+    private ChannelHandlerContext ctx = null;
 
     private void processGameStateUpdate(ByteBuf m){
         List<Object> objects = new ArrayList<>();
@@ -28,6 +29,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void processGameStart(ByteBuf m){
+        startSending(ctx);
         startEditingPhase();
         playerID = m.readInt();
         OnlinePlayerManager.getInstance().init(playerID);
@@ -42,11 +44,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-
-        if(!isSending){//TODO placer ça autre part
-            startSending(ctx);
-            isSending = true;
-        }
+        if(this.ctx == null) this.ctx = ctx;
 
         ByteBuf m = (ByteBuf) msg;
         m.readChar();
@@ -64,6 +62,12 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
                     processBlockPlacement(m);
                 }
             }
+            else if(m.getChar(0) == MessageType.CanPlace.getChar()) {
+                //TODO thibaud
+            }
+            else if(m.getChar(0) == MessageType.StartMovementPhase.getChar()) {
+                //TODO
+            }
             else {
                 while (m.isReadable()) {
                     System.out.print((char) m.readByte());
@@ -76,7 +80,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void startSending(ChannelHandlerContext ctx){
-        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1, 20, 30, 0));
+        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(playerID, 20, 30, 0));
         ClientPlayerStateTickManager.getInstance().setContext(ctx);
         ClientPlayerStateTickManager.getInstance().start(1000, 500);
     }

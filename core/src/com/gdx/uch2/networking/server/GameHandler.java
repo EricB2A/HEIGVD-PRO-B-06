@@ -33,6 +33,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
         finished = new boolean[players.size()];
         Arrays.fill(finished, false);
         currentPhase = GamePhase.Editing;
+        startEditingPhase();
     }
 
 
