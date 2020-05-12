@@ -1,5 +1,6 @@
 package com.gdx.uch2.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,8 @@ import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.client.ClientPlayerStateTickManager;
 
+import com.gdx.uch2.effects.Effect;
+
 public class PlayerController {
 
     enum Keys {
@@ -23,7 +26,7 @@ public class PlayerController {
 
     private static final long LONG_JUMP_PRESS 	= 200;
     private static final float ACCELERATION 	= 20;
-    private static final float GRAVITY 			= -36f;
+    public  static final float GRAVITY 			= -36f;
     private static final float MAX_JUMP_SPEED	= 10f;
     private static final float DAMP 			= 0.8f;
     private static final float MAX_VEL 			= 5.6f;
@@ -104,7 +107,7 @@ public class PlayerController {
 
     /** The main update method **/
     public void update(float delta) {
-        if (!finished) {
+        if (!finished || player.getState() != State.DEAD) {
             // Processing the input - setting the states of Player
             processInput();
         }
@@ -114,6 +117,9 @@ public class PlayerController {
 
         // Setting initial vertical acceleration
         player.getAcceleration().y = GRAVITY;
+
+        // Need to update player here to apply effects before other operations
+        player.update(delta);
 
         if (player.getState() == State.SLIDING && player.getVelocity().y < 0) {
             player.getAcceleration().y += SLIDING_FRICTION;
@@ -150,11 +156,8 @@ public class PlayerController {
             player.getVelocity().y = MAX_FALL_VEL;
         }
 
-        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1, player.getPosition().x, player.getPosition().y));
-        // simply updates the state time
-        player.update(delta);
-
-
+        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(1,
+                player.getPosition().x, player.getPosition().y, System.nanoTime()));
     }
 
     //Mort ou arrivé
@@ -180,7 +183,6 @@ public class PlayerController {
         // Check victory
         if (playerRect.overlaps(world.getLevel().getFinishBlocks().getBounds())) {
             finish();
-//            return;
         }
 
         // we first check the movement on the horizontal X axis
@@ -213,6 +215,7 @@ public class PlayerController {
                 if(!grounded) {
                     player.setState(State.SLIDING);
                 }
+
                 // Apply block action if any
                 block.action(player);
 
@@ -260,12 +263,11 @@ public class PlayerController {
                 }
 
                 player.getVelocity().y = 0;
-                world.getCollisionRects().add(block.getBounds());
 
-                if (block instanceof Trap) {
-                    block.action(player);
-                    //finish();
-                }
+                // Apply block action if any
+                block.action(player);
+
+                world.getCollisionRects().add(block.getBounds());
             }
         }
         // reset the collision box's position on Y

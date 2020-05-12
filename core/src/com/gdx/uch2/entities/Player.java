@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Player {
     public enum State {
-        IDLE, WALKING, JUMPING, SLIDING
+        IDLE, WALKING, JUMPING, SLIDING, DEAD
     }
 
     public static final float SPEED = 6f;	// unit per second
@@ -94,11 +94,20 @@ public class Player {
         effects.add(effect);
     }
 
+    public boolean hasEffect(Effect effect){
+        for(Effect e : effects) {
+            if(e.equals(effect)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void applyEffects(){
         for(Effect effect : effects) {
             if(effect.isFinished()){
                 effects.remove(effect);
-                continue;
+                break;
             }
             effect.apply(this);
         }

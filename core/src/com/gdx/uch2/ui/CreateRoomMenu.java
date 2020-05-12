@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
+import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.server.GameServer;
 
@@ -108,7 +109,7 @@ public class CreateRoomMenu implements Screen {
                 tServer.start();
                 Thread tClient = new Thread(new GameClient("localhost", port));
                 tClient.start();
-                Screen s = new PlacementScreen();
+                Screen s = new WaitingRoomMenu();
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }

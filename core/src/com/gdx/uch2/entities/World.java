@@ -19,6 +19,7 @@ public class World {
     Array<Rectangle> collisionRects = new Array<Rectangle>();
 //    /** The blocks making up the world **/
 //    Array<Block> blocks = new Array<Block>();
+
     /**
      * Our player controlled hero
      **/
@@ -29,9 +30,6 @@ public class World {
     public static World currentWorld;
 
     // Getters -----------
-//    public Array<Block> getBlocks() {
-//        return blocks;
-//    }
     public Player getPlayer() {
         return player;
     }
@@ -49,16 +47,6 @@ public class World {
      * Return only the blocks that need to be drawn
      **/
     public List<Block> getDrawableBlocks(int width, int height) {
-//        List<Block> blocks = new LinkedList<>();
-//        for (int col = 0; col < level.getWidth(); ++col) {
-//            for (int row = 0; row < level.getHeight(); ++row) {
-//                Block block = level.getBlocks()[col][row];
-//                if (block != null)
-//                    blocks.add(block);
-//            }
-//        }
-//
-//        return blocks;
         int x = (int) player.getBounds().x - width;
         int y = (int) player.getBounds().y - height;
         if (x < 0) {
@@ -89,7 +77,6 @@ public class World {
         return blocks;
     }
 
-    // --------------------
     public World() {
         createWorld();
     }

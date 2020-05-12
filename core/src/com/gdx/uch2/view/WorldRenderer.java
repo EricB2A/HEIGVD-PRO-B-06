@@ -17,8 +17,8 @@ import com.gdx.uch2.util.Constants;
 
 public class WorldRenderer {
 
-    private static final float CAMERA_WIDTH = 30f;
-    private static final float CAMERA_HEIGHT = 15f;
+    private static final float CAMERA_WIDTH = 30;
+    private static final float CAMERA_HEIGHT = 15;
     private static final float RUNNING_FRAME_DURATION = 0.06f;
 
     private World world;
@@ -28,7 +28,10 @@ public class WorldRenderer {
     ShapeRenderer debugRenderer = new ShapeRenderer();
 
     /** Textures **/
+    private TextureRegion boxTexture;
     private TextureRegion blockTexture;
+    private TextureRegion gUpTexture;
+    private TextureRegion gDownTexture;
     private TextureRegion lethalBlockTexture;
     private TextureRegion spawnTexture;
     private TextureRegion finishTexture;
@@ -79,7 +82,10 @@ public class WorldRenderer {
     private void loadTextures() {
         TextureAtlas playerAtlas = new TextureAtlas(Gdx.files.internal(Constants.PLAYER_1_ATLAS));
         TextureAtlas blocksAtlas = new TextureAtlas(Gdx.files.internal(Constants.BLOCKS_ATLAS));
-        blockTexture = blocksAtlas.findRegion("box");
+        boxTexture = blocksAtlas.findRegion("box");
+        blockTexture = blocksAtlas.findRegion("stone");
+        gUpTexture = blocksAtlas.findRegion("liquidWater");
+        gDownTexture = blocksAtlas.findRegion("liquidLava");
         lethalBlockTexture = blocksAtlas.findRegion("boxExplosive");
         spawnTexture = blocksAtlas.findRegion("signRight");
         finishTexture = blocksAtlas.findRegion("signExit");
@@ -119,6 +125,7 @@ public class WorldRenderer {
         spriteBatch.setProjectionMatrix(cam.combined);
         spriteBatch.begin();
         drawBlocks();
+        drawOnlinePlayers();
         drawPlayer();
         spriteBatch.end();
         if (debug) {
@@ -143,16 +150,24 @@ public class WorldRenderer {
 
     private void drawBlocks() {
         for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
-//            spriteBatch.draw(blockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
-            if (block.isLethal()) {
-                spriteBatch.draw(lethalBlockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
-            } else {
-                spriteBatch.draw(blockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
+            TextureRegion texture;
+            switch (block.getType()){
+                case BOX: texture = boxTexture; break;
+                case BLOCK: texture = blockTexture; break;
+                case LETHAL: texture = lethalBlockTexture; break;
+                case G_UP: texture = gUpTexture; break;
+                case G_DOWN: texture = gDownTexture; break;
+                default: texture = boxTexture; break;
             }
+            spriteBatch.draw(texture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
         }
 
         spriteBatch.draw(spawnTexture, world.getLevel().getSpanPosition().x, world.getLevel().getSpanPosition().y, Block.SIZE, Block.SIZE);
         spriteBatch.draw(finishTexture, world.getLevel().getFinishPosition().x, world.getLevel().getFinishPosition().y, Block.SIZE, Block.SIZE);
+    }
+
+    private void drawOnlinePlayers() {
+        // TODO
     }
 
     private void drawPlayer() {

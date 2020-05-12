@@ -51,4 +51,8 @@ public class GameState {
     public void setPosY(float posY, int playerID) {
         playersStates.get(playerID).setPosY(posY);
     }
+
+    public Map<Integer, PlayerState> getPlayerStates() {
+        return playersStates;
+    }
 }
