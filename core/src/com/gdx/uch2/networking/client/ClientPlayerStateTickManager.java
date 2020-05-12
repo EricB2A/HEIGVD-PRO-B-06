@@ -23,7 +23,7 @@ public class ClientPlayerStateTickManager {
     private Timer timer;
     private ChannelHandlerContext ctx;
     private PlayerState currentState;
-    //private boolean hasFinished = false;
+    private int playerID = -1;
 
     private ClientPlayerStateTickManager(){
     }
@@ -42,6 +42,10 @@ public class ClientPlayerStateTickManager {
 
     public void setContext(ChannelHandlerContext ctx){
         this.ctx = ctx;
+    }
+
+    public void setPlayerID(int playerID){
+        this.playerID = playerID;
     }
 
     /*
@@ -63,7 +67,7 @@ public class ClientPlayerStateTickManager {
 
     //TODO placer dans un endroit plus évident ou renommer la classe
     public void sendBlockPlacement(Block block){
-        ObjectPlacement op = new ObjectPlacement(currentState.getPlayerID(), block, false); //TODO trap?
+        ObjectPlacement op = new ObjectPlacement(playerID, block, false); //TODO trap?
         ByteBuf out = Unpooled.buffer(1024);
         NettyKryoEncoder encoder = new NettyKryoEncoder();
         encoder.encode(op, out, MessageType.BlockPlaced.getChar());

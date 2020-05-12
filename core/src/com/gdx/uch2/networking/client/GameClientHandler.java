@@ -30,6 +30,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private void processGameStart(ByteBuf m){
         startEditingPhase();
         playerID = m.readInt();
+        ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
         OnlinePlayerManager.getInstance().init(playerID);
         System.out.println("PlayerID = " + playerID);
         startSending(ctx);
