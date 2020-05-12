@@ -103,7 +103,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                     case LETHAL:
                     case G_DOWN:
                     case G_UP: block = new Trap(new Vector2(x, y), blockType); break;
-                    default: block = new Block(new Vector2(x, y), blockType); break;
+                    default: block = new Block(new Vector2(x, y), Block.Type.BOX); break;
                 }
                 blocks[x][y] = block;
                 ScreenManager.getInstance().showScreen(new GameScreen(world));
