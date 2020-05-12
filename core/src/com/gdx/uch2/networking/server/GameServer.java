@@ -1,5 +1,7 @@
 package com.gdx.uch2.networking.server;
 
+import com.gdx.uch2.controller.LevelLoader;
+import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.GameState;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -12,9 +14,11 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class GameServer implements Runnable {
     private int port;
+    private Level level;
 
-    public GameServer(int port){
+    public GameServer(int port, int noLevel){
         this.port = port;
+        this.level = LevelLoader.loadLevel(noLevel);
         GameState.setUpKryo();
     }
 
@@ -46,8 +50,9 @@ public class GameServer implements Runnable {
 
     public static void main(String[] args) throws Exception {
         int port = 12345;
+        int level = 1;
 
-        new GameServer(port).run();
+        new GameServer(port, level).run();
     }
 
 }

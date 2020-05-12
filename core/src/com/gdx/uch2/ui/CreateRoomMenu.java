@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Select;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.Player;
@@ -49,6 +50,8 @@ public class CreateRoomMenu implements Screen {
         ipLabel.setWidth(100);
         Label portLabel = new Label("Port:", skin);
         portLabel.setWidth(100);
+        Label levelLabel = new Label("Level:", skin);
+        levelLabel.setWidth(100);
 
         // Create TextField
         TextField nicknameTF = new TextField("Player 1", skin);
@@ -57,6 +60,8 @@ public class CreateRoomMenu implements Screen {
         nicknameTF.setMaxLength(20);
         ipTF.setMaxLength(15);
         portTF.setMaxLength(5);
+        final SelectBox<Integer> levelSB = new SelectBox<Integer>(skin);
+        levelSB.setItems(1);
 
         // Title
         HorizontalGroup titleGroup = new HorizontalGroup();
@@ -90,6 +95,14 @@ public class CreateRoomMenu implements Screen {
         table.add(portGroup).colspan(2).center();
         table.row();
 
+        // Level
+        HorizontalGroup levelGroup = new HorizontalGroup();
+        levelGroup.space(10);
+        levelGroup.addActor(levelLabel);
+        levelGroup.addActor(levelSB);
+        table.add(levelGroup).colspan(2).center();
+        table.row();
+
         //create buttons
         TextButton createButton = new TextButton("Create", skin);
         TextButton mainMenuButton = new TextButton("Go back", skin);
@@ -105,7 +118,8 @@ public class CreateRoomMenu implements Screen {
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("création de la partie");
                 int port = Integer.parseInt(String.valueOf(portTF.getText()));
-                Thread tServer = new Thread(new GameServer(port));
+                int level = levelSB.getSelected();
+                Thread tServer = new Thread(new GameServer(port, level));
                 tServer.start();
                 Thread tClient = new Thread(new GameClient("localhost", port));
                 tClient.start();
