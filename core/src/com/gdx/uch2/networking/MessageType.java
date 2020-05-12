@@ -5,7 +5,9 @@ public enum MessageType {
     GameStart,
     BlockPlaced,
     PlayerStateUpdate,
-    ReachedEnd
+    ReachedEnd,
+    CanPlace,
+    StartMovementPhase
     ;
 
     public char getChar(){

@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking.server;
 
 import com.esotericsoftware.kryo.io.Output;
+import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.MessageType;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -14,14 +15,18 @@ import static io.netty.buffer.Unpooled.buffer;
 
 public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
     //2 premiers joueurs à se connecter.
-    static List<ChannelHandlerContext> players = new ArrayList<>();
+    private static List<ChannelHandlerContext> players = new ArrayList<>();
 
 
     //indique si la partie est pleine
-    static boolean full = false;
-    static final int MAX_PLAYERS = 2;
+    private static boolean full = false;
+    private static final int MAX_PLAYERS = 2;
+    private static boolean gameStarted = false;
+    private Level map;
 
-    static boolean gameStarted = false;
+    public PlayersAmountHandler(Level level){
+        this.map = level;
+    }
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx){
@@ -75,7 +80,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
 
 
             //ctx.pipeline().addLast(new MovementHandler());
-            ctx.pipeline().addLast(new GameHandler(players));
+            ctx.pipeline().addLast(new GameHandler(players, map));
             playerID++;
         }
 
