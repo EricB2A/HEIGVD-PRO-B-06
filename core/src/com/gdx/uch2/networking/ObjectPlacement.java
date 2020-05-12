@@ -1,6 +1,5 @@
 package com.gdx.uch2.networking;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.esotericsoftware.kryo.Kryo;
 import com.gdx.uch2.entities.Block;
 

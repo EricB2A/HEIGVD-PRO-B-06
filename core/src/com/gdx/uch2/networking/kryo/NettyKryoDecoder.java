@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.kryo;
 
+import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.ObjectPlacement;
 import io.netty.buffer.ByteBuf;
@@ -19,6 +20,7 @@ public class NettyKryoDecoder {
 		this.kryo = new Kryo();
 		this.kryo.register(GameState.class);
 		this.kryo.register(ObjectPlacement.class);
+		this.kryo.register(Block.class);
 	}
 
 	public void decode( ByteBuf msg, List<Object> out) {

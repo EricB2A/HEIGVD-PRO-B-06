@@ -16,7 +16,6 @@ import java.util.List;
 
 public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
-    private boolean isSending;
     private int playerID = -1;
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
     private GamePhase currentPhase;
@@ -29,11 +28,11 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void processGameStart(ByteBuf m){
-        startSending(ctx);
         startEditingPhase();
         playerID = m.readInt();
         OnlinePlayerManager.getInstance().init(playerID);
         System.out.println("PlayerID = " + playerID);
+        startSending(ctx);
     }
 
     private void processBlockPlacement(ByteBuf m){
@@ -80,8 +79,8 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void startSending(ChannelHandlerContext ctx){
-        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(playerID, 20, 30, 0));
         ClientPlayerStateTickManager.getInstance().setContext(ctx);
+        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(playerID, 20, 30, 0));
         ClientPlayerStateTickManager.getInstance().start(1000, 500);
     }
 

@@ -2,6 +2,7 @@ package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.MessageType;
+import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.UserActionSequence;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
@@ -62,10 +63,10 @@ public class ClientPlayerStateTickManager {
 
     //TODO placer dans un endroit plus évident ou renommer la classe
     public void sendBlockPlacement(Block block){
+        ObjectPlacement op = new ObjectPlacement(currentState.getPlayerID(), block, false); //TODO trap?
         ByteBuf out = Unpooled.buffer(1024);
-        out.writeChar(MessageType.ReachedEnd.getChar());
         NettyKryoEncoder encoder = new NettyKryoEncoder();
-        encoder.encode(block, out, MessageType.BlockPlaced.getChar());
+        encoder.encode(op, out, MessageType.BlockPlaced.getChar());
         ctx.channel().writeAndFlush(out);
     }
 

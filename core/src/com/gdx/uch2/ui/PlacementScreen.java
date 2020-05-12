@@ -100,6 +100,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             Block[][] blocks = world.getLevel().getBlocks();
             if (blocks[x][y] == null) {
                 Block block;
+                if(blockType == null) blockType = BOX; // TODO GUILLAUME
                 switch (blockType){
                     case BOX:
                     case BLOCK: block = new Block(new Vector2(x, y), blockType); break;
