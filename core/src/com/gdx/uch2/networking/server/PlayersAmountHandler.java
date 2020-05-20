@@ -75,20 +75,13 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         int playerID = 0;
         for(ChannelHandlerContext ctx : players){
 
-            String bite = "BITE";
-
-            ByteBuf out = Unpooled.directBuffer(512);
-            //out.writeBytes(bite.getBytes());
-
-            NettyKryoEncoder encoder = new NettyKryoEncoder();
-            PlayerIDGiver idGiver = new PlayerIDGiver(playerID);
-            encoder.encode(idGiver, out, MessageType.GameStart.getChar());
-
-            //out.writeChar(MessageType.GameStart.getChar());
-            //out.writeInt(playerID);
+            ByteBuf out = buffer(512);
+            out.writeChar(MessageType.GameStart.getChar());
+            out.writeInt(playerID);
             ctx.writeAndFlush(out);
 
             System.out.println("Message envoyé au joueur #" + playerID);
+            System.out.println("Prélude envoyé au joueur " + (int) MessageType.GameStart.getChar());
             playerID++;
         }
         players.get(0).pipeline().addLast(new GameHandler(players, map));

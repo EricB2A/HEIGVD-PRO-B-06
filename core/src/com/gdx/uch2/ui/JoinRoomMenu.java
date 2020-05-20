@@ -45,7 +45,7 @@ public class JoinRoomMenu implements Screen {
         // Create TextField
         TextField nicknameTF = new TextField("Player 1", skin);
         final TextField ipTF = new TextField("127.0.0.1", skin);
-        final TextField portTF = new TextField("404", skin);
+        final TextField portTF = new TextField("12345", skin);
         nicknameTF.setMaxLength(20);
         ipTF.setMaxLength(15);
         portTF.setMaxLength(5);
