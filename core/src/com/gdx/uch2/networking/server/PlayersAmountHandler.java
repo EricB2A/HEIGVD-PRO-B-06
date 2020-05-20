@@ -55,7 +55,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         }
         //Envoie le message de welcome et lance la partie si 2 joueurs sont présents
         else{
-            ctx.writeAndFlush(Unpooled.wrappedBuffer(welcome.getBytes()));
+            //ctx.writeAndFlush(Unpooled.wrappedBuffer(welcome.getBytes()));
             players.add(ctx);
             if(players.size() == MAX_PLAYERS){
                 full = true;
