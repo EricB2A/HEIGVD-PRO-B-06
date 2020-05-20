@@ -27,7 +27,7 @@ public class World {
 
     Level level;
 
-    public static World currentWorld;
+    public static World currentWorld = new World(1); //TODO 1 hardcodé
 
     // Getters -----------
     public Player getPlayer() {
@@ -77,12 +77,18 @@ public class World {
         return blocks;
     }
 
-    public World() {
-        createWorld();
+    public World(int noLevel) {
+        createWorld(noLevel);
     }
 
-    private void createWorld() {
-        level = LevelLoader.loadLevel(1);
+    public void placeBlock(Block b){
+        Block[][] blocks = level.getBlocks();
+        blocks[(int) b.getPosition().x][(int) b.getPosition().y] = b;
+        level.setBlocks(blocks);
+    }
+
+    private void createWorld(int noLevel) {
+        level = LevelLoader.loadLevel(noLevel);
         resetPlayer();
     }
 

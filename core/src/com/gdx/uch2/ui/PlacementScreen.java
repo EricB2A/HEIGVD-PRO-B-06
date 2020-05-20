@@ -24,7 +24,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private int width, height;
 
     public PlacementScreen() {
-        world = new World();
+        world = World.currentWorld;
     }
 
     @Override

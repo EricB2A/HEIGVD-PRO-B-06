@@ -8,6 +8,7 @@ import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
+import io.netty.channel.group.ChannelGroup;
 
 
 import java.util.ArrayList;
@@ -84,7 +85,9 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
             System.out.println("Prélude envoyé au joueur " + (int) MessageType.GameStart.getChar());
             playerID++;
         }
-        players.get(0).pipeline().addLast(new GameHandler(players, map));
+
+        GameHandler gh = new GameHandler(players, map);
+        players.get(0).pipeline().addLast(gh);
 
         //Démarre les ticks de serveur
         ServerGameStateTickManager.getInstance().setPlayers(players);

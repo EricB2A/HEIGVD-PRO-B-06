@@ -1,10 +1,8 @@
 package com.gdx.uch2.networking.client;
 
-import com.gdx.uch2.networking.GamePhase;
+import com.gdx.uch2.entities.World;
+import com.gdx.uch2.networking.*;
 import com.gdx.uch2.entities.OnlinePlayerManager;
-import com.gdx.uch2.networking.MessageType;
-import com.gdx.uch2.networking.PlayerIDGiver;
-import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.networking.server.PlayersAmountHandler;
 import io.netty.buffer.ByteBuf;
@@ -23,27 +21,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private GamePhase currentPhase;
     private ChannelHandlerContext ctx = null;
 
-    private void processGameStateUpdate(ByteBuf m){
-        List<Object> objects = new ArrayList<>();
-        decoder.decode(m, objects);
-        System.out.println("Gamestate reçu par le client :" + objects.get(0).toString());
-    }
 
-    private void processGameStart(ByteBuf m){
-        startEditingPhase();
-
-        playerID = m.readInt();
-        ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
-        OnlinePlayerManager.getInstance().init(playerID);
-        System.out.println("PlayerID = " + playerID);
-        startSending(ctx);
-    }
-
-    private void processBlockPlacement(ByteBuf m){
-        List<Object> objects = new ArrayList<>();
-        decoder.decode(m, objects);
-        System.out.println("block placé : " + objects.get(0).toString());
-    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
@@ -52,7 +30,6 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         ByteBuf m = (ByteBuf) msg;
 
         int msgType = (int) m.readChar();
-        System.out.println("c = " + msgType);
         try{
             if(msgType == MessageType.GameStateUpdate.getChar()){
                 if(currentPhase == GamePhase.Moving){
@@ -84,6 +61,30 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
             ReferenceCountUtil.release(msg);
         }
 
+    }
+
+    private void processGameStateUpdate(ByteBuf m){
+        List<Object> objects = new ArrayList<>();
+        decoder.decode(m, objects);
+        System.out.println("CLI: Gamestate reçu par le client :" + objects.get(0).toString());
+    }
+
+    private void processGameStart(ByteBuf m){
+        startEditingPhase();
+
+        playerID = m.readInt();
+        ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
+        OnlinePlayerManager.getInstance().init(playerID);
+        System.out.println("CLI: PlayerID = " + playerID);
+        startSending(ctx);
+    }
+
+    private void processBlockPlacement(ByteBuf m){
+        List<Object> objects = new ArrayList<>();
+        decoder.decode(m, objects);
+        ObjectPlacement op = (ObjectPlacement) objects.get(0);
+        System.out.println("CLI: block placé : " + op.toString());
+        World.currentWorld.placeBlock(op.getBlock());
     }
 
     private void startSending(ChannelHandlerContext ctx){

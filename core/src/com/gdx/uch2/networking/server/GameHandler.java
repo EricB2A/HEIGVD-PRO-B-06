@@ -32,7 +32,6 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
         this.map = map;
         finished = new boolean[players.size()];
         Arrays.fill(finished, false);
-        currentPhase = GamePhase.Editing;
         startEditingPhase();
     }
 
@@ -73,6 +72,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void startEditingPhase(){
+        System.out.println("SRV: start editing phase");
         currentPhase = GamePhase.Editing;
         playerPlacing = -1;
         nextPlayerCanPlace();
@@ -101,7 +101,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
                 break;
             }
         }
-        System.out.println("Le joueur #" + playerThatFinished + " est arrivé à la fin!");
+        System.out.println("SRV: Le joueur #" + playerThatFinished + " est arrivé à la fin!");
 
         if(allFinished){
             computePoints();
@@ -115,7 +115,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
 
         List<Object> objects = new ArrayList<>();
         decoder.decode(m, objects);
-        System.out.println("playerState reçu");
+        System.out.println("SRV: playerState reçu");
         PlayerState state = (PlayerState) objects.get(0);
         ServerGameStateTickManager.getInstance().setPlayerState(state);
     }
@@ -123,18 +123,19 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
     private void processObjectPlacement(ByteBuf m){
         if(currentPhase == GamePhase.Editing) {
             //Reads the message
-            System.out.println("Placement de block reçu");
             List<Object> objects = new ArrayList<>();
             decoder.decode(m, objects);
             ObjectPlacement op = (ObjectPlacement) objects.get(0);
-
+            System.out.println("SRV: Placement de block reçu par le joueur #" + op.getPlayerID());
             //Broadcasts the message if it came from the right player
             if(op.getPlayerID() == playerPlacing){
-                System.out.println("Placement de block DU BON JOUEUR reçu");
+                System.out.println("SRV: Placement de block DU BON JOUEUR reçu");
                 sendBlockToAllPlayers((ObjectPlacement) (objects.get(0)));
                 if(playerPlacing != players.size() - 1){
+                    System.out.println("SRV: NEXT PLAYER CAN PLACE");
                     nextPlayerCanPlace();
                 }else{
+                    System.out.println("SRV: ALL PLAYERS HAVE PLACED");
                     startMovementPhase();
                 }
 
@@ -152,6 +153,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
 
     private void nextPlayerCanPlace(){ //TODO timeout si rien de reçu
         playerPlacing++;
+        System.out.println("SRV: sending CAN PLACE to player #" + playerPlacing);
         ByteBuf out = buffer(128);
         out.writeChar(MessageType.CanPlace.getChar());
         players.get(playerPlacing).writeAndFlush(out);

@@ -10,6 +10,7 @@ import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
+import jdk.swing.interop.SwingInterOpUtils;
 
 import java.util.Timer;
 
@@ -67,7 +68,8 @@ public class ClientPlayerStateTickManager {
 
     //TODO placer dans un endroit plus évident ou renommer la classe
     public void sendBlockPlacement(Block block){
-        ObjectPlacement op = new ObjectPlacement(playerID, block, false); //TODO trap?
+        System.out.println("Sending block placement as player #" + playerID);
+        ObjectPlacement op = new ObjectPlacement(playerID, block, block.isLethal());
         ByteBuf out = Unpooled.buffer(1024);
         NettyKryoEncoder encoder = new NettyKryoEncoder();
         encoder.encode(op, out, MessageType.BlockPlaced.getChar());

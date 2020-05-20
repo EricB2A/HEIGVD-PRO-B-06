@@ -38,6 +38,10 @@ public class ObjectPlacement {
         return playerID;
     }
 
+    public Block getBlock(){
+        return block;
+    }
+
     public float getHeight(){
         return block.getBounds().height;
     }
