@@ -17,7 +17,7 @@ import java.util.List;
 
 import static io.netty.buffer.Unpooled.buffer;
 
-public class GameHandler extends ChannelInboundHandlerAdapter {
+public class CentralGameManager {
 
     private List<ChannelHandlerContext> players;
     private boolean[] finished;
@@ -27,7 +27,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
     private Level map;
     private int playerPlacing = -1;
 
-    public GameHandler(List<ChannelHandlerContext> players, Level map){
+    public CentralGameManager(List<ChannelHandlerContext> players, Level map){
         this.players = players;
         this.map = map;
         finished = new boolean[players.size()];
@@ -36,8 +36,7 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
     }
 
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void readMessage(ChannelHandlerContext ctx, Object msg) throws Exception {
 
         try{
             ByteBuf m = (ByteBuf) msg;
@@ -159,9 +158,4 @@ public class GameHandler extends ChannelInboundHandlerAdapter {
         players.get(playerPlacing).writeAndFlush(out);
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause){
-        cause.printStackTrace();
-        ctx.close();
-    }
 }

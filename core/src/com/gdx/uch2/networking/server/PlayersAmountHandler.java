@@ -1,14 +1,10 @@
 package com.gdx.uch2.networking.server;
 
-import com.esotericsoftware.kryo.io.Output;
 import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.MessageType;
-import com.gdx.uch2.networking.PlayerIDGiver;
-import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
-import io.netty.channel.group.ChannelGroup;
 
 
 import java.util.ArrayList;
@@ -72,6 +68,8 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         gameStarted = true;
         System.out.println("2 joueurs connectés. Lancer la partie.");
 
+
+
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
         int playerID = 0;
         for(ChannelHandlerContext ctx : players){
@@ -83,11 +81,15 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
 
             System.out.println("Message envoyé au joueur #" + playerID);
             System.out.println("Prélude envoyé au joueur " + (int) MessageType.GameStart.getChar());
+
+            //players.get(playerID).pipeline().addLast(new PlayerHandler(manager));
+
             playerID++;
         }
 
-        GameHandler gh = new GameHandler(players, map);
-        players.get(0).pipeline().addLast(gh);
+        CentralGameManager manager = new CentralGameManager(players, map);
+        players.get(0).pipeline().addLast(new PlayerHandler(manager));
+        players.get(1).pipeline().addLast(new PlayerHandler(manager));
 
         //Démarre les ticks de serveur
         ServerGameStateTickManager.getInstance().setPlayers(players);
