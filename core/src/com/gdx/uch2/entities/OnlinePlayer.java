@@ -66,4 +66,9 @@ public class OnlinePlayer {
             position = position.add(to.sub(position).scl(diff / stateTime));
         }
     }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
 }

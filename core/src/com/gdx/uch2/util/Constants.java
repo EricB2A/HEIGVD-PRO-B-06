@@ -8,6 +8,7 @@ public class Constants {
 
     public static final String PLAYER_1_ATLAS = "player.atlas";
     public static final String BLOCKS_ATLAS = "levels/blocks.atlas";
+    public static final String OPPONENTS_ATLAS = "opponents.atlas";
 
     public static final float WORLD_SIZE = 128;
 
