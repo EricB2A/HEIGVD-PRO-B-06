@@ -28,8 +28,8 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void processGameStart(ByteBuf m){
+        System.out.println("ProcessGameStart reçu");
         startEditingPhase();
-        playerID = m.readInt();
         ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
         OnlinePlayerManager.getInstance().init(playerID);
         System.out.println("PlayerID = " + playerID);
@@ -47,7 +47,10 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         if(this.ctx == null) this.ctx = ctx;
 
         ByteBuf m = (ByteBuf) msg;
+
         m.readChar();
+        System.out.println("Message reçu : " + (int)(m.getChar(0)));
+        System.out.println("Message cherché : " + (int)(MessageType.GameStart.getChar()));
         try{
             if(m.getChar(0) == MessageType.GameStateUpdate.getChar()){
                 if(currentPhase == GamePhase.Moving){
@@ -77,6 +80,8 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         } finally {
             ReferenceCountUtil.release(msg);
         }
+
+
     }
 
     private void startSending(ChannelHandlerContext ctx){
