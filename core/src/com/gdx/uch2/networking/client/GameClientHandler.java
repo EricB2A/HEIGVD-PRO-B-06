@@ -3,8 +3,10 @@ package com.gdx.uch2.networking.client;
 import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.networking.MessageType;
+import com.gdx.uch2.networking.PlayerIDGiver;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
+import com.gdx.uch2.networking.server.PlayersAmountHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -29,7 +31,11 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private void processGameStart(ByteBuf m){
         startEditingPhase();
-        playerID = m.readInt();
+
+        List<Object> objects = new ArrayList<>();
+        decoder.decode(m, objects);
+        PlayerIDGiver giver = (PlayerIDGiver) objects.get(0);
+        playerID = giver.getId();
         ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
         OnlinePlayerManager.getInstance().init(playerID);
         System.out.println("PlayerID = " + playerID);
@@ -47,6 +53,15 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         if(this.ctx == null) this.ctx = ctx;
 
         ByteBuf m = (ByteBuf) msg;
+
+        ByteBuf m2 = m.copy();
+        System.out.println("Message raw");
+        while (m2.isReadable()) {
+            System.out.print((char) m2.readByte());
+            System.out.flush();
+        }
+        System.out.println();
+
         m.readChar();
         try{
             if(m.getChar(0) == MessageType.GameStateUpdate.getChar()){
@@ -77,6 +92,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         } finally {
             ReferenceCountUtil.release(msg);
         }
+
     }
 
     private void startSending(ChannelHandlerContext ctx){
