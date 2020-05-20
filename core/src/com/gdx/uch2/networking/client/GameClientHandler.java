@@ -32,10 +32,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private void processGameStart(ByteBuf m){
         startEditingPhase();
 
-        List<Object> objects = new ArrayList<>();
-        decoder.decode(m, objects);
-        PlayerIDGiver giver = (PlayerIDGiver) objects.get(0);
-        playerID = giver.getId();
+        playerID = m.readInt();
         ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
         OnlinePlayerManager.getInstance().init(playerID);
         System.out.println("PlayerID = " + playerID);
@@ -54,40 +51,34 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
         ByteBuf m = (ByteBuf) msg;
 
-        ByteBuf m2 = m.copy();
-        System.out.println("Message raw");
-        while (m2.isReadable()) {
-            System.out.print((char) m2.readByte());
-            System.out.flush();
-        }
-        System.out.println();
-
-        m.readChar();
+        int msgType = (int) m.readChar();
+        System.out.println("c = " + msgType);
         try{
-            if(m.getChar(0) == MessageType.GameStateUpdate.getChar()){
+            if(msgType == MessageType.GameStateUpdate.getChar()){
                 if(currentPhase == GamePhase.Moving){
                     processGameStateUpdate(m);
                 }
             }
-            else if(m.getChar(0) == MessageType.GameStart.getChar()){
+            else if(msgType == MessageType.GameStart.getChar()){
                 processGameStart(m);
             }
-            else if(m.getChar(0) == MessageType.BlockPlaced.getChar()) {
+            else if(msgType == MessageType.BlockPlaced.getChar()) {
                 if(currentPhase == GamePhase.Editing){
                     processBlockPlacement(m);
                 }
             }
-            else if(m.getChar(0) == MessageType.CanPlace.getChar()) {
+            else if(msgType == MessageType.CanPlace.getChar()) {
                 //TODO thibaud
             }
-            else if(m.getChar(0) == MessageType.StartMovementPhase.getChar()) {
+            else if(msgType == MessageType.StartMovementPhase.getChar()) {
                 //TODO
             }
             else {
                 while (m.isReadable()) {
-                    System.out.print((char) m.readByte());
+                    System.out.print(m.readByte());
                     System.out.flush();
                 }
+                System.out.println();
             }
         } finally {
             ReferenceCountUtil.release(msg);
