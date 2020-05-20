@@ -3,6 +3,7 @@ package com.gdx.uch2.networking.kryo;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.ObjectPlacement;
+import com.gdx.uch2.networking.PlayerIDGiver;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -21,6 +22,7 @@ public class NettyKryoDecoder {
 		this.kryo.register(GameState.class);
 		this.kryo.register(ObjectPlacement.class);
 		this.kryo.register(Block.class);
+		this.kryo.register(PlayerIDGiver.class);
 	}
 
 	public void decode( ByteBuf msg, List<Object> out) {

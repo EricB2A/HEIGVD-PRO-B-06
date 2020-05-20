@@ -3,6 +3,8 @@ package com.gdx.uch2.networking.server;
 import com.esotericsoftware.kryo.io.Output;
 import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.MessageType;
+import com.gdx.uch2.networking.PlayerIDGiver;
+import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -34,7 +36,6 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         //Compose le message de welcome et l'ajoute dans un buffer
         final String welcome = "Welcome. Nombre de joueurs actuels : " + players.size() + ". Plein? :" + full + " Partie en cours? : " + gameStarted + "\n";
         final ByteBuf msg = ctx.alloc().buffer(200);
-        msg.writeBytes(Unpooled.wrappedBuffer(welcome.getBytes()));
 
 
 
@@ -73,16 +74,24 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
         int playerID = 0;
         for(ChannelHandlerContext ctx : players){
-            ByteBuf out = buffer(128);
-            out.writeChar(MessageType.GameStart.getChar());
-            out.writeInt(playerID);
+
+            String bite = "BITE";
+
+            ByteBuf out = Unpooled.directBuffer(512);
+            //out.writeBytes(bite.getBytes());
+
+            NettyKryoEncoder encoder = new NettyKryoEncoder();
+            PlayerIDGiver idGiver = new PlayerIDGiver(playerID);
+            encoder.encode(idGiver, out, MessageType.GameStart.getChar());
+
+            //out.writeChar(MessageType.GameStart.getChar());
+            //out.writeInt(playerID);
             ctx.writeAndFlush(out);
 
-
-            //ctx.pipeline().addLast(new MovementHandler());
-            ctx.pipeline().addLast(new GameHandler(players, map));
+            System.out.println("Message envoyé au joueur #" + playerID);
             playerID++;
         }
+        players.get(0).pipeline().addLast(new GameHandler(players, map));
 
         //Démarre les ticks de serveur
         ServerGameStateTickManager.getInstance().setPlayers(players);
