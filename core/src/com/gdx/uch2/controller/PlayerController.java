@@ -43,6 +43,8 @@ public class PlayerController {
     private boolean grounded = false;
     private long recoilBeginTime;
     private boolean finished = false;
+    private Vector2 positionBak = new Vector2();
+    private float epsilon = 0.01f;
 
     // This is the rectangle pool used in collision detection
     // Good to avoid instantiation each frame
@@ -112,6 +114,9 @@ public class PlayerController {
             processInput();
         }
 
+        positionBak.x = player.getPosition().x;
+        positionBak.y = player.getPosition().y;
+
         // Fix resume mess after long inactivity
         delta = Math.min(delta, 0.025f);
 
@@ -156,9 +161,14 @@ public class PlayerController {
             player.getVelocity().y = MAX_FALL_VEL;
         }
 
-        ClientPlayerStateTickManager.getInstance().setCurrentState(
-                new PlayerState(ClientPlayerStateTickManager.getInstance().getPlayerID(),
-                player.getPosition().x, player.getPosition().y, System.nanoTime()));
+//        if (player.getPosition().x < positionBak.x - epsilon || player.getPosition().x > positionBak.x + epsilon
+//         || player.getPosition().y < positionBak.y - epsilon || player.getPosition().y > positionBak.y + epsilon) {
+            ClientPlayerStateTickManager.getInstance().setCurrentState(
+                    new PlayerState(ClientPlayerStateTickManager.getInstance().getPlayerID(),
+                            player.getPosition().x, player.getPosition().y, System.nanoTime()));
+//        } else {
+//            ClientPlayerStateTickManager.getInstance().getCurrentState().currentTime = System.nanoTime();
+//        }
     }
 
     //Mort ou arrivé

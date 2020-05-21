@@ -10,6 +10,8 @@ public class Constants {
     public static final String BLOCKS_ATLAS = "levels/blocks.atlas";
     public static final String OPPONENTS_ATLAS = "opponents.atlas";
 
+    public static final int TICK_DURATION = 50;
+
     public static final float WORLD_SIZE = 128;
 
     public static final float LOOP_SPEED = .10f;

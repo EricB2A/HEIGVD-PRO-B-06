@@ -52,6 +52,10 @@ public class GameState {
         playersStates.get(playerID).setPosY(posY);
     }
 
+    public void setPlayerState(PlayerState p) {
+        playersStates.put(p.getPlayerID(), p);
+    }
+
     public Map<Integer, PlayerState> getPlayerStates() {
         return playersStates;
     }

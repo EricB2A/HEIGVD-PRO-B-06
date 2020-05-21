@@ -7,67 +7,61 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class OnlinePlayer {
+    private Vector2 from;
     private Vector2 position;
     private Vector2 to;
     private long begin;
     private long end;
     private float stateTime;
-    private Queue<PlayerState> upcomingUpdates;
+    private boolean facingLeft;
+
 
     public OnlinePlayer(PlayerState initialState) {
+        from  = new Vector2(initialState.getPosX(), initialState.getPosY());
         position = new Vector2(initialState.getPosX(), initialState.getPosY());
+        to = new Vector2(initialState.getPosX(), initialState.getPosY());
         begin = initialState.getTime();
+        end = begin;
         stateTime = 0;
-        upcomingUpdates = new LinkedList<>();
+        facingLeft = false;
     }
 
     public void addUpdate(PlayerState update) {
-        if (to == null) {
-            to = new Vector2(update.getPosX(), update.getPosY());
-            end = update.getTime();
-        } else {
-            upcomingUpdates.add(update);
-        }
+        from.x = position.x;
+        from.y = position.y;
+        to.x = update.getPosX();
+        to.y = update.getPosY();
+
+        begin = end;
+        end = update.getTime();
+        stateTime = 0;
     }
 
     public void update(float delta) {
-        if (to == null) {
-            return;
-        }
-
         stateTime += delta;
-        float diff = (end - begin) / 10e9f;
-        while (stateTime > diff) {
-            if (upcomingUpdates.isEmpty()) {
-                break;
-            }
-
-            PlayerState s = upcomingUpdates.remove();
-            begin = end;
-
-            position.x = to.x;
-            position.y = to.y;
-
-            to.x = s.getPosX();
-            to.y = s.getPosY();
-            end = s.getTime();
-            stateTime -= diff;
-            diff = (end - begin) / 10e9f;
-        }
+        float diff = (end - begin) / 1e9f;
 
         if (stateTime >= diff) {
-            begin = end;
-
-            position = to;
-            to = null;
-            stateTime = 0;
+            position.x = to.x;
+            position.y = to.y;
         } else {
-            position = position.add(to.sub(position).scl(diff / stateTime));
+            float scl = stateTime / diff;
+            position.x = from.x + (to.x - from.x) * scl;
+            position.y = from.y + (to.y - from.y) * scl;
         }
+
+        System.out.println(from + "  " + position);
+
+        if (position.x - from.x != 0)
+            facingLeft = position.x - from.x < 0;
     }
 
     public Vector2 getPosition() {
         return position;
+    }
+
+    public boolean isFacingLeft() {
+        return facingLeft;
     }
 
 }

@@ -2,6 +2,7 @@ package com.gdx.uch2.networking.server;
 
 import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.MessageType;
+import com.gdx.uch2.util.Constants;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -97,7 +98,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
 
         //Démarre les ticks de serveur
         ServerGameStateTickManager.getInstance().setPlayers(players);
-        ServerGameStateTickManager.getInstance().start(1000, 1000);
+        ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
     }
 
     @Override

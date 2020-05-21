@@ -8,6 +8,7 @@ import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.networking.server.PlayersAmountHandler;
+import com.gdx.uch2.util.Constants;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -93,7 +94,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private void startSending(ChannelHandlerContext ctx){
         ClientPlayerStateTickManager.getInstance().setContext(ctx);
         ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(playerID, 20, 30, 0));
-        ClientPlayerStateTickManager.getInstance().start(1000, 500);
+        ClientPlayerStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
     }
 
 

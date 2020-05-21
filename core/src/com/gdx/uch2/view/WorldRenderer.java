@@ -38,7 +38,8 @@ public class WorldRenderer {
     private TextureRegion playerFallLeft;
     private TextureRegion playerJumpRight;
     private TextureRegion playerFallRight;
-    private TextureRegion onlinePlayer;
+    private TextureRegion onlinePlayerRight;
+    private TextureRegion onlinePlayerLeft;
 
     /** Animations **/
     private Animation walkLeftAnimation;
@@ -120,7 +121,9 @@ public class WorldRenderer {
         playerFallLeft = new TextureRegion(playerFallRight);
         playerFallLeft.flip(true, false);
 
-        onlinePlayer = opponentsAtlas.findRegion("tile000");
+        onlinePlayerRight = opponentsAtlas.findRegion("tile000");
+        onlinePlayerLeft = new TextureRegion(onlinePlayerRight);
+        onlinePlayerLeft.flip(true, false);
     }
 
 
@@ -171,7 +174,11 @@ public class WorldRenderer {
 
     private void drawOnlinePlayers() {
         for (OnlinePlayer p : OnlinePlayerManager.getInstance().getPlayers()) {
-            spriteBatch.draw(onlinePlayer, p.getPosition().x, p.getPosition().y, Player.SIZE, Player.SIZE);
+            if (p.isFacingLeft()) {
+                spriteBatch.draw(onlinePlayerLeft, p.getPosition().x, p.getPosition().y, Player.SIZE, Player.SIZE);
+            } else {
+                spriteBatch.draw(onlinePlayerRight, p.getPosition().x, p.getPosition().y, Player.SIZE, Player.SIZE);
+            }
         }
     }
 

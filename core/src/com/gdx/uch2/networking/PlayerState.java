@@ -50,7 +50,7 @@ public class PlayerState {
 
     @Override
     public String toString() {
-        return "Joueur#" + playerID + ", x=" + posX + ", y=" + posY;
+        return "Joueur#" + playerID + ", x=" + posX + ", y=" + posY + ", time=" + time;
     }
 
     public long getTime() {
