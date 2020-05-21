@@ -15,8 +15,7 @@ public class OnlinePlayer {
     private Queue<PlayerState> upcomingUpdates;
 
     public OnlinePlayer(PlayerState initialState) {
-        position.x = initialState.getPosX();
-        position.y = initialState.getPosY();
+        position = new Vector2(initialState.getPosX(), initialState.getPosY());
         begin = initialState.getTime();
         stateTime = 0;
         upcomingUpdates = new LinkedList<>();

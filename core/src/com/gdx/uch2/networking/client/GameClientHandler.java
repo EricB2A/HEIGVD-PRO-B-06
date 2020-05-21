@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.entities.OnlinePlayerManager;
+import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
@@ -22,6 +23,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private void processGameStateUpdate(ByteBuf m){
         List<Object> objects = new ArrayList<>();
         decoder.decode(m, objects);
+        OnlinePlayerManager.getInstance().update((GameState) objects.get(0));
         System.out.println("Gamestate reçu par le client :" + objects.get(0).toString());
     }
 
