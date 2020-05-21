@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.TimerTask;
 
 public class SendUpdate extends TimerTask {
+    //TODO: Eric Broadcast
     private List<ChannelHandlerContext> players;
 
     public SendUpdate(List<ChannelHandlerContext> players){  //TODO remplacer Object toSend par un GameState
@@ -19,12 +20,12 @@ public class SendUpdate extends TimerTask {
 
     @Override
     public void run() {
-
+        NettyKryoEncoder encoder = new NettyKryoEncoder();
+        ByteBuf out = Unpooled.buffer(1024);
+        out.retain();
+        encoder.encode(ServerGameStateTickManager.getInstance().getGameState(), out, MessageType.GameStateUpdate.getChar());
+        System.out.println("SRV: Envoi du gamestate");
         for(ChannelHandlerContext ch : players){
-            NettyKryoEncoder encoder = new NettyKryoEncoder();
-            ByteBuf out = Unpooled.buffer(1024);
-            encoder.encode(ServerGameStateTickManager.getInstance().getGameState(), out, MessageType.GameStateUpdate.getChar());
-            System.out.println("SRV: Envoi du gamestate");
             ch.writeAndFlush(out);
         }
     }
