@@ -21,7 +21,7 @@ public class GameClient implements Runnable {
     }
 
     public void run(){
-        GameState.setUpKryo();
+        GameState.setUpKryo(); //TODO Eric
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try{

@@ -6,14 +6,12 @@ import com.gdx.uch2.entities.Block;
 public class ObjectPlacement {
     private int playerID;
     private Block block;
-    private boolean isTrap;
 
     static private Kryo kryo;
 
-    public ObjectPlacement(int playerID, Block block, boolean isTrap){
+    public ObjectPlacement(int playerID, Block block){
         this.playerID = playerID;
         this.block = block;
-        this.isTrap = isTrap;
     }
 
     /*
@@ -23,7 +21,7 @@ public class ObjectPlacement {
 
     }
 
-    public static void setUpKryo() {
+    public static void setUpKryo() { //TODO Eric
         Kryo kryo = new Kryo();
         kryo.register(ObjectPlacement.class);
         kryo.register(Block.class);
@@ -58,12 +56,9 @@ public class ObjectPlacement {
         return block.getPosition().y;
     }
 
-    public boolean isTrap(){
-        return isTrap;
-    }
 
     public String toString(){
-        return isTrap? "Trap : " : "Block : " + "(" + getX() + ", " + getY() + ")";
+        return block.isLethal()? "Trap : " : "Block : " + "(" + getX() + ", " + getY() + ")";
     }
 
 }

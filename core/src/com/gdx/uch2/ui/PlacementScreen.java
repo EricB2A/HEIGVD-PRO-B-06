@@ -92,28 +92,30 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
-            Vector2 pos = new Vector2(x,height - y);
-            renderer.scale(pos);
-            x = (int) pos.x;
-            y = (int) pos.y;
-            Block[][] blocks = world.getLevel().getBlocks();
-            if (blocks[x][y] == null) {
-                Block block;
-                if(blockType == null) blockType = Block.Type.BOX; // TODO GUILLAUME
-                switch (blockType){
-                    case BOX:
-                    case BLOCK: block = new Block(new Vector2(x, y), blockType); break;
-                    case LETHAL:
-                    case G_DOWN:
-                    case G_UP: block = new Trap(new Vector2(x, y), blockType); break;
-                    default: block = new Block(new Vector2(x, y), Block.Type.BOX); break;
+        if(ClientPlayerStateTickManager.getInstance().getCanPlace()){
+            if (button == Input.Buttons.LEFT) {
+                Vector2 pos = new Vector2(x,height - y);
+                renderer.scale(pos);
+                x = (int) pos.x;
+                y = (int) pos.y;
+                Block[][] blocks = world.getLevel().getBlocks();
+                if (blocks[x][y] == null) {
+                    Block block;
+                    if(blockType == null) blockType = Block.Type.BOX; // TODO GUILLAUME
+                    switch (blockType){
+                        case BOX:
+                        case BLOCK: block = new Block(new Vector2(x, y), blockType); break;
+                        case LETHAL:
+                        case G_DOWN:
+                        case G_UP: block = new Trap(new Vector2(x, y), blockType); break;
+                        default: block = new Block(new Vector2(x, y), Block.Type.BOX); break;
+                    }
+                    ScreenManager.getInstance().showScreen(new GameScreen(world));
+                    ClientPlayerStateTickManager.getInstance().sendBlockPlacement(block);
                 }
-                //blocks[x][y] = block;
-                ScreenManager.getInstance().showScreen(new GameScreen(world));
-                ClientPlayerStateTickManager.getInstance().sendBlockPlacement(block);
             }
         }
+
         return true;
     }
 

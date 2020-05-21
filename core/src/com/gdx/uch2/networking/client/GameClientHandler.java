@@ -14,6 +14,7 @@ import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.util.Constants;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
@@ -44,19 +45,18 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
                 processGameStart(m);
             }
             else if(msgType == MessageType.BlockPlaced.getChar()) {
-                if(currentPhase == GamePhase.Editing){
-                    processBlockPlacement(m);
-                }
+                System.out.println("BITE");
+                processBlockPlacement(m);
             }
-            else if(msgType == MessageType.CanPlace.getChar()) {
-                //TODO thibaud
-            }
+            //else if(msgType == MessageType.CanPlace.getChar()) {
+            //
+            //}
             else if(msgType == MessageType.StartMovementPhase.getChar()) {
                 startMovementPhase();
             }
-            else if(msgType == MessageType.StartEditingPhase.getChar()) {
-                startEditingPhase();
-            }
+            //else if(msgType == MessageType.StartEditingPhase.getChar()) {
+            //    startEditingPhase();
+            //}
             else {
                 while (m.isReadable()) {
                     System.out.print(m.readByte());
@@ -78,21 +78,39 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void processGameStart(ByteBuf m){
-        startEditingPhase();
 
         playerID = m.readInt();
         ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
         OnlinePlayerManager.getInstance().init(playerID);
         System.out.println("CLI: PlayerID = " + playerID);
         startSending(ctx);
+
+        //Sends an ACK to the server meaning the client recieved it's ID
+        ByteBuf out = Unpooled.buffer(128);
+        out.writeChar(MessageType.AckGameStart.getChar());
+        //out.writeInt(playerID);
+        ctx.writeAndFlush(out);
     }
 
     private void processBlockPlacement(ByteBuf m){
         List<Object> objects = new ArrayList<>();
         decoder.decode(m, objects);
         ObjectPlacement op = (ObjectPlacement) objects.get(0);
-        System.out.println("CLI: block placé : " + op.toString());
-        World.currentWorld.placeBlock(op.getBlock());
+        System.out.println("CLI: placement de bloc recu avec ID = " + op.getPlayerID() + " , block = " + (op.getBlock() == null? "null":"NOT null"));
+
+        if(op.getBlock() == null) {
+            startEditingPhase();
+        }else{
+            World.currentWorld.placeBlock(op.getBlock());
+            System.out.println("CLI: placement du bloc reçu");
+        }
+        if(op.getPlayerID() == playerID){
+            ClientPlayerStateTickManager.getInstance().setCanPlace(true);
+        }else if(op.getPlayerID() == -1){
+            startMovementPhase();
+        }
+
+
     }
 
     private void startSending(ChannelHandlerContext ctx){
@@ -103,13 +121,15 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
 
     private void startMovementPhase(){
+        //TODO Permettre aux personnages de bouger
         currentPhase = GamePhase.Moving;
         System.out.println("CLI: START MOVEMENT PHASE");
-        //World.currentWorld.updateScreen(World.currentWorld);
     }
 
     private void startEditingPhase(){
+        //TODO interdire aux personnages de bouger
         currentPhase = GamePhase.Editing;
+        ClientPlayerStateTickManager.getInstance().setCanPlace(false);
         System.out.println("CLI: START EDITING PHASE");
     }
 

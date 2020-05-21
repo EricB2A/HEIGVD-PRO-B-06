@@ -26,14 +26,14 @@ public class CentralGameManager {
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
     private GamePhase currentPhase;
     private Level map;
-    private int playerPlacing = -1;
+    private int nbPlayersReady = 0;
 
     public CentralGameManager(List<ChannelHandlerContext> players, Level map){
         this.players = players;
         this.map = map;
         finished = new boolean[players.size()];
         Arrays.fill(finished, false);
-        startEditingPhase();
+        //startEditingPhase();
     }
 
 
@@ -51,6 +51,9 @@ public class CentralGameManager {
             else if(m.getChar(0) == MessageType.ReachedEnd.getChar()){
                 processPlayerReachedEnd(m);
             }
+            else if(m.getChar(0) == MessageType.AckGameStart.getChar()){
+                processAckGameStart(m);
+            }
             else{
                 while (m.isReadable()) {
                     System.out.print((char) m.readByte());
@@ -65,20 +68,28 @@ public class CentralGameManager {
     private void startMovementPhase(){
         currentPhase = GamePhase.Moving;
         Arrays.fill(finished, false);
+
+        /*
         //Sends a message to all clients announcing the movement phase starts
         ByteBuf out = Unpooled.buffer(128);
         out.writeChar(MessageType.StartMovementPhase.getChar());
         broadcast(out);
+
+         */
     }
 
     private void startEditingPhase(){
+        final int STARTER_ID = 0;
+
         System.out.println("SRV: start editing phase");
         currentPhase = GamePhase.Editing;
-        ByteBuf out = Unpooled.buffer(128);
-        out.writeChar(MessageType.StartEditingPhase.getChar());
+
+        //Send an object with Block = null to inform players that the editing phase is starting
+        ByteBuf out = Unpooled.buffer(512);
+        ObjectPlacement op = new ObjectPlacement(STARTER_ID, null);
+        encoder.encode(op, out, MessageType.BlockPlaced.getChar());
         broadcast(out);
-        playerPlacing = -1;
-        nextPlayerCanPlace();
+        System.out.println("SRV: envoie objet de placement avec block = null et ID = " + op.getPlayerID());
     }
 
     private void computePoints(){
@@ -113,6 +124,12 @@ public class CentralGameManager {
         }
     }
 
+    private void processAckGameStart(ByteBuf m){
+        nbPlayersReady++;
+        if(nbPlayersReady == players.size()){
+            startEditingPhase();
+        }
+    }
 
     private void processPlayerState(ByteBuf m){
 
@@ -120,32 +137,35 @@ public class CentralGameManager {
         decoder.decode(m, objects);
 
         PlayerState state = (PlayerState) objects.get(0);
-        System.out.println("SRV: playerState reçu du joueur #" + state.getPlayerID() + "    ---    " + state.toString());
+        //System.out.println("SRV: playerState reçu du joueur #" + state.getPlayerID());
         ServerGameStateTickManager.getInstance().setPlayerState(state);
 
     }
 
     private void processObjectPlacement(ByteBuf m){
+
         if(currentPhase == GamePhase.Editing) {
             //Reads the message
             List<Object> objects = new ArrayList<>();
             decoder.decode(m, objects);
             ObjectPlacement op = (ObjectPlacement) objects.get(0);
             System.out.println("SRV: Placement de block reçu par le joueur #" + op.getPlayerID());
-            //Broadcasts the message if it came from the right player
-            if(op.getPlayerID() == playerPlacing){
-                System.out.println("SRV: Placement de block DU BON JOUEUR reçu");
-                sendBlockToAllPlayers((ObjectPlacement) (objects.get(0)));
-                if(playerPlacing != players.size() - 1){
-                    System.out.println("SRV: NEXT PLAYER CAN PLACE");
-                    nextPlayerCanPlace();
-                }else{
-                    System.out.println("SRV: ALL PLAYERS HAVE PLACED");
-                    startMovementPhase();
-                }
 
+            int newID;
+            if(op.getPlayerID() < players.size() - 1){
+                newID = op.getPlayerID() + 1;
+            }else{
+                newID = -1;
+                startMovementPhase();
             }
+
+            ByteBuf out = Unpooled.buffer(512);
+            encoder.encode(new ObjectPlacement(newID, op.getBlock()), out, MessageType.BlockPlaced.getChar());
+            broadcast(out);
+            System.out.println("SRV: broadcasted new block, next player to place is #" + newID);
+
         }
+
     }
 
     private void sendBlockToAllPlayers(ObjectPlacement object){
@@ -154,6 +174,7 @@ public class CentralGameManager {
         broadcast(out);
     }
 
+    /*
     private void nextPlayerCanPlace(){ //TODO timeout si rien de reçu
         playerPlacing++;
         System.out.println("SRV: sending CAN PLACE to player #" + playerPlacing);
@@ -161,6 +182,7 @@ public class CentralGameManager {
         out.writeChar(MessageType.CanPlace.getChar());
         players.get(playerPlacing).writeAndFlush(out);
     }
+*/
 
     private void broadcast(ByteBuf out){
         out.retain(players.size() - 1);
