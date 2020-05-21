@@ -7,7 +7,8 @@ public enum MessageType {
     PlayerStateUpdate,
     ReachedEnd,
     CanPlace,
-    StartMovementPhase
+    StartMovementPhase,
+    StartEditingPhase
     ;
 
     public char getChar(){

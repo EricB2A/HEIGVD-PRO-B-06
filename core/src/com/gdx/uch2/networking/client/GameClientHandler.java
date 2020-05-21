@@ -29,12 +29,13 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
         ByteBuf m = (ByteBuf) msg;
 
-        int msgType = (int) m.readChar();
+        int msgType = m.readChar();
+        //System.out.println("CLI : msgType = " + msgType);
         try{
             if(msgType == MessageType.GameStateUpdate.getChar()){
-                if(currentPhase == GamePhase.Moving){
+                //if(currentPhase == GamePhase.Moving){
                     processGameStateUpdate(m);
-                }
+                //}
             }
             else if(msgType == MessageType.GameStart.getChar()){
                 processGameStart(m);

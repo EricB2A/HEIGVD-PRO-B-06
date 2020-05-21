@@ -114,8 +114,9 @@ public class CentralGameManager {
 
         List<Object> objects = new ArrayList<>();
         decoder.decode(m, objects);
-        System.out.println("SRV: playerState reçu");
+
         PlayerState state = (PlayerState) objects.get(0);
+        System.out.println("SRV: playerState reçu du joueur #" + state.getPlayerID());
         ServerGameStateTickManager.getInstance().setPlayerState(state);
     }
 
