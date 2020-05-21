@@ -32,6 +32,7 @@ public class GameClient implements Runnable {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 public void initChannel(SocketChannel ch) throws Exception{
                     ch.pipeline().addLast(new GameClientHandler());
+
                 }
             });
 

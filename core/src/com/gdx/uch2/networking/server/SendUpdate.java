@@ -24,7 +24,7 @@ public class SendUpdate extends TimerTask {
             NettyKryoEncoder encoder = new NettyKryoEncoder();
             ByteBuf out = Unpooled.buffer(1024);
             encoder.encode(ServerGameStateTickManager.getInstance().getGameState(), out, MessageType.GameStateUpdate.getChar());
-
+            System.out.println("SRV: Envoi du gamestate");
             ch.writeAndFlush(out);
 
         }

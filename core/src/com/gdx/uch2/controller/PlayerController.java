@@ -160,8 +160,13 @@ public class PlayerController {
                 player.getPosition().x, player.getPosition().y, System.nanoTime()));
     }
 
+    //Mort ou arrivé
     private void finish() {
-        finished = true;
+        if(!finished){
+            System.out.println("FINISH");
+            ClientPlayerStateTickManager.getInstance().sendFinish();
+            finished = true;
+        }
         player.setState(State.IDLE);
     }
 

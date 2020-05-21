@@ -10,7 +10,10 @@ import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
+import com.gdx.uch2.networking.client.ClientPlayerStateTickManager;
 import com.gdx.uch2.view.WorldRenderer;
+
+import static com.gdx.uch2.entities.Block.Type.BOX;
 
 public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private World world;
@@ -21,7 +24,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private int width, height;
 
     public PlacementScreen() {
-        world = new World();
+        world = World.currentWorld;
     }
 
     @Override
@@ -108,6 +111,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 }
                 blocks[x][y] = block;
                 ScreenManager.getInstance().showScreen(new GameScreen(world));
+                ClientPlayerStateTickManager.getInstance().sendBlockPlacement(block);
             }
         }
         return true;
