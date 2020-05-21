@@ -6,6 +6,7 @@ import com.gdx.uch2.networking.ObjectPlacement;
 import io.netty.buffer.ByteBuf;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -13,6 +14,7 @@ import com.esotericsoftware.kryo.io.Input;
 public class NettyKryoDecoder {
 
 	Kryo kryo;
+	private Semaphore kryoAccessMutex = new Semaphore(1);
 
 	public NettyKryoDecoder() {
 		this.kryo = new Kryo();
@@ -23,11 +25,10 @@ public class NettyKryoDecoder {
 
 	public void decode( ByteBuf msg, List<Object> out) {
 
-		if(kryo == null) kryo = new Kryo();
 		int length = msg.readableBytes();
-		
+
 		if(length == 0) return ;
-		
+
 		Input input = null;
 		ByteBuf msgCopy = null;
 		try {
@@ -36,7 +37,9 @@ public class NettyKryoDecoder {
 			msgCopy.readBytes(bytes);
 			//msg.readBytes(msg.readableBytes());
 			input = new Input(bytes);
+			kryoAccessMutex.acquire();
 			out.add(kryo.readClassAndObject(input));
+			kryoAccessMutex.release();
 		}
 		catch(Exception ex){
 			ex.printStackTrace();

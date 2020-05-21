@@ -8,9 +8,12 @@ import io.netty.buffer.ByteBuf;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
 
+import java.util.concurrent.Semaphore;
+
 public class NettyKryoEncoder {
 	
 	Kryo kryo;
+	private Semaphore kryoAccessMutex = new Semaphore(1);
 
 	public NettyKryoEncoder() {
 		this.kryo = new Kryo();
@@ -20,13 +23,13 @@ public class NettyKryoEncoder {
 	}
 
 	public void encode(Object msg, ByteBuf out, char prelude) {
-		
-		if(kryo == null) kryo = new Kryo();
 
         Output output = new Output(200);
         output.writeChar(prelude);
-        try { 
+        try {
+        	kryoAccessMutex.acquire();
 	        kryo.writeClassAndObject(output, msg);
+	        kryoAccessMutex.release();
 	        output.flush();  
 	        output.close();
         } catch (Exception e){

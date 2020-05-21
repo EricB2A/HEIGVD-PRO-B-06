@@ -1,22 +1,22 @@
 package com.gdx.uch2.networking.client;
 
-import com.gdx.uch2.entities.World;
-import com.gdx.uch2.networking.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.gdx.uch2.entities.OnlinePlayerManager;
+import com.gdx.uch2.entities.World;
+import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.MessageType;
+import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
-import com.gdx.uch2.networking.server.PlayersAmountHandler;
 import com.gdx.uch2.util.Constants;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
@@ -35,9 +35,10 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         //System.out.println("CLI : msgType = " + msgType);
         try{
             if(msgType == MessageType.GameStateUpdate.getChar()){
-                //if(currentPhase == GamePhase.Moving){
+                if(currentPhase == GamePhase.Moving){
                     processGameStateUpdate(m);
-                //}
+                }
+                else System.out.println("CLI: Gamestate Recu mais on est en phase de placement");
             }
             else if(msgType == MessageType.GameStart.getChar()){
                 processGameStart(m);
@@ -51,7 +52,10 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
                 //TODO thibaud
             }
             else if(msgType == MessageType.StartMovementPhase.getChar()) {
-                //TODO
+                startMovementPhase();
+            }
+            else if(msgType == MessageType.StartEditingPhase.getChar()) {
+                startEditingPhase();
             }
             else {
                 while (m.isReadable()) {
@@ -100,10 +104,13 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private void startMovementPhase(){
         currentPhase = GamePhase.Moving;
+        System.out.println("CLI: START MOVEMENT PHASE");
+        //World.currentWorld.updateScreen(World.currentWorld);
     }
 
     private void startEditingPhase(){
         currentPhase = GamePhase.Editing;
+        System.out.println("CLI: START EDITING PHASE");
     }
 
     @Override
