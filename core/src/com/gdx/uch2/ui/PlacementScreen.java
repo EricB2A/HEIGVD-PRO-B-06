@@ -66,7 +66,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     public boolean keyUp(int keycode) {
         switch(keycode){
             case Input.Keys.NUM_1:
-            case Input.Keys.NUMPAD_1: blockType = BOX; break;
+            case Input.Keys.NUMPAD_1: blockType = Block.Type.BOX; break;
             case Input.Keys.NUM_2:
             case Input.Keys.NUMPAD_2: blockType = Block.Type.BLOCK; break;
             case Input.Keys.NUM_3:
@@ -75,7 +75,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             case Input.Keys.NUMPAD_4: blockType = Block.Type.G_DOWN; break;
             case Input.Keys.NUM_5:
             case Input.Keys.NUMPAD_5: blockType = Block.Type.G_UP; break;
-            default: blockType = BOX; break;
+            default: blockType = Block.Type.BOX; break;
         }
         return true;
     }
@@ -100,7 +100,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             Block[][] blocks = world.getLevel().getBlocks();
             if (blocks[x][y] == null) {
                 Block block;
-                if(blockType == null) blockType = BOX; // TODO GUILLAUME
+                if(blockType == null) blockType = Block.Type.BOX; // TODO GUILLAUME
                 switch (blockType){
                     case BOX:
                     case BLOCK: block = new Block(new Vector2(x, y), blockType); break;

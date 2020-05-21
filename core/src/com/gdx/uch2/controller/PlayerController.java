@@ -227,6 +227,8 @@ public class PlayerController {
                 } else if (player.getVelocity().x > 0){
                     player.translate(new Vector2(block.getBounds().x - player.getBounds().x - player.getBounds().width, 0));
                 }
+
+                player.getVelocity().x = 0;
             }
         }
 

@@ -9,10 +9,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.gdx.uch2.entities.Block;
-import com.gdx.uch2.entities.Player;
+import com.gdx.uch2.entities.*;
 import com.gdx.uch2.entities.Player.State;
-import com.gdx.uch2.entities.World;
 import com.gdx.uch2.util.Constants;
 
 public class WorldRenderer {
@@ -40,6 +38,7 @@ public class WorldRenderer {
     private TextureRegion playerFallLeft;
     private TextureRegion playerJumpRight;
     private TextureRegion playerFallRight;
+    private TextureRegion onlinePlayer;
 
     /** Animations **/
     private Animation walkLeftAnimation;
@@ -82,6 +81,8 @@ public class WorldRenderer {
     private void loadTextures() {
         TextureAtlas playerAtlas = new TextureAtlas(Gdx.files.internal(Constants.PLAYER_1_ATLAS));
         TextureAtlas blocksAtlas = new TextureAtlas(Gdx.files.internal(Constants.BLOCKS_ATLAS));
+        TextureAtlas opponentsAtlas = new TextureAtlas(Gdx.files.internal(Constants.OPPONENTS_ATLAS));
+
         boxTexture = blocksAtlas.findRegion("box");
         blockTexture = blocksAtlas.findRegion("stone");
         gUpTexture = blocksAtlas.findRegion("liquidWater");
@@ -118,6 +119,8 @@ public class WorldRenderer {
         playerFallRight = playerAtlas.findRegion("jump2");
         playerFallLeft = new TextureRegion(playerFallRight);
         playerFallLeft.flip(true, false);
+
+        onlinePlayer = opponentsAtlas.findRegion("tile000");
     }
 
 
@@ -167,7 +170,9 @@ public class WorldRenderer {
     }
 
     private void drawOnlinePlayers() {
-        // TODO
+        for (OnlinePlayer p : OnlinePlayerManager.getInstance().getPlayers()) {
+            spriteBatch.draw(onlinePlayer, p.getPosition().x, p.getPosition().y, Player.SIZE, Player.SIZE);
+        }
     }
 
     private void drawPlayer() {
