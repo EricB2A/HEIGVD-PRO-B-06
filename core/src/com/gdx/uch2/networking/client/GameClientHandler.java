@@ -34,9 +34,10 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         //System.out.println("CLI : msgType = " + msgType);
         try{
             if(msgType == MessageType.GameStateUpdate.getChar()){
-                //if(currentPhase == GamePhase.Moving){
+                if(currentPhase == GamePhase.Moving){
                     processGameStateUpdate(m);
-                //}
+                }
+                else System.out.println("CLI: Gamestate Recu mais on est en phase de placement");
             }
             else if(msgType == MessageType.GameStart.getChar()){
                 processGameStart(m);
@@ -50,7 +51,10 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
                 //TODO thibaud
             }
             else if(msgType == MessageType.StartMovementPhase.getChar()) {
-                //TODO
+                startMovementPhase();
+            }
+            else if(msgType == MessageType.StartEditingPhase.getChar()) {
+                startEditingPhase();
             }
             else {
                 while (m.isReadable()) {
@@ -99,10 +103,12 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private void startMovementPhase(){
         currentPhase = GamePhase.Moving;
+        System.out.println("CLI: START MOVEMENT PHASE");
     }
 
     private void startEditingPhase(){
         currentPhase = GamePhase.Editing;
+        System.out.println("CLI: START EDITING PHASE");
     }
 
     @Override
