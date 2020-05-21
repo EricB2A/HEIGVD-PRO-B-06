@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.client;
 
+import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.*;
 import com.gdx.uch2.entities.OnlinePlayerManager;
@@ -8,6 +9,7 @@ import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.networking.server.PlayersAmountHandler;
+import com.gdx.uch2.ui.GameScreen;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -104,6 +106,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private void startMovementPhase(){
         currentPhase = GamePhase.Moving;
         System.out.println("CLI: START MOVEMENT PHASE");
+        //World.currentWorld.updateScreen(World.currentWorld);
     }
 
     private void startEditingPhase(){

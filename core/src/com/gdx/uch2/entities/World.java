@@ -4,7 +4,9 @@ package com.gdx.uch2.entities;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.controller.LevelLoader;
+import com.gdx.uch2.ui.GameScreen;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,6 +92,10 @@ public class World {
     private void createWorld(int noLevel) {
         level = LevelLoader.loadLevel(noLevel);
         resetPlayer();
+    }
+
+    public void updateScreen(World world){
+        ScreenManager.getInstance().showScreen(new GameScreen(world));
     }
 
     public void resetPlayer() {
