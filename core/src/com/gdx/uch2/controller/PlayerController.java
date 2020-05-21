@@ -13,10 +13,12 @@ import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.Player.State;
 import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
+import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking.client.ClientPlayerStateTickManager;
 
 import com.gdx.uch2.effects.Effect;
+import com.gdx.uch2.networking.client.GameClientHandler;
 
 public class PlayerController {
 
@@ -313,71 +315,74 @@ public class PlayerController {
 
     /** Change Player's state and parameters based on input controls **/
     private boolean processInput() {
-        if (keys.get(Keys.JUMP)) {
-            if (jumpingPressed && (!player.getState().equals(State.JUMPING))) {
-                jumpingActive = true;
-                jumpingPressed = false;
-                jumpPressedTime = System.currentTimeMillis();
+        if(GameClientHandler.currentPhase == GamePhase.Moving){
+            if (keys.get(Keys.JUMP)) {
+                if (jumpingPressed && (!player.getState().equals(State.JUMPING))) {
+                    jumpingActive = true;
+                    jumpingPressed = false;
+                    jumpPressedTime = System.currentTimeMillis();
 
-                player.getVelocity().y = MAX_JUMP_SPEED;
-                grounded = false;
+                    player.getVelocity().y = MAX_JUMP_SPEED;
+                    grounded = false;
 
-                if (player.getState() == State.SLIDING) {
-                    recoilBeginTime = System.currentTimeMillis();
-                    player.getAcceleration().x = 0;
+                    if (player.getState() == State.SLIDING) {
+                        recoilBeginTime = System.currentTimeMillis();
+                        player.getAcceleration().x = 0;
 
-                    if (player.isFacingLeft()) {
-                        if (!keys.get(Keys.LEFT)) {
-                            player.setFacingLeft(false);
+                        if (player.isFacingLeft()) {
+                            if (!keys.get(Keys.LEFT)) {
+                                player.setFacingLeft(false);
+                            }
+                            player.getVelocity().x = MAX_JUMP_SPEED;
+                        } else {
+                            if (!keys.get(Keys.RIGHT)) {
+                                player.setFacingLeft(true);
+                            }
+                            player.getVelocity().x = -MAX_JUMP_SPEED;
                         }
-                        player.getVelocity().x = MAX_JUMP_SPEED;
+                    }
+
+                    player.setState(State.JUMPING);
+                } else if (jumpingActive){
+                    if ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS) {
+                        jumpingActive = false;
                     } else {
-                        if (!keys.get(Keys.RIGHT)) {
-                            player.setFacingLeft(true);
-                        }
-                        player.getVelocity().x = -MAX_JUMP_SPEED;
+                        player.getVelocity().y = MAX_JUMP_SPEED;
                     }
                 }
+            }
 
-                player.setState(State.JUMPING);
-            } else if (jumpingActive){
-                if ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS) {
-                    jumpingActive = false;
-                } else {
-                    player.getVelocity().y = MAX_JUMP_SPEED;
+            float tmp;
+            boolean flag = player.isFacingLeft();
+            if (keys.get(Keys.LEFT)) {
+                // left is pressed
+                player.setFacingLeft(true);
+                if (!player.getState().equals(State.JUMPING)) {
+                    player.setState(State.WALKING);
                 }
+                tmp = -ACCELERATION;
+            } else if (keys.get(Keys.RIGHT)) {
+                // left is pressed
+                player.setFacingLeft(false);
+                if (!player.getState().equals(State.JUMPING)) {
+                    player.setState(State.WALKING);
+
+                }
+                tmp = ACCELERATION;
+            } else {
+                if (!player.getState().equals(State.JUMPING) && player.getState() != State.SLIDING) {
+                    player.setState(State.IDLE);
+                }
+                tmp = 0;
+
+            }
+
+            if (System.currentTimeMillis() - recoilBeginTime >= SLIDING_JUMP_RECOIL_TIME
+                    || flag != player.isFacingLeft()) {
+                player.getAcceleration().x = tmp;
             }
         }
 
-        float tmp;
-        boolean flag = player.isFacingLeft();
-        if (keys.get(Keys.LEFT)) {
-            // left is pressed
-            player.setFacingLeft(true);
-            if (!player.getState().equals(State.JUMPING)) {
-                player.setState(State.WALKING);
-            }
-            tmp = -ACCELERATION;
-        } else if (keys.get(Keys.RIGHT)) {
-            // left is pressed
-            player.setFacingLeft(false);
-            if (!player.getState().equals(State.JUMPING)) {
-                player.setState(State.WALKING);
-
-            }
-            tmp = ACCELERATION;
-        } else {
-            if (!player.getState().equals(State.JUMPING) && player.getState() != State.SLIDING) {
-                player.setState(State.IDLE);
-            }
-            tmp = 0;
-
-        }
-
-        if (System.currentTimeMillis() - recoilBeginTime >= SLIDING_JUMP_RECOIL_TIME
-         || flag != player.isFacingLeft()) {
-            player.getAcceleration().x = tmp;
-        }
 
         return false;
     }

@@ -23,7 +23,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private int playerID = -1;
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
-    private GamePhase currentPhase;
+    static public GamePhase currentPhase; //TODO quand même c'est un peu abusé là
     private ChannelHandlerContext ctx = null;
 
     @Override

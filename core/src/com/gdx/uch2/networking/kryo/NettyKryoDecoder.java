@@ -32,12 +32,13 @@ public class NettyKryoDecoder {
 		Input input = null;
 		ByteBuf msgCopy = null;
 		try {
+			kryoAccessMutex.acquire();
 			byte[] bytes = new byte[length];
 			msgCopy = msg.copy();
 			msgCopy.readBytes(bytes);
 			//msg.readBytes(msg.readableBytes());
 			input = new Input(bytes);
-			kryoAccessMutex.acquire();
+
 			out.add(kryo.readClassAndObject(input));
 			kryoAccessMutex.release();
 		}

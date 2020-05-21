@@ -29,9 +29,10 @@ public class NettyKryoEncoder {
         try {
         	kryoAccessMutex.acquire();
 	        kryo.writeClassAndObject(output, msg);
-	        kryoAccessMutex.release();
+
 	        output.flush();  
 	        output.close();
+			kryoAccessMutex.release();
         } catch (Exception e){
         	e.printStackTrace();
         }
