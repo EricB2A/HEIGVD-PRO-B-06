@@ -24,6 +24,18 @@ public class ClientPlayerStateTickManager {
     private ChannelHandlerContext ctx;
     private PlayerState currentState;
     private int playerID = -1;
+    private boolean canPlace;
+
+    public boolean getCanPlace() {
+        return canPlace;
+    }
+
+    public void setCanPlace(boolean canPlace) {
+        this.canPlace = canPlace;
+        System.out.println("CLI: set Can place = " + canPlace);
+    }
+
+
 
     private ClientPlayerStateTickManager(){
     }
@@ -71,9 +83,10 @@ public class ClientPlayerStateTickManager {
 
     //TODO placer dans un endroit plus évident ou renommer la classe
     public void sendBlockPlacement(Block block){
+        setCanPlace(false);
         System.out.println("Sending block placement as player #" + playerID);
-        ObjectPlacement op = new ObjectPlacement(playerID, block, block.isLethal());
-        ByteBuf out = Unpooled.buffer(1024);
+        ObjectPlacement op = new ObjectPlacement(playerID, block);
+        ByteBuf out = Unpooled.buffer(512);
         NettyKryoEncoder encoder = new NettyKryoEncoder();
         encoder.encode(op, out, MessageType.BlockPlaced.getChar());
         ctx.channel().writeAndFlush(out);

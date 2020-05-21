@@ -94,10 +94,6 @@ public class World {
         resetPlayer();
     }
 
-    public void updateScreen(World world){
-        ScreenManager.getInstance().showScreen(new GameScreen(world));
-    }
-
     public void resetPlayer() {
         player = new Player(new Vector2(level.getSpanPosition()));
     }
