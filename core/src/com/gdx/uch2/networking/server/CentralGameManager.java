@@ -65,17 +65,13 @@ public class CentralGameManager {
         currentPhase = GamePhase.Moving;
         Arrays.fill(finished, false);
         //Sends a message to all clients announcing the movement phase starts
-        ByteBuf out = buffer(128);
-        out.writeChar(MessageType.StartMovementPhase.getChar());
-        broadcast(out);
+        broadcast(MessageType.StartMovementPhase);
     }
 
     private void startEditingPhase(){
         System.out.println("SRV: start editing phase");
         currentPhase = GamePhase.Editing;
-        ByteBuf out = buffer(128);
-        out.writeChar(MessageType.StartEditingPhase.getChar());
-        broadcast(out);
+        broadcast(MessageType.StartEditingPhase);
         playerPlacing = -1;
         nextPlayerCanPlace();
     }
@@ -162,10 +158,12 @@ public class CentralGameManager {
         players.get(playerPlacing).writeAndFlush(out);
     }
 
-    private void broadcast(ByteBuf out){
+    private void broadcast(MessageType msgType){
+        ByteBuf out = Unpooled.buffer(128);
+        out.retain();
+        out.writeChar(msgType.getChar());
         for(ChannelHandlerContext player : players){
             player.writeAndFlush(out);
-            out.resetReaderIndex();
         }
     }
 

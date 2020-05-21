@@ -26,7 +26,6 @@ public class SendUpdate extends TimerTask {
             encoder.encode(ServerGameStateTickManager.getInstance().getGameState(), out, MessageType.GameStateUpdate.getChar());
             System.out.println("SRV: Envoi du gamestate");
             ch.writeAndFlush(out);
-
         }
     }
 }
