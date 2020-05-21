@@ -13,6 +13,7 @@ import io.netty.util.ReferenceCountUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static io.netty.buffer.Unpooled.buffer;
@@ -65,13 +66,17 @@ public class CentralGameManager {
         currentPhase = GamePhase.Moving;
         Arrays.fill(finished, false);
         //Sends a message to all clients announcing the movement phase starts
-        broadcast(MessageType.StartMovementPhase);
+        ByteBuf out = Unpooled.buffer(128);
+        out.writeChar(MessageType.StartMovementPhase.getChar());
+        broadcast(out);
     }
 
     private void startEditingPhase(){
         System.out.println("SRV: start editing phase");
         currentPhase = GamePhase.Editing;
-        broadcast(MessageType.StartEditingPhase);
+        ByteBuf out = Unpooled.buffer(128);
+        out.writeChar(MessageType.StartEditingPhase.getChar());
+        broadcast(out);
         playerPlacing = -1;
         nextPlayerCanPlace();
     }
@@ -143,11 +148,9 @@ public class CentralGameManager {
     }
 
     private void sendBlockToAllPlayers(ObjectPlacement object){
-        for(ChannelHandlerContext ctx : players){
-            ByteBuf out = Unpooled.buffer(1024);
-            encoder.encode(object, out, MessageType.BlockPlaced.getChar());
-            ctx.channel().writeAndFlush(out);
-        }
+        ByteBuf out = Unpooled.buffer(1024);
+        encoder.encode(object, out, MessageType.BlockPlaced.getChar());
+        broadcast(out);
     }
 
     private void nextPlayerCanPlace(){ //TODO timeout si rien de reçu
@@ -158,10 +161,8 @@ public class CentralGameManager {
         players.get(playerPlacing).writeAndFlush(out);
     }
 
-    private void broadcast(MessageType msgType){
-        ByteBuf out = Unpooled.buffer(128);
-        out.retain();
-        out.writeChar(msgType.getChar());
+    private void broadcast(ByteBuf out){
+        out.retain(players.size() - 1);
         for(ChannelHandlerContext player : players){
             player.writeAndFlush(out);
         }
