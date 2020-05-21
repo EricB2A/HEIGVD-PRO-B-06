@@ -10,7 +10,6 @@ import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import jdk.swing.interop.SwingInterOpUtils;
 
 import java.util.Timer;
 
@@ -47,6 +46,10 @@ public class ClientPlayerStateTickManager {
 
     public void setPlayerID(int playerID){
         this.playerID = playerID;
+    }
+
+    public int getPlayerID() {
+        return playerID;
     }
 
     /*
