@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking2.serialization;
 
 import com.badlogic.gdx.Game;
+import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
@@ -64,10 +65,8 @@ public class MyOuputStream {
                 stream.writeInt(MessageType.GameStateUpdate.ordinal());
                 // Taille.
                 stream.writeInt(gameState.getPlayerStates().size());
-                Collection collection = gameState.getPlayerStates().values();
-                Iterator iterator = collection.iterator();
-                while(iterator.hasNext()){
-                    writeMessage((PlayerState) iterator.next());
+                for (PlayerState p : gameState.getPlayerStates().values()) {
+                    writeMessage(p);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
