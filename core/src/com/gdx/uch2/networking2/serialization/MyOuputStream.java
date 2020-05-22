@@ -38,11 +38,15 @@ public class MyOuputStream {
     }
 
     public void writeMessage(PlayerState playerState){
+        writeMessage(playerState, true);
+    }
+
+    private void writeMessage(PlayerState playerState, boolean writeMessageType){
         try {
             mutex.acquire();
             try {
                 // PlayerStateUpdate.
-                stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
+                if (writeMessageType) stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
                 stream.writeInt(playerState.getPlayerID());
                 stream.writeFloat(playerState.getPosX());
                 stream.writeFloat(playerState.getPosY());
@@ -66,7 +70,7 @@ public class MyOuputStream {
                 // Taille.
                 stream.writeInt(gameState.getPlayerStates().size());
                 for (PlayerState p : gameState.getPlayerStates().values()) {
-                    writeMessage(p);
+                    writeMessage(p, false);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
