@@ -84,9 +84,7 @@ public class World {
     }
 
     public void placeBlock(Block b){
-        Block[][] blocks = level.getBlocks();
-        blocks[(int) b.getPosition().x][(int) b.getPosition().y] = b;
-        level.setBlocks(blocks);
+        level.getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] = b;
     }
 
     private void createWorld(int noLevel) {
