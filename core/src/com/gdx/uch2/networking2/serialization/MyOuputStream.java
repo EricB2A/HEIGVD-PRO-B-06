@@ -7,6 +7,7 @@ import com.gdx.uch2.networking.PlayerState;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.Semaphore;
@@ -15,9 +16,9 @@ public class MyOuputStream {
     private Semaphore mutex;
     private DataOutputStream stream;
 
-    public MyOuputStream(DataOutputStream stream) {
+    public MyOuputStream(OutputStream stream) {
         this.mutex = new Semaphore(1);
-        this.stream = stream;
+        this.stream = new DataOutputStream(stream);
     }
 
     public void writeMessage(PlayerState playerState){
@@ -80,6 +81,22 @@ public class MyOuputStream {
                 mutex.release();
             }
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void close(){
+        try {
+            stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void flush(){
+        try {
+            stream.flush();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
