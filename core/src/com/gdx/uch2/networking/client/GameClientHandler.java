@@ -45,12 +45,11 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
                 processGameStart(m);
             }
             else if(msgType == MessageType.BlockPlaced.getChar()) {
-                System.out.println("BITE");
                 processBlockPlacement(m);
             }
-            //else if(msgType == MessageType.CanPlace.getChar()) {
-            //
-            //}
+            else if(msgType == MessageType.AckBlockPlaced.getChar()) {
+                processAckBlockPlaced();
+            }
             else if(msgType == MessageType.StartMovementPhase.getChar()) {
                 startMovementPhase();
             }
@@ -109,8 +108,10 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         }else if(op.getPlayerID() == -1){
             startMovementPhase();
         }
+    }
 
-
+    private void processAckBlockPlaced(){
+        ClientPlayerStateTickManager.getInstance().setRecievedAck(true);
     }
 
     private void startSending(ChannelHandlerContext ctx){

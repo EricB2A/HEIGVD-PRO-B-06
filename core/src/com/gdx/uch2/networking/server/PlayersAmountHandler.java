@@ -51,7 +51,7 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
             });
 
         }
-        //Envoie le message de welcome et lance la partie si 2 joueurs sont présents
+        //lance la partie si 2 joueurs sont présents
         else{
             //ctx.writeAndFlush(Unpooled.wrappedBuffer(welcome.getBytes()));
             players.add(ctx);
@@ -90,8 +90,8 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         // players.get(0).pipeline().addLast(new PlayerHandler(manager));
         // players.get(1).pipeline().addLast(new PlayerHandler(manager));
 
-        for (ChannelHandlerContext player : players) {
-            player.pipeline().addLast(new PlayerHandler(manager));
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).pipeline().addLast(new PlayerHandler(manager, i));
         }
 
 

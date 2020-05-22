@@ -14,7 +14,6 @@ import com.esotericsoftware.kryo.io.Input;
 public class NettyKryoDecoder {
 
 	Kryo kryo;
-	private Semaphore kryoAccessMutex = new Semaphore(1);
 
 	public NettyKryoDecoder() {
 		this.kryo = new Kryo();
@@ -33,7 +32,6 @@ public class NettyKryoDecoder {
 		Input input = null;
 		ByteBuf msgCopy = null;
 		try {
-			kryoAccessMutex.acquire();
 			byte[] bytes = new byte[length];
 			msgCopy = msg.copy();
 			msgCopy.readBytes(bytes);
@@ -41,7 +39,6 @@ public class NettyKryoDecoder {
 			input = new Input(bytes);
 
 			out.add(kryo.readClassAndObject(input));
-			kryoAccessMutex.release();
 		}
 		catch(Exception ex){
 //			ex.printStackTrace();

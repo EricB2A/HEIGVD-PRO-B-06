@@ -5,16 +5,18 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 public class PlayerHandler extends ChannelInboundHandlerAdapter {
 
-    public PlayerHandler(CentralGameManager manager) {
+    public PlayerHandler(CentralGameManager manager, int playerID) {
         this.manager = manager;
+        this.playerID = playerID;
     }
 
     private CentralGameManager manager;
-
+    private int playerID;
 
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        //System.out.println("Message reçu de #" + playerID);
         manager.readMessage(ctx, msg);
     }
 

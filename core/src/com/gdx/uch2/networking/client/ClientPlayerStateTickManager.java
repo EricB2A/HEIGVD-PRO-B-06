@@ -20,11 +20,23 @@ public class ClientPlayerStateTickManager {
         static final ClientPlayerStateTickManager instance = new ClientPlayerStateTickManager();
     }
 
+    NettyKryoEncoder encoder = new NettyKryoEncoder();
+
     private Timer timer;
     private ChannelHandlerContext ctx;
     private PlayerState currentState;
     private int playerID = -1;
     private boolean canPlace;
+    private boolean recievedAck = false;
+
+
+    public boolean getRecievedAck() {
+        return recievedAck;
+    }
+
+    public void setRecievedAck(boolean recievedAck) {
+        this.recievedAck = recievedAck;
+    }
 
     public boolean getCanPlace() {
         return canPlace;
@@ -64,15 +76,6 @@ public class ClientPlayerStateTickManager {
         return playerID;
     }
 
-    /*
-    public void setHasFinished(boolean value){
-        hasFinished = value;
-    }
-
-    public boolean hasFinished(){
-        return hasFinished;
-    }
-    */
 
     public void sendFinish(){
         ByteBuf out = Unpooled.buffer(128);
@@ -82,14 +85,39 @@ public class ClientPlayerStateTickManager {
     }
 
     //TODO placer dans un endroit plus évident ou renommer la classe
-    public void sendBlockPlacement(Block block){
+    public void sendBlockPlacement(final Block block){
         setCanPlace(false);
-        System.out.println("Sending block placement as player #" + playerID);
+
+
+        new Runnable(){
+
+            @Override
+            public void run() {
+                ObjectPlacement op = new ObjectPlacement(playerID, block);
+                ByteBuf out = buffer(1024);
+                encoder.encode(op, out, MessageType.BlockPlaced.getChar());
+                while(!getRecievedAck()){
+                    try{
+                        ctx.writeAndFlush(out);
+                        System.out.println("CLI: Tentative d'envoi de BlocPlacement...");
+                        Thread.sleep(100);
+                    }catch (InterruptedException ex){
+                        Thread.currentThread().interrupt();
+                    }
+                    System.out.println("CLI: BlocPlacement envoyé avec succes!");
+                }
+                setRecievedAck(false);
+            }
+        }.run();
+
+        /*
+        System.out.println("CLI: Sending block placement as player #" + playerID);
         ObjectPlacement op = new ObjectPlacement(playerID, block);
-        ByteBuf out = Unpooled.buffer(512);
-        NettyKryoEncoder encoder = new NettyKryoEncoder();
+        ByteBuf out = Unpooled.buffer(2048);
         encoder.encode(op, out, MessageType.BlockPlaced.getChar());
-        ctx.channel().writeAndFlush(out);
+        ctx.writeAndFlush(out);
+
+         */
     }
 
     //Crée le timer et envoie régulièrement une séquence d'acitons au serveur.

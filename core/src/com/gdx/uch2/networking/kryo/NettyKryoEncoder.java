@@ -13,7 +13,6 @@ import java.util.concurrent.Semaphore;
 public class NettyKryoEncoder {
 	
 	Kryo kryo;
-	private Semaphore kryoAccessMutex = new Semaphore(1);
 
 	public NettyKryoEncoder() {
 		this.kryo = new Kryo();
@@ -27,12 +26,10 @@ public class NettyKryoEncoder {
         Output output = new Output(200);
         output.writeChar(prelude);
         try {
-        	kryoAccessMutex.acquire();
 	        kryo.writeClassAndObject(output, msg);
 
 	        output.flush();  
 	        output.close();
-			kryoAccessMutex.release();
         } catch (Exception e){
         	e.printStackTrace();
         }
