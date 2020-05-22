@@ -82,9 +82,13 @@ public class GameServer {
                                 GameState gs = in.readGameState();
                                 System.out.println("Gamestate lu : " + gs.toString());
 
-                                mutex.acquire();
-                                protectedStuff = 1000;
-                                mutex.release();
+                                try {
+                                    mutex.acquire();
+                                    protectedStuff = 1000;
+                                    mutex.release();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                                 System.out.println("protected stuff (should be 1000): " + protectedStuff);
 
                                 Block b = new Block(new Vector2(5, 5));
@@ -96,9 +100,14 @@ public class GameServer {
                                 PlayerState ps = in.readPlayerState();
                                 System.out.println("PlayerState lu : " + ps.toString());
 
-                                mutex.acquire();
-                                protectedStuff = 200;
-                                mutex.release();
+                                try {
+                                    mutex.acquire();
+                                    protectedStuff = 200;
+                                    mutex.release();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
                                 System.out.println("protected stuff (should be 200): " + protectedStuff);
 
                                 break;
@@ -114,18 +123,10 @@ public class GameServer {
 
                 } catch (IOException ex) {
                     if (in != null) {
-                        try {
-                            in.close();
-                        } catch (IOException ex1) {
-                            ex.printStackTrace();
-                        }
+                        in.close();
                     }
                     if (out != null) {
-                        try {
-                            out.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        out.close();
                     }
                     if (clientSocket != null) {
                         try {
