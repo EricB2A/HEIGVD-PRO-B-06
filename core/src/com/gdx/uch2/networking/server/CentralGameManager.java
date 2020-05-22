@@ -22,11 +22,13 @@ public class CentralGameManager {
 
     private List<ChannelHandlerContext> players;
     private boolean[] finished;
+    private boolean[] recievedBlockPlacement;
     private NettyKryoEncoder encoder = new NettyKryoEncoder();
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
     private GamePhase currentPhase;
     private Level map;
     private int nbPlayersReady = 0;
+
 
     public CentralGameManager(List<ChannelHandlerContext> players, Level map){
         this.players = players;
@@ -37,7 +39,7 @@ public class CentralGameManager {
     }
 
 
-    public void readMessage(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void readMessage(ChannelHandlerContext ctx, Object msg, int playerID) throws Exception {
 
         try{
             ByteBuf m = (ByteBuf) msg;
@@ -54,6 +56,9 @@ public class CentralGameManager {
             else if(m.getChar(0) == MessageType.AckGameStart.getChar()){
                 processAckGameStart(m);
             }
+            else if(m.getChar(0) == MessageType.AckBlockPlaced.getChar()){
+                processAckBlockPlaced(playerID);
+            }
             else{
                 while (m.isReadable()) {
                     System.out.print((char) m.readByte());
@@ -63,6 +68,10 @@ public class CentralGameManager {
         }finally {
             ReferenceCountUtil.release(msg);
         }
+    }
+
+    private void processAckBlockPlaced(int playerID) {
+        recievedBlockPlacement[playerID] = true;
     }
 
     private void startMovementPhase(){
@@ -85,10 +94,8 @@ public class CentralGameManager {
         currentPhase = GamePhase.Editing;
 
         //Send an object with Block = null to inform players that the editing phase is starting
-        ByteBuf out = Unpooled.buffer(512);
         ObjectPlacement op = new ObjectPlacement(STARTER_ID, null);
-        encoder.encode(op, out, MessageType.BlockPlaced.getChar());
-        broadcast(out);
+        sendBlockToAllPlayers(op);
         System.out.println("SRV: envoie objet de placement avec block = null et ID = " + op.getPlayerID());
     }
 
@@ -163,9 +170,7 @@ public class CentralGameManager {
                 startMovementPhase();
             }
 
-            ByteBuf out = Unpooled.buffer(512);
-            encoder.encode(new ObjectPlacement(newID, op.getBlock()), out, MessageType.BlockPlaced.getChar());
-            broadcast(out);
+            sendBlockToAllPlayers(new ObjectPlacement(newID, op.getBlock()));
             System.out.println("SRV: broadcasted new block, next player to place is #" + newID);
 
         }
@@ -176,10 +181,39 @@ public class CentralGameManager {
 
     }
 
-    private void sendBlockToAllPlayers(ObjectPlacement object){
-        ByteBuf out = Unpooled.buffer(1024);
-        encoder.encode(object, out, MessageType.BlockPlaced.getChar());
-        broadcast(out);
+    private void sendBlockToAllPlayers(final ObjectPlacement op){
+        Arrays.fill(recievedBlockPlacement, false);
+
+        new Runnable(){
+
+            @Override
+            public void run() {
+                ByteBuf out = buffer(1024);
+                encoder.encode(op, out, MessageType.BlockPlaced.getChar());
+                boolean allPlayersRecievedBlockPlacement = false;
+                while(!allPlayersRecievedBlockPlacement){
+                    try{
+                        out.retain();
+                        broadcast(out);
+                        System.out.println("SRV: Tentative d'envoi de BlocPlacement...");
+                        Thread.sleep(100);
+
+                        boolean tmp = true;
+                        for(boolean b : recievedBlockPlacement){
+                            if(!b){
+                                tmp = false;
+                                break;
+                            }
+                            allPlayersRecievedBlockPlacement = tmp;
+                        }
+
+                    }catch (InterruptedException ex){
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                System.out.println("SRV: BlocPlacement envoyé avec succes!");
+            }
+        }.run();
     }
 
 
