@@ -90,8 +90,8 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         // players.get(0).pipeline().addLast(new PlayerHandler(manager));
         // players.get(1).pipeline().addLast(new PlayerHandler(manager));
 
-        for(int i = 0; i < players.size(); ++i){
-            players.get(i).pipeline().addLast(new PlayerHandler(manager));
+        for (ChannelHandlerContext player : players) {
+            player.pipeline().addLast(new PlayerHandler(manager));
         }
 
 

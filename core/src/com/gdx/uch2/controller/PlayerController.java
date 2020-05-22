@@ -223,6 +223,7 @@ public class PlayerController {
         // if player collides, make his horizontal velocity 0
         for (Block block : collidable) {
             if (block == null) continue;
+            if (!block.isSolid()) continue;
             if (playerRect.overlaps(block.getBounds())) {
                 jumpingActive = false;
                 if(!grounded) {
@@ -267,6 +268,7 @@ public class PlayerController {
         grounded = false;
         for (Block block : collidable) {
             if (block == null) continue;
+            if (!block.isSolid()) continue;
             if (playerRect.overlaps(block.getBounds())) {
                 jumpingActive = false;
                 if (player.getVelocity().y < 0) {
