@@ -52,6 +52,7 @@ public class CentralGameManager {
                 processPlayerReachedEnd(m);
             }
             else if(m.getChar(0) == MessageType.AckGameStart.getChar()){
+                System.out.println("zoome zoome");
                 processAckGameStart(m);
             }
             else{
@@ -134,7 +135,7 @@ public class CentralGameManager {
     private void processPlayerState(ByteBuf m){
 
         List<Object> objects = new ArrayList<>();
-        decoder.decode(m, objects);
+        if(!decoder.decode(m, objects)) return;
 
         PlayerState state = (PlayerState) objects.get(0);
         //System.out.println("SRV: playerState reçu du joueur #" + state.getPlayerID());
