@@ -35,6 +35,7 @@ public class CentralGameManager {
         this.map = map;
         finished = new boolean[players.size()];
         Arrays.fill(finished, false);
+        recievedBlockPlacement = new boolean[players.size()];
         //startEditingPhase();
     }
 
@@ -218,7 +219,7 @@ public class CentralGameManager {
 
 
     private void broadcast(ByteBuf out){
-        out.retain(players.size() - 1);
+        if(players.size() > 1) out.retain(players.size() - 1);
         for(ChannelHandlerContext player : players){
             player.writeAndFlush(out);
         }

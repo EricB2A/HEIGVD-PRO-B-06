@@ -42,7 +42,7 @@ public class NettyKryoDecoder {
 			out.add(kryo.readClassAndObject(input));
 		} catch(Exception ex){
 			System.out.println("ERREUR DECODAGE : Buffer underflow probable");
-//			ex.printStackTrace();
+			ex.printStackTrace();
 			ret = false;
 		}
 		finally {
