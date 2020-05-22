@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -40,14 +37,14 @@ public class GameServer {
         private class ServantWorker implements Runnable {
 
             Socket clientSocket;
-            BufferedReader in = null;
-            PrintWriter out = null;
+            DataInputStream in = null;
+            DataOutputStream out = null;
 
             public ServantWorker(Socket clientSocket) {
                 try {
                     this.clientSocket = clientSocket;
-                    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                    out = new PrintWriter(clientSocket.getOutputStream());
+                    in = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+                    out = new DataOutputStream(clientSocket.getOutputStream());
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -59,11 +56,12 @@ public class GameServer {
                 boolean shouldRun = true;
 
                 try {
-                    while ((shouldRun) && (line = in.readLine()) != null) {
-                        if (line.equalsIgnoreCase("bye")) {
+                    while ((shouldRun)) {
+                        float f = in.readFloat();
+                        if (f == -1) {
                             shouldRun = false;
                         }
-                        out.println("> " + line.toUpperCase());
+                        out.writeFloat(f + 42f);
                         out.flush();
                     }
 
@@ -80,7 +78,11 @@ public class GameServer {
                         }
                     }
                     if (out != null) {
-                        out.close();
+                        try {
+                            out.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                     if (clientSocket != null) {
                         try {
