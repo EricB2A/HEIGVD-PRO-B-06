@@ -75,13 +75,12 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
         int playerID = 0;
         for(ChannelHandlerContext ctx : players){
 
-            ByteBuf out = buffer(512);
+            ByteBuf out = Unpooled.buffer(128);
             out.writeChar(MessageType.GameStart.getChar());
             out.writeInt(playerID);
             ctx.writeAndFlush(out);
 
             System.out.println("Message envoyé au joueur #" + playerID);
-            System.out.println("Prélude envoyé au joueur " + (int) MessageType.GameStart.getChar());
 
             playerID++;
         }

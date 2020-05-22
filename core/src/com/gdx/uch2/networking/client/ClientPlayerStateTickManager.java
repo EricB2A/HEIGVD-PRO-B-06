@@ -88,7 +88,6 @@ public class ClientPlayerStateTickManager {
     public void sendBlockPlacement(final Block block){
         setCanPlace(false);
 
-
         new Runnable(){
 
             @Override
@@ -105,8 +104,9 @@ public class ClientPlayerStateTickManager {
                     }catch (InterruptedException ex){
                         Thread.currentThread().interrupt();
                     }
-                    System.out.println("CLI: BlocPlacement envoyé avec succes!");
+
                 }
+                System.out.println("CLI: BlocPlacement envoyé avec succes!");
                 setRecievedAck(false);
             }
         }.run();
