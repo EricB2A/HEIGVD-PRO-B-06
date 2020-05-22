@@ -37,11 +37,15 @@ public class MyOuputStream {
     }
 
     public void writeMessage(PlayerState playerState){
+        writeMessage(playerState, true);
+    }
+
+    private void writeMessage(PlayerState playerState, boolean writeMessageType){
         try {
             mutex.acquire();
             try {
                 // PlayerStateUpdate.
-                stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
+                if (writeMessageType) stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
                 stream.writeInt(playerState.getPlayerID());
                 stream.writeFloat(playerState.getPosX());
                 stream.writeFloat(playerState.getPosY());
@@ -67,7 +71,7 @@ public class MyOuputStream {
                 Collection collection = gameState.getPlayerStates().values();
                 Iterator iterator = collection.iterator();
                 while(iterator.hasNext()){
-                    writeMessage((PlayerState) iterator.next());
+                    writeMessage((PlayerState) iterator.next(), false);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

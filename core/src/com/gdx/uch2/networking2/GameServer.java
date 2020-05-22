@@ -32,6 +32,7 @@ public class GameServer {
 
         @Override
         public void run() {
+            System.out.println("Start receptionnist");
             ServerSocket serverSocket;
 
             try {
@@ -70,6 +71,7 @@ public class GameServer {
 
             @Override
             public void run() {
+                System.out.println("Start servant worker");
                 boolean shouldRun = true;
 
                 try {
@@ -85,9 +87,10 @@ public class GameServer {
                                 try {
                                     mutex.acquire();
                                     protectedStuff = 1000;
-                                    mutex.release();
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
+                                }finally {
+                                    mutex.release();
                                 }
                                 System.out.println("protected stuff (should be 1000): " + protectedStuff);
 
@@ -103,9 +106,10 @@ public class GameServer {
                                 try {
                                     mutex.acquire();
                                     protectedStuff = 200;
-                                    mutex.release();
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
+                                }finally {
+                                    mutex.release();
                                 }
 
                                 System.out.println("protected stuff (should be 200): " + protectedStuff);
