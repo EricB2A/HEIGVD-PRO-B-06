@@ -16,7 +16,6 @@ public class MyInputStream  {
     private final DataInputStream in;
 
     public MyInputStream(InputStream stream) {
-//        super(stream);
         this.in = new DataInputStream(new BufferedInputStream(stream));
     }
 

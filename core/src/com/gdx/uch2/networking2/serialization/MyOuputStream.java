@@ -21,6 +21,21 @@ public class MyOuputStream {
         this.stream = new DataOutputStream(stream);
     }
 
+    public void writeMessage(MessageType messageType) {
+        try {
+            mutex.acquire();
+            try {
+                stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                mutex.release();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void writeMessage(PlayerState playerState){
         try {
             mutex.acquire();
