@@ -1,11 +1,9 @@
-public class Main {
+public class StartJavaServer {
 
     public static void main(String[] args) {
         GameServer srv = new GameServer();
-
-        GameClient cli = new GameClient();
-
         srv.serveClients();
+
     }
 
 }
