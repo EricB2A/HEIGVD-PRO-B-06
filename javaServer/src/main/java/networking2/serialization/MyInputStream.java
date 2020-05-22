@@ -1,24 +1,25 @@
-package serialization;
+package networking2.serialization;
 
-import java.awt.*;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.Semaphore;
 
-public class MyOuputStream {
-    private Semaphore mutex;
-    private DataOutputStream stream;
+public class MyInputStream {
 
-    public MyOuputStream(DataOutputStream stream) {
+    private Semaphore mutex;
+    private InputStream stream;
+
+    public MyInputStream(InputStream stream) {
         this.mutex = new Semaphore(1);
         this.stream = stream;
     }
 
-    public void writeMessage(MessageType messageType){
+    public void read(){
         try {
             mutex.acquire();
             try {
-                stream.writeChar(messageType.getChar());
+                char message = (char) stream.read();
+                System.out.println("Message reçu :" + message);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -28,5 +29,6 @@ public class MyOuputStream {
             e.printStackTrace();
         }
     }
-    
+
+
 }

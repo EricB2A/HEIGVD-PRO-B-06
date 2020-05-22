@@ -1,4 +1,4 @@
-package serialization;
+package com.gdx.uch2.networking2.serialization;
 
 public enum MessageType {
     GameStateUpdate,
