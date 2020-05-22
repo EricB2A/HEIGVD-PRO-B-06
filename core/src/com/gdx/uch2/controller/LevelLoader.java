@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Level;
+import com.gdx.uch2.entities.ProtectedArea;
 import com.gdx.uch2.entities.Trap;
 
 import java.util.Arrays;
@@ -21,6 +22,7 @@ public class LevelLoader {
     private static final int    EMPTY           = 0xffffff; // white
     private static final int    START_POS       = 0x00ff00; // green
     private static final int    FINISH_POS      = 0xff0000; // red
+    private static final int    PROTECTED       = 0xff00ff; // ugly pink
 
     public static Level loadLevel(int number) {
         Level level = new Level();
@@ -56,8 +58,12 @@ public class LevelLoader {
                     blocks[col][iRow] = new Trap(new Vector2(col, iRow), Block.Type.LETHAL);
                 } else if (pixel == START_POS) {
                     level.setSpanPosition(new Vector2(col, iRow));
+                    blocks[col][iRow] = new ProtectedArea(new Vector2(col, iRow));
                 } else if (pixel == FINISH_POS) {
                     level.setFinishPosition(new Vector2(col, iRow));
+                    blocks[col][iRow] = new ProtectedArea(new Vector2(col, iRow));
+                } else if (pixel == PROTECTED) {
+                    blocks[col][iRow] = new ProtectedArea(new Vector2(col, iRow));
                 }
             }
         }

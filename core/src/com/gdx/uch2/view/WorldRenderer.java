@@ -15,8 +15,8 @@ import com.gdx.uch2.util.Constants;
 
 public class WorldRenderer {
 
-    private static final float CAMERA_WIDTH = 30;
-    private static final float CAMERA_HEIGHT = 15;
+    private final float camera_width;
+    private final float camera_height;
     private static final float RUNNING_FRAME_DURATION = 0.06f;
 
     private World world;
@@ -57,9 +57,9 @@ public class WorldRenderer {
     public void setSize (int w, int h) {
         this.width = w;
         this.height = h;
-        float ppu = Math.min(width / CAMERA_WIDTH, height / CAMERA_HEIGHT);
-        ppuX = width / CAMERA_WIDTH;
-        ppuY = height / CAMERA_HEIGHT;
+        float ppu = Math.min(width / camera_width, height / camera_height);
+        ppuX = width / camera_width;
+        ppuY = height / camera_height;
     }
     public boolean isDebug() {
         return debug;
@@ -70,9 +70,11 @@ public class WorldRenderer {
 
     public WorldRenderer(World world, boolean debug) {
         this.world = world;
-        this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
+        camera_width = world.getLevel().getWidth();
+        camera_height = world.getLevel().getHeight();
+        this.cam = new OrthographicCamera(camera_width, camera_height);
 //        this.cam.position.set(world.getPlayer().getPosition().x, world.getPlayer().getPosition().y, 0);
-		this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
+		this.cam.position.set(camera_width / 2f, camera_height / 2f, 0);
         this.cam.update();
         this.debug = debug;
         spriteBatch = new SpriteBatch();
@@ -155,7 +157,7 @@ public class WorldRenderer {
 
 
     private void drawBlocks() {
-        for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
+        for (Block block : world.getDrawableBlocks((int) camera_width, (int) camera_height)) {
             TextureRegion texture;
             switch (block.getType()){
                 case BOX: texture = boxTexture; break;
@@ -163,6 +165,7 @@ public class WorldRenderer {
                 case LETHAL: texture = lethalBlockTexture; break;
                 case G_UP: texture = gUpTexture; break;
                 case G_DOWN: texture = gDownTexture; break;
+                case PROTECTED_AREA: continue;
                 default: texture = boxTexture; break;
             }
             spriteBatch.draw(texture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
@@ -202,7 +205,7 @@ public class WorldRenderer {
         // render blocks
         debugRenderer.setProjectionMatrix(cam.combined);
         debugRenderer.begin(ShapeType.Line);
-        for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
+        for (Block block : world.getDrawableBlocks((int) camera_width, (int) camera_height)) {
             Rectangle rect = block.getBounds();
             debugRenderer.setColor(new Color(1, 0, 0, 1));
             debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);

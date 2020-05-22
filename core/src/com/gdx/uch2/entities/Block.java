@@ -8,7 +8,7 @@ public class Block {
     public static final float SIZE = 1f;
 
     public enum Type {
-        BLOCK, BOX, LETHAL, G_UP, G_DOWN
+        BLOCK, BOX, LETHAL, G_UP, G_DOWN, PROTECTED_AREA
     }
 
     Vector2 	position = new Vector2();
@@ -50,6 +50,10 @@ public class Block {
 
     public boolean isLethal() {
         return false;
+    }
+
+    public boolean isSolid() {
+        return true;
     }
 
     public void action(Player player) { }

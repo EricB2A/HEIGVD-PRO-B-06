@@ -46,7 +46,7 @@ public class CentralGameManager {
                 processPlayerState(m);
             }
             else if(m.getChar(0) == MessageType.BlockPlaced.getChar()){
-                processObjectPlacement(m);
+                processObjectPlacement(ctx, m);
             }
             else if(m.getChar(0) == MessageType.ReachedEnd.getChar()){
                 processPlayerReachedEnd(m);
@@ -142,12 +142,16 @@ public class CentralGameManager {
 
     }
 
-    private void processObjectPlacement(ByteBuf m){
+    private void processObjectPlacement(ChannelHandlerContext ctx, ByteBuf m){
 
         if(currentPhase == GamePhase.Editing) {
             //Reads the message
             List<Object> objects = new ArrayList<>();
-            decoder.decode(m, objects);
+            if (!decoder.decode(m, objects)) {
+                System.out.println("SRV: Placement de blocs");
+                return;
+            }
+
             ObjectPlacement op = (ObjectPlacement) objects.get(0);
             System.out.println("SRV: Placement de block reçu par le joueur #" + op.getPlayerID());
 
@@ -165,6 +169,10 @@ public class CentralGameManager {
             System.out.println("SRV: broadcasted new block, next player to place is #" + newID);
 
         }
+
+        ByteBuf out = buffer(128);
+        out.writeChar(MessageType.AckBlockPlaced.getChar());
+        ctx.writeAndFlush(out);
 
     }
 

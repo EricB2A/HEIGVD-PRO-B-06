@@ -14,10 +14,12 @@ public class GameClient implements Runnable {
 
     private int port;
     private String hostname;
+    private String nickname;
 
-    public GameClient(String hostname, int port){
+    public GameClient(String hostname, int port, String nickname){
         this.port = port;
         this.hostname = hostname;
+        this.nickname = nickname;
     }
 
     public void run(){
