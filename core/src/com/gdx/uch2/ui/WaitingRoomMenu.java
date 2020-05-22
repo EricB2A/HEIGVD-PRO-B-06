@@ -13,14 +13,14 @@ import java.util.ArrayList;
 
 public class WaitingRoomMenu implements Screen {
     private Stage stage;
-    private ArrayList<String> playersName = new ArrayList<>();
+    static private ArrayList<String> playersName = new ArrayList<>();
 
-    public WaitingRoomMenu(){
+    public WaitingRoomMenu(String nickname){
         // create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-
-        getPlayersList();
+        playersName.add(nickname);
+       // getPlayersList();
     }
 
     public void getPlayersList(){
@@ -32,6 +32,9 @@ public class WaitingRoomMenu implements Screen {
     }
 
     public boolean canStartGame(){
+        if(playersName.size() <= 2){
+            //return false;
+        }
         // Ask the server if enough peoples are connected
         return true;
     }
