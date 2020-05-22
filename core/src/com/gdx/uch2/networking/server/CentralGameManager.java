@@ -23,6 +23,7 @@ public class CentralGameManager {
     private List<ChannelHandlerContext> players;
     private boolean[] finished;
     private boolean[] recievedBlockPlacement;
+    private boolean[] connected;
     private NettyKryoEncoder encoder = new NettyKryoEncoder();
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
     private GamePhase currentPhase;
@@ -30,13 +31,40 @@ public class CentralGameManager {
     private int nbPlayersReady = 0;
 
 
-    public CentralGameManager(List<ChannelHandlerContext> players, Level map){
+    public CentralGameManager(final List<ChannelHandlerContext> players, Level map){
         this.players = players;
         this.map = map;
         finished = new boolean[players.size()];
         Arrays.fill(finished, false);
         recievedBlockPlacement = new boolean[players.size()];
+        connected = new boolean[players.size()];
         //startEditingPhase();
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                while (nbPlayersReady < CentralGameManager.this.players.size()) {
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+
+                    for (int i=0; i < connected.length; ++i) {
+                        if (!connected[i]) {
+                            ByteBuf out = Unpooled.buffer(128);
+                            out.writeChar(MessageType.GameStart.getChar());
+                            out.writeInt(i);
+                            CentralGameManager.this.players.get(i).writeAndFlush(out);
+                            System.out.println("Message envoyé au joueur #" + i);
+                        }
+                    }
+
+                }
+            }
+        }).start();
     }
 
 
@@ -55,8 +83,7 @@ public class CentralGameManager {
                 processPlayerReachedEnd(m);
             }
             else if(m.getChar(0) == MessageType.AckGameStart.getChar()){
-                System.out.println("zoome zoome");
-                processAckGameStart(m);
+                processAckGameStart(playerID);
             }
             else if(m.getChar(0) == MessageType.AckBlockPlaced.getChar()){
                 processAckBlockPlaced(playerID);
@@ -133,10 +160,13 @@ public class CentralGameManager {
         }
     }
 
-    private void processAckGameStart(ByteBuf m){
-        nbPlayersReady++;
-        if(nbPlayersReady == players.size()){
-            startEditingPhase();
+    private void processAckGameStart(int playerId){
+        if (!connected[playerId]) {
+            nbPlayersReady++;
+            connected[playerId] = true;
+            if (nbPlayersReady == players.size()) {
+                startEditingPhase();
+            }
         }
     }
 
@@ -186,7 +216,7 @@ public class CentralGameManager {
     private void sendBlockToAllPlayers(final ObjectPlacement op){
         Arrays.fill(recievedBlockPlacement, false);
 
-        new Runnable(){
+        new Thread(new Runnable(){
 
             @Override
             public void run() {
@@ -215,7 +245,7 @@ public class CentralGameManager {
                 }
                 System.out.println("SRV: BlocPlacement envoyé avec succes!");
             }
-        }.run();
+        }).start();
     }
 
 

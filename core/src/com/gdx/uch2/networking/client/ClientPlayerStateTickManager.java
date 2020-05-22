@@ -88,7 +88,7 @@ public class ClientPlayerStateTickManager {
     public void sendBlockPlacement(final Block block){
         setCanPlace(false);
 
-        new Runnable(){
+        new Thread(new Runnable(){
 
             @Override
             public void run() {
@@ -109,7 +109,7 @@ public class ClientPlayerStateTickManager {
                 System.out.println("CLI: BlocPlacement envoyé avec succes!");
                 setRecievedAck(false);
             }
-        }.run();
+        }).start();
 
         /*
         System.out.println("CLI: Sending block placement as player #" + playerID);

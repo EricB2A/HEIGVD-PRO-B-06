@@ -72,18 +72,18 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
 
 
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
-        int playerID = 0;
-        for(ChannelHandlerContext ctx : players){
-
-            ByteBuf out = Unpooled.buffer(128);
-            out.writeChar(MessageType.GameStart.getChar());
-            out.writeInt(playerID);
-            ctx.writeAndFlush(out);
-
-            System.out.println("Message envoyé au joueur #" + playerID);
-
-            playerID++;
-        }
+//        int playerID = 0;
+//        for(ChannelHandlerContext ctx : players){
+//
+//            ByteBuf out = Unpooled.buffer(128);
+//            out.writeChar(MessageType.GameStart.getChar());
+//            out.writeInt(playerID);
+//            ctx.writeAndFlush(out);
+//
+//            System.out.println("Message envoyé au joueur #" + playerID);
+//
+//            playerID++;
+//        }
 
         CentralGameManager manager = new CentralGameManager(players, map);
         // players.get(0).pipeline().addLast(new PlayerHandler(manager));

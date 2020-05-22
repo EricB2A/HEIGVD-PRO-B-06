@@ -78,12 +78,13 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     }
 
     private void processGameStart(ByteBuf m){
-
-        playerID = m.readInt();
-        ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
-        OnlinePlayerManager.getInstance().init(playerID);
-        System.out.println("CLI: PlayerID = " + playerID);
-        startSending(ctx);
+        if (playerID < 0) {
+            playerID = m.readInt();
+            ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
+            OnlinePlayerManager.getInstance().init(playerID);
+            System.out.println("CLI: PlayerID = " + playerID);
+            startSending(ctx);
+        }
 
         //Sends an ACK to the server meaning the client recieved it's ID
         ByteBuf out = Unpooled.buffer(128);
