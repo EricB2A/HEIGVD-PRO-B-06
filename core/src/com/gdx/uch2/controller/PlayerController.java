@@ -34,7 +34,7 @@ public class PlayerController {
     private static final float MAX_VEL 			= 5.6f;
     private static final float MAX_FALL_VEL 	= -30;
     private static final float SLIDING_JUMP_RECOIL = 2f;
-    private static final float SLIDING_FRICTION =  12f;
+    private static final float SLIDING_FRICTION =  20f;
     private static final long SLIDING_JUMP_RECOIL_TIME = 0;
 
     private World 	world;

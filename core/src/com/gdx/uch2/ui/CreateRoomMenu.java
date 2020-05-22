@@ -46,8 +46,6 @@ public class CreateRoomMenu implements Screen {
         titleLabel.setFontScale(2);
         final Label nicknameLabel = new Label("Nickname:", skin);
         nicknameLabel.setWidth(100);
-        Label ipLabel = new Label("IP:", skin);
-        ipLabel.setWidth(100);
         Label portLabel = new Label("Port:", skin);
         portLabel.setWidth(100);
         Label levelLabel = new Label("Level:", skin);
@@ -78,14 +76,6 @@ public class CreateRoomMenu implements Screen {
         nicknameGroup.addActor(nicknameLabel);
         nicknameGroup.addActor(nicknameTF);
         table.add(nicknameGroup).colspan(2).center();
-        table.row();
-
-        // IP
-        HorizontalGroup ipGroup = new HorizontalGroup();
-        ipGroup.space(10);
-        ipGroup.addActor(ipLabel);
-        ipGroup.addActor(ipTF);
-        table.add(ipGroup).colspan(2).center();
         table.row();
 
         // Port
