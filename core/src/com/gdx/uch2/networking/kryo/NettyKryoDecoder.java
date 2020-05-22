@@ -23,11 +23,12 @@ public class NettyKryoDecoder {
 		this.kryo.register(Block.class);
 	}
 
-	public void decode( ByteBuf msg, List<Object> out) {
+	public boolean decode( ByteBuf msg, List<Object> out) {
 
 		int length = msg.readableBytes();
+		boolean ret = true;
 
-		if(length == 0) return ;
+		if(length == 0) return false;
 
 		Input input = null;
 		ByteBuf msgCopy = null;
@@ -44,6 +45,7 @@ public class NettyKryoDecoder {
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
+			ret = false;
 		}
 		finally {
 			if(msgCopy != null)
@@ -54,6 +56,8 @@ public class NettyKryoDecoder {
 			}
 
 		}
+
+		return ret;
 	        
 	}
 
