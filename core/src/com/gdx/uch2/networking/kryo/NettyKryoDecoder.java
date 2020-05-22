@@ -5,6 +5,7 @@ import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.ObjectPlacement;
 import io.netty.buffer.ByteBuf;
 
+import java.nio.BufferUnderflowException;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -39,9 +40,10 @@ public class NettyKryoDecoder {
 			input = new Input(bytes);
 
 			out.add(kryo.readClassAndObject(input));
-		}
-		catch(Exception ex){
-//			ex.printStackTrace();
+		} catch (BufferUnderflowException e) {
+			System.out.println("SRV: Buffer underflow");
+		} catch(Exception ex){
+			ex.printStackTrace();
 			ret = false;
 		}
 		finally {
