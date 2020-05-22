@@ -98,6 +98,7 @@ public class ClientPlayerStateTickManager {
                 encoder.encode(op, out, MessageType.BlockPlaced.getChar());
                 while(!getRecievedAck()){
                     try{
+                        out.retain();
                         ctx.writeAndFlush(out);
                         System.out.println("CLI: Tentative d'envoi de BlocPlacement...");
                         Thread.sleep(100);
