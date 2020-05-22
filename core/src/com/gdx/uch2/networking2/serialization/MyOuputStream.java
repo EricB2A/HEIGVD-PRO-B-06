@@ -26,7 +26,7 @@ public class MyOuputStream {
             mutex.acquire();
             try {
                 // PlayerStateUpdate.
-                stream.writeChar(MessageType.PlayerStateUpdate.getChar());
+                stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
                 stream.writeInt(playerState.getPlayerID());
                 stream.writeFloat(playerState.getPosX());
                 stream.writeFloat(playerState.getPosY());
@@ -46,7 +46,7 @@ public class MyOuputStream {
             mutex.acquire();
             try {
                 // GameStateUpdate.
-                stream.writeChar(MessageType.GameStateUpdate.getChar());
+                stream.writeInt(MessageType.GameStateUpdate.ordinal());
                 // Taille.
                 stream.writeInt(gameState.getPlayerStates().size());
                 Collection collection = gameState.getPlayerStates().values();
@@ -69,7 +69,7 @@ public class MyOuputStream {
             mutex.acquire();
             try {
                 // BlockPlaced.
-                stream.writeChar(MessageType.BlockPlaced.getChar());
+                stream.writeInt(MessageType.BlockPlaced.ordinal());
                 stream.writeInt(objectPlacement.getPlayerID());
                 // Bloc.
                 stream.writeInt(objectPlacement.getBlock().getType().ordinal());
