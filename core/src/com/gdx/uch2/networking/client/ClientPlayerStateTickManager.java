@@ -110,11 +110,14 @@ public class ClientPlayerStateTickManager {
             }
         }.run();
 
+        /*
         System.out.println("CLI: Sending block placement as player #" + playerID);
         ObjectPlacement op = new ObjectPlacement(playerID, block);
         ByteBuf out = Unpooled.buffer(2048);
         encoder.encode(op, out, MessageType.BlockPlaced.getChar());
         ctx.writeAndFlush(out);
+
+         */
     }
 
     //Crée le timer et envoie régulièrement une séquence d'acitons au serveur.

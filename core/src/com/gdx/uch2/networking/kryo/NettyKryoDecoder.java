@@ -30,11 +30,11 @@ public class NettyKryoDecoder {
 		if(length == 0) return false;
 
 		Input input = null;
-		//ByteBuf msgCopy = null;
+		ByteBuf msgCopy = null;
 		try {
 			byte[] bytes = new byte[length];
-			//msgCopy = msg.copy();
-			msg.readBytes(bytes);
+			msgCopy = msg.copy();
+			msgCopy.readBytes(bytes);
 			//msg.readBytes(msg.readableBytes());
 			input = new Input(bytes);
 
@@ -45,8 +45,8 @@ public class NettyKryoDecoder {
 			ret = false;
 		}
 		finally {
-			//if(msgCopy != null)
-				//msgCopy.release();
+			if(msgCopy != null)
+				msgCopy.release();
 
 			if(input != null){
 				input.close();

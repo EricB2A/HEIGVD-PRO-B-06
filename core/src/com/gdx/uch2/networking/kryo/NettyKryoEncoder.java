@@ -26,7 +26,7 @@ public class NettyKryoEncoder {
         Output output = new Output(200);
         output.writeChar(prelude);
         try {
-	        kryo.writeObject(output, msg);
+	        kryo.writeClassAndObject(output, msg);
 
 	        output.flush();  
 	        output.close();
