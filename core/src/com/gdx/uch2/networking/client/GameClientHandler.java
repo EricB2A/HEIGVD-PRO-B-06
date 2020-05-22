@@ -39,7 +39,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
                 if(currentPhase == GamePhase.Moving){
                     processGameStateUpdate(m);
                 }
-                else System.out.println("CLI: Gamestate Recu mais on est en phase de placement");
+//                else System.out.println("CLI: Gamestate Recu mais on est en phase de placement");
             }
             else if(msgType == MessageType.GameStart.getChar()){
                 processGameStart(m);
@@ -74,7 +74,7 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         List<Object> objects = new ArrayList<>();
         decoder.decode(m, objects);
         OnlinePlayerManager.getInstance().update((GameState) objects.get(0));
-        System.out.println("CLI: Gamestate reçu par le client :" + objects.get(0).toString());
+//        System.out.println("CLI: Gamestate reçu par le client :" + objects.get(0).toString());
     }
 
     private void processGameStart(ByteBuf m){

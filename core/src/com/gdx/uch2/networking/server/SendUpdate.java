@@ -24,7 +24,7 @@ public class SendUpdate extends TimerTask {
         ByteBuf out = Unpooled.buffer(1024);
         out.retain();
         encoder.encode(ServerGameStateTickManager.getInstance().getGameState(), out, MessageType.GameStateUpdate.getChar());
-        System.out.println("SRV: Envoi du gamestate");
+//        System.out.println("SRV: Envoi du gamestate");
         for(ChannelHandlerContext ch : players){
             ch.writeAndFlush(out);
         }

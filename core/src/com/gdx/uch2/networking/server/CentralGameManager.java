@@ -148,7 +148,7 @@ public class CentralGameManager {
             //Reads the message
             List<Object> objects = new ArrayList<>();
             if (!decoder.decode(m, objects)) {
-                System.out.println("SRV: Placement de blocs");
+                System.out.println("SRV: Placement de bloc invalide");
                 return;
             }
 

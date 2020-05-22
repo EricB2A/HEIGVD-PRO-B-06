@@ -44,7 +44,7 @@ public class NettyKryoDecoder {
 			kryoAccessMutex.release();
 		}
 		catch(Exception ex){
-			ex.printStackTrace();
+//			ex.printStackTrace();
 			ret = false;
 		}
 		finally {
