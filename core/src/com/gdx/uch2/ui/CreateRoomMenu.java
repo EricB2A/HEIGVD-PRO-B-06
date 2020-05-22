@@ -44,7 +44,7 @@ public class CreateRoomMenu implements Screen {
         // Create Text
         Label titleLabel = new Label("Ultimate Chicken Horse 2", skin);
         titleLabel.setFontScale(2);
-        Label nicknameLabel = new Label("Nickname:", skin);
+        final Label nicknameLabel = new Label("Nickname:", skin);
         nicknameLabel.setWidth(100);
         Label ipLabel = new Label("IP:", skin);
         ipLabel.setWidth(100);
@@ -54,8 +54,8 @@ public class CreateRoomMenu implements Screen {
         levelLabel.setWidth(100);
 
         // Create TextField
-        TextField nicknameTF = new TextField("Player 1", skin);
-        TextField ipTF = new TextField("127.0.0.1", skin);
+        final TextField nicknameTF = new TextField("Player 1", skin);
+        final TextField ipTF = new TextField("127.0.0.1", skin);
         final TextField portTF = new TextField("12345", skin);
         nicknameTF.setMaxLength(20);
         ipTF.setMaxLength(15);
@@ -120,11 +120,12 @@ public class CreateRoomMenu implements Screen {
                 System.out.println("création de la partie");
                 int port = Integer.parseInt(String.valueOf(portTF.getText()));
                 int level = levelSB.getSelected();
+                String nickname = String.valueOf(nicknameTF.getText());
                 Thread tServer = new Thread(new GameServer(port, level));
                 tServer.start();
-                Thread tClient = new Thread(new GameClient("localhost", port));
+                Thread tClient = new Thread(new GameClient(ipTF.getText(), port, nickname));
                 tClient.start();
-                Screen s = new WaitingRoomMenu();
+                Screen s = new WaitingRoomMenu(nickname);
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }

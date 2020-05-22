@@ -38,12 +38,12 @@ public class JoinRoomMenu implements Screen {
         // Create Text
         Label titleLabel = new Label("Ultimate Chicken Horse 2", skin);
         titleLabel.setFontScale(2);
-        Label nicknameLabel = new Label("Nickname:", skin);
+        final Label nicknameLabel = new Label("Nickname:", skin);
         Label ipLabel = new Label("ip:", skin);
         Label portLabel = new Label("port:", skin);
 
         // Create TextField
-        TextField nicknameTF = new TextField("Player 1", skin);
+        final TextField nicknameTF = new TextField("Player 1", skin);
         final TextField ipTF = new TextField("127.0.0.1", skin);
         final TextField portTF = new TextField("12345", skin);
         nicknameTF.setMaxLength(20);
@@ -108,9 +108,10 @@ public class JoinRoomMenu implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 int port = Integer.parseInt(String.valueOf(portTF.getText()));
-                Thread tClient = new Thread(new GameClient(ipTF.getText(), port));
+                String nickname = String.valueOf(nicknameTF.getText());
+                Thread tClient = new Thread(new GameClient(ipTF.getText(), port, nickname));
                 tClient.start();
-                Screen s = new WaitingRoomMenu();
+                Screen s = new WaitingRoomMenu(nickname);
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
