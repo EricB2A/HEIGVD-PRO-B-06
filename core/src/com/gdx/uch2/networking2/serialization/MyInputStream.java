@@ -11,18 +11,18 @@ import com.gdx.uch2.networking.PlayerState;
 import java.io.*;
 import java.util.concurrent.Semaphore;
 
-public class MyInputStream extends FilterInputStream {
-    private final DataInputStream stream;
+public class MyInputStream  {
+
+    private final DataInputStream in;
 
     public MyInputStream(InputStream stream) {
-        super(new DataInputStream(new BufferedInputStream(stream)));
-        this.stream = (DataInputStream) in;
+        this.in = new DataInputStream(new BufferedInputStream(stream));
     }
 
     public MessageType getType() {
         MessageType m = null;
         try {
-            m = MessageType.values()[stream.readInt()];
+            m = MessageType.values()[in.readInt()];
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,10 +36,10 @@ public class MyInputStream extends FilterInputStream {
         float y;
         long time;
         try {
-            id = stream.readInt();
-            x = stream.readFloat();
-            y = stream.readFloat();
-            time = stream.readLong();
+            id = in.readInt();
+            x = in.readFloat();
+            y = in.readFloat();
+            time = in.readLong();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -51,7 +51,7 @@ public class MyInputStream extends FilterInputStream {
     public GameState readGameState() {
         int size;
         try {
-            size = stream.readInt();
+            size = in.readInt();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -73,10 +73,10 @@ public class MyInputStream extends FilterInputStream {
         float y;
 
         try {
-            id = stream.readInt();
-            type = Block.Type.values()[stream.readInt()];
-            x = stream.readFloat();
-            y = stream.readFloat();
+            id = in.readInt();
+            type = Block.Type.values()[in.readInt()];
+            x = in.readFloat();
+            y = in.readFloat();
         } catch(IOException e) {
             e.printStackTrace();
             return null;
@@ -97,12 +97,20 @@ public class MyInputStream extends FilterInputStream {
     public int readInt() {
         int i;
         try {
-            i = stream.readInt();
+            i = in.readInt();
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
         }
 
         return 0;
+    }
+
+    public void close() {
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
