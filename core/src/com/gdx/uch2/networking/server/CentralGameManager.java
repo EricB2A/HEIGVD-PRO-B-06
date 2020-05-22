@@ -174,15 +174,6 @@ public class CentralGameManager {
         broadcast(out);
     }
 
-    /*
-    private void nextPlayerCanPlace(){ //TODO timeout si rien de reçu
-        playerPlacing++;
-        System.out.println("SRV: sending CAN PLACE to player #" + playerPlacing);
-        ByteBuf out = buffer(128);
-        out.writeChar(MessageType.CanPlace.getChar());
-        players.get(playerPlacing).writeAndFlush(out);
-    }
-*/
 
     private void broadcast(ByteBuf out){
         out.retain(players.size() - 1);

@@ -5,6 +5,7 @@ public enum MessageType {
     GameStart,
     AckGameStart,
     BlockPlaced,
+    AckBlockPlaced,
     PlayerStateUpdate,
     ReachedEnd,
     CanPlace,

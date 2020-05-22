@@ -50,7 +50,7 @@ public class OnlinePlayer {
             position.y = from.y + (to.y - from.y) * scl;
         }
 
-        System.out.println(from + "  " + position);
+        //System.out.println(from + "  " + position);
 
         if (position.x - from.x != 0)
             facingLeft = position.x - from.x < 0;

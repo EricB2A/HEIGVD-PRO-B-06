@@ -40,6 +40,8 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         Gdx.gl.glClearColor(153f / 255, 187f / 255, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        //TODO update le gamescreen ici si la phase de mouvement a commencé
+
         renderer.renderBackground();
     }
 
