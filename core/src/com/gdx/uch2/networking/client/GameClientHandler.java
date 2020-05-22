@@ -89,7 +89,6 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         //Sends an ACK to the server meaning the client recieved it's ID
         ByteBuf out = Unpooled.buffer(128);
         out.writeChar(MessageType.AckGameStart.getChar());
-        //out.writeInt(playerID);
         ctx.writeAndFlush(out);
     }
 
@@ -127,18 +126,16 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
     private void startSending(ChannelHandlerContext ctx){
         ClientPlayerStateTickManager.getInstance().setContext(ctx);
         ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(playerID, 20, 30, 0));
-        ClientPlayerStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
+        ClientPlayerStateTickManager.getInstance().start(0, Constants.TICK_DURATION);
     }
 
 
     private void startMovementPhase(){
-        //TODO Permettre aux personnages de bouger
         currentPhase = GamePhase.Moving;
         System.out.println("CLI: START MOVEMENT PHASE");
     }
 
     private void startEditingPhase(){
-        //TODO interdire aux personnages de bouger
         currentPhase = GamePhase.Editing;
         ClientPlayerStateTickManager.getInstance().setCanPlace(false);
         System.out.println("CLI: START EDITING PHASE");

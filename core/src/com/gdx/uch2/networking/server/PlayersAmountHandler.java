@@ -86,8 +86,6 @@ public class PlayersAmountHandler extends ChannelInboundHandlerAdapter {
 //        }
 
         CentralGameManager manager = new CentralGameManager(players, map);
-        // players.get(0).pipeline().addLast(new PlayerHandler(manager));
-        // players.get(1).pipeline().addLast(new PlayerHandler(manager));
 
         for(int i = 0; i < players.size(); ++i){
             players.get(i).pipeline().addLast(new PlayerHandler(manager, i));

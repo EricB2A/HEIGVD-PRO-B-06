@@ -1,5 +1,7 @@
 package com.gdx.uch2.networking.kryo;
 
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.ObjectPlacement;
@@ -42,7 +44,7 @@ public class NettyKryoDecoder {
 			out.add(kryo.readClassAndObject(input));
 		} catch(Exception ex){
 			System.out.println("ERREUR DECODAGE : Buffer underflow probable");
-			ex.printStackTrace();
+			//ex.printStackTrace();
 			ret = false;
 		}
 		finally {
