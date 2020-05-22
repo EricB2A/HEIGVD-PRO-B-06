@@ -71,7 +71,8 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private void processGameStateUpdate(ByteBuf m){
         List<Object> objects = new ArrayList<>();
-        decoder.decode(m, objects);
+
+        if (!decoder.decode(m, objects)) return;
         OnlinePlayerManager.getInstance().update((GameState) objects.get(0));
 //        System.out.println("CLI: Gamestate reçu par le client :" + objects.get(0).toString());
     }
@@ -93,16 +94,24 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
 
     private void processBlockPlacement(ByteBuf m){
         List<Object> objects = new ArrayList<>();
-        decoder.decode(m, objects);
+        if (!decoder.decode(m, objects)) return;
+
+        ByteBuf out = Unpooled.buffer(128);
+        out.writeChar(MessageType.AckBlockPlaced.getChar());
+        ctx.writeAndFlush(out);
+
         ObjectPlacement op = (ObjectPlacement) objects.get(0);
         System.out.println("CLI: placement de bloc recu avec ID = " + op.getPlayerID() + " , block = " + (op.getBlock() == null? "null":"NOT null"));
 
-        if(op.getBlock() == null) {
+        if(op.getBlock() == null && currentPhase != GamePhase.Editing) {
             startEditingPhase();
-        }else{
+        }else if (op.getBlock() != null && currentPhase == GamePhase.Editing){
             World.currentWorld.placeBlock(op.getBlock());
             System.out.println("CLI: placement du bloc reçu");
+        } else {
+            return;
         }
+
         if(op.getPlayerID() == playerID){
             ClientPlayerStateTickManager.getInstance().setCanPlace(true);
         }else if(op.getPlayerID() == -1){

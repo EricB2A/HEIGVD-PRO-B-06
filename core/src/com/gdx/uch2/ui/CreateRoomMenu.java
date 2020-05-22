@@ -62,7 +62,7 @@ public class CreateRoomMenu implements Screen {
         portTF.setMaxLength(5);
         final SelectBox<Integer> levelSB = new SelectBox<Integer>(skin);
         levelSB.setItems(1,2,3);
-        levelSB.setSelected(3);
+//        levelSB.setSelected(3);
 
         // Title
         HorizontalGroup titleGroup = new HorizontalGroup();
