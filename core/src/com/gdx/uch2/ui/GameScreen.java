@@ -34,6 +34,11 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public void render(float delta) {
+        if (ErrorHandler.getInstance().isSet()) {
+            ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
+            return;
+        }
+
         Gdx.gl.glClearColor(153f / 255, 187f / 255, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

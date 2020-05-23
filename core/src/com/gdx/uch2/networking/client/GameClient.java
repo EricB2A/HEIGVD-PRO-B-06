@@ -6,10 +6,13 @@ import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.PlayerState;
+import com.gdx.uch2.ui.ErrorHandler;
 import com.gdx.uch2.util.Constants;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class GameClient implements Runnable {
 
@@ -54,23 +57,21 @@ public class GameClient implements Runnable {
                 } else break;
 
             }
+        } catch (IOException e) {
+            ErrorHandler.getInstance().setError(e.toString());
 
-            ctx.in.close();
-            ctx.out.close();
-            socket.close();
-
-        } catch (IOException ex) {
-            if (ctx.in != null) {
-                ctx.in.close();
-            }
-            if (ctx.out != null) {
-                ctx.out.close();
-            }
             if (socket != null) {
+                if (ctx.in != null) {
+                    ctx.in.close();
+                }
+                if (ctx.out != null) {
+                    ctx.out.close();
+                }
+
                 try {
                     socket.close();
                 } catch (IOException ex1) {
-                    ex.printStackTrace();
+                    ex1.printStackTrace();
                 }
             }
         }

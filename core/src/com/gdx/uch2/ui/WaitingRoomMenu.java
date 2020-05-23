@@ -41,6 +41,11 @@ public class WaitingRoomMenu implements Screen {
 
     @Override
     public void show() {
+        if (ErrorHandler.getInstance().isSet()) {
+            ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
+            return;
+        }
+
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         table.setFillParent(true);
