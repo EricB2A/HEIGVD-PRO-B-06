@@ -1,24 +1,12 @@
 package com.gdx.uch2.networking.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.*;
-import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
-import com.gdx.uch2.util.Constants;
-
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.ReferenceCountUtil;
 
 public class GameClientHandler {
 
     private int playerID = -1;
-    private NettyKryoDecoder decoder = new NettyKryoDecoder();
     static public GamePhase currentPhase; //TODO quand même c'est un peu abusé là
     private PlayerContext ctx;
 

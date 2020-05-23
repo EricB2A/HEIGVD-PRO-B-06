@@ -2,19 +2,13 @@ package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.*;
-import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
-import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 
 import java.util.Timer;
-
-import static io.netty.buffer.Unpooled.buffer;
 
 public class ClientPlayerStateTickManager {
     private static class Instance{
         static final ClientPlayerStateTickManager instance = new ClientPlayerStateTickManager();
     }
-
-    NettyKryoEncoder encoder = new NettyKryoEncoder();
 
     private Timer timer;
     private PlayerContext ctx;
@@ -40,8 +34,6 @@ public class ClientPlayerStateTickManager {
         this.canPlace = canPlace;
         System.out.println("CLI: set Can place = " + canPlace);
     }
-
-
 
     private ClientPlayerStateTickManager(){
     }

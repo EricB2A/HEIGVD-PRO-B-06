@@ -3,8 +3,6 @@ package com.gdx.uch2.networking.server;
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.*;
-import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
-import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,8 +16,6 @@ public class CentralGameManager {
     private boolean[] finished;
     private boolean[] recievedBlockPlacement;
     private boolean[] dead;
-    private NettyKryoEncoder encoder = new NettyKryoEncoder();
-    private NettyKryoDecoder decoder = new NettyKryoDecoder();
     private GamePhase currentPhase;
     private Level map;
     private int nbPlayersReady = 0;
