@@ -75,6 +75,7 @@ public class ClientPlayerStateTickManager {
 
 
     public void sendFinish(){
+        System.out.println("CLI: Envoi ReachEnd");
         ctx.out.writeMessage(MessageType.ReachedEnd);
     }
 

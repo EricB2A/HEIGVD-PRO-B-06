@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking;
 
+import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.networking2.serialization.MyInputStream;
 import com.gdx.uch2.networking2.serialization.MyOuputStream;
 
@@ -22,6 +23,14 @@ public class PlayerContext {
             e.printStackTrace();
         }
 
+    }
+
+    public PlayerContext(Socket socket) {
+        this(-1, socket);
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId() {

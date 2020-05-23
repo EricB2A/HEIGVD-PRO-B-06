@@ -39,28 +39,26 @@ public class GameClient implements Runnable {
         boolean shouldRun = true;
         MessageType type;
         Socket socket = null;
-        MyInputStream in = null;
-        MyOuputStream out = null;
+        PlayerContext ctx = null;
 
         try {
             socket = new Socket(hostname, port);
-            in = new MyInputStream(socket.getInputStream());
-            out = new MyOuputStream(socket.getOutputStream());
+            ctx = new PlayerContext(socket);
 
-            if (in.getType() != MessageType.GameStart) {
+            if (ctx.in.getType() != MessageType.GameStart) {
                 System.out.println("CLI: Message de départ inconnu");
                 return;
             }
 
-            int id = in.readInt();
-            PlayerContext ctx = new PlayerContext(id, socket);
+            int id = ctx.in.readInt();
+            ctx.setId(id);
             processGameStart(ctx);
 
             GameClientHandler handler = new GameClientHandler(ctx);
 
             while ((shouldRun)) { // TODO : vraie condition d'arrêt
 
-                type = in.getType();
+                type = ctx.in.getType();
 
                 if (type != null) {
                     handler.readMessage(type);
@@ -68,16 +66,16 @@ public class GameClient implements Runnable {
 
             }
 
-            in.close();
-            out.close();
+            ctx.in.close();
+            ctx.out.close();
             socket.close();
 
         } catch (IOException ex) {
-            if (in != null) {
-                in.close();
+            if (ctx.in != null) {
+                ctx.in.close();
             }
-            if (out != null) {
-                out.close();
+            if (ctx.out != null) {
+                ctx.out.close();
             }
             if (socket != null) {
                 try {
