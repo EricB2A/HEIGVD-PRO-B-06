@@ -4,9 +4,6 @@ import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.*;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Timer;
 
@@ -94,7 +91,7 @@ public class ClientPlayerStateTickManager {
     //Crée le timer et envoie régulièrement une séquence d'acitons au serveur.
     public void start(int delay, int tickDuration){
         this.timer = new Timer();
-        timer.schedule(new sendPlayerState(ctx), delay, tickDuration);
+        timer.schedule(new SendPlayerState(ctx), delay, tickDuration);
     }
 
 }

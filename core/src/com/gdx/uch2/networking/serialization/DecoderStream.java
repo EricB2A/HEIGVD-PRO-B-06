@@ -1,4 +1,4 @@
-package com.gdx.uch2.networking2.serialization;
+package com.gdx.uch2.networking.serialization;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Block;
@@ -10,13 +10,12 @@ import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
 
 import java.io.*;
-import java.util.concurrent.Semaphore;
 
-public class MyInputStream  {
+public class DecoderStream {
 
     private final DataInputStream in;
 
-    public MyInputStream(InputStream stream) {
+    public DecoderStream(InputStream stream) {
         this.in = new DataInputStream(new BufferedInputStream(stream));
     }
 

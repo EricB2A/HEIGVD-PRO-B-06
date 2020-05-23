@@ -1,23 +1,12 @@
 package com.gdx.uch2.networking.client;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.World;
-import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.PlayerState;
-import com.gdx.uch2.networking2.serialization.MyInputStream;
-import com.gdx.uch2.networking2.serialization.MyOuputStream;
 import com.gdx.uch2.util.Constants;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.io.IOException;
 import java.net.Socket;

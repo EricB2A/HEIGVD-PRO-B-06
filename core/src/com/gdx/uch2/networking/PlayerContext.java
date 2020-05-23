@@ -1,8 +1,7 @@
 package com.gdx.uch2.networking;
 
-import com.gdx.uch2.entities.Player;
-import com.gdx.uch2.networking2.serialization.MyInputStream;
-import com.gdx.uch2.networking2.serialization.MyOuputStream;
+import com.gdx.uch2.networking.serialization.DecoderStream;
+import com.gdx.uch2.networking.serialization.EncoderStream;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -10,15 +9,15 @@ import java.net.Socket;
 public class PlayerContext {
     private int id;
     private Socket socket;
-    public MyInputStream in = null;
-    public MyOuputStream out = null;
+    public DecoderStream in = null;
+    public EncoderStream out = null;
 
     public PlayerContext(int id, Socket socket) {
         this.id = id;
         this.socket = socket;
         try {
-            this.in = new MyInputStream(socket.getInputStream());
-            this.out = new MyOuputStream(socket.getOutputStream());
+            this.in = new DecoderStream(socket.getInputStream());
+            this.out = new EncoderStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }

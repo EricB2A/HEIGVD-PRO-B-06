@@ -1,8 +1,6 @@
-package com.gdx.uch2.networking2.serialization;
+package com.gdx.uch2.networking.serialization;
 
-import com.badlogic.gdx.Game;
 import com.gdx.uch2.entities.Block;
-import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.ObjectPlacement;
@@ -12,15 +10,13 @@ import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.concurrent.Semaphore;
 
-public class MyOuputStream {
+public class EncoderStream {
     private Semaphore mutex;
     private DataOutputStream stream;
 
-    public MyOuputStream(OutputStream stream) {
+    public EncoderStream(OutputStream stream) {
         this.mutex = new Semaphore(1);
         this.stream = new DataOutputStream( new BufferedOutputStream(stream));
     }

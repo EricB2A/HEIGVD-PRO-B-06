@@ -29,7 +29,7 @@ public class World {
 
     Level level;
 
-    public static World currentWorld = new World(1); //TODO 1 hardcodé
+    public static World currentWorld = new World(3); //TODO 1 hardcodé
 
     // Getters -----------
     public Player getPlayer() {

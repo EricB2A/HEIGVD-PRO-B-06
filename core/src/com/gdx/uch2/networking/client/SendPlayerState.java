@@ -12,11 +12,11 @@ import java.util.TimerTask;
 
 import static io.netty.buffer.Unpooled.buffer;
 
-public class sendPlayerState extends TimerTask {
+public class SendPlayerState extends TimerTask {
 
     private PlayerContext ctx;
 
-    public sendPlayerState(PlayerContext ctx){
+    public SendPlayerState(PlayerContext ctx){
         this.ctx = ctx;
     }
 

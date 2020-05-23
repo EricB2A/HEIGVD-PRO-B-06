@@ -33,6 +33,7 @@ public class WorldRenderer {
     private TextureRegion lethalBlockTexture;
     private TextureRegion spawnTexture;
     private TextureRegion finishTexture;
+    private TextureRegion protectedArea;
     private TextureRegion playerFrame;
     private TextureRegion playerJumpLeft;
     private TextureRegion playerFallLeft;
@@ -95,6 +96,7 @@ public class WorldRenderer {
         lethalBlockTexture = blocksAtlas.findRegion("boxExplosive");
         spawnTexture = blocksAtlas.findRegion("signRight");
         finishTexture = blocksAtlas.findRegion("signExit");
+        protectedArea = blocksAtlas.findRegion("castleCenter");
 
         Array<TextureAtlas.AtlasRegion> idleRightFrames = new Array<TextureAtlas.AtlasRegion>();
         Array<TextureAtlas.AtlasRegion> idleLeftFrames = new Array<TextureAtlas.AtlasRegion>();
@@ -162,6 +164,7 @@ public class WorldRenderer {
 
 
     private void drawBlocks() {
+
         for (Block block : world.getDrawableBlocks((int) camera_width, (int) camera_height)) {
             TextureRegion texture;
             switch (block.getType()){
@@ -170,7 +173,7 @@ public class WorldRenderer {
                 case LETHAL: texture = lethalBlockTexture; break;
                 case G_UP: texture = gUpTexture; break;
                 case G_DOWN: texture = gDownTexture; break;
-                case PROTECTED_AREA: continue;
+                case PROTECTED_AREA: texture = protectedArea; break;
                 default: texture = boxTexture; break;
             }
             spriteBatch.draw(texture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
@@ -178,6 +181,7 @@ public class WorldRenderer {
 
         spriteBatch.draw(spawnTexture, world.getLevel().getSpanPosition().x, world.getLevel().getSpanPosition().y, Block.SIZE, Block.SIZE);
         spriteBatch.draw(finishTexture, world.getLevel().getFinishPosition().x, world.getLevel().getFinishPosition().y, Block.SIZE, Block.SIZE);
+
     }
 
     private void drawOnlinePlayers() {

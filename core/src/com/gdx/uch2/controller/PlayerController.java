@@ -146,7 +146,7 @@ public class PlayerController {
         }
 
         // apply damping to halt Player nicely
-        if (player.getState() == State.IDLE) {
+        if (player.getState() == State.IDLE || finished) {
             player.getVelocity().x *= DAMP;
         }
 
