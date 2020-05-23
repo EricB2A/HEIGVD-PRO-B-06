@@ -33,6 +33,7 @@ public class PlayerController {
     private static final float DAMP 			= 0.8f;
     private static final float MAX_VEL 			= 5.6f;
     private static final float MAX_FALL_VEL 	= -30;
+    private static final float MAX_SLIDING_VEL = -14;
     private static final float SLIDING_JUMP_RECOIL = 2f;
     private static final float SLIDING_FRICTION =  20f;
     private static final long SLIDING_JUMP_RECOIL_TIME = 0;
@@ -42,11 +43,11 @@ public class PlayerController {
     private long	jumpPressedTime;
     private boolean jumpingActive;
     private boolean jumpingPressed;
+    private float jumpingPosition;
     private boolean grounded = false;
     private long recoilBeginTime;
     private boolean finished = false;
-    private Vector2 positionBak = new Vector2();
-    private float epsilon = 0.01f;
+    private float epsilon = 0.02f;
 
     // This is the rectangle pool used in collision detection
     // Good to avoid instantiation each frame
@@ -116,9 +117,6 @@ public class PlayerController {
             processInput();
         }
 
-        positionBak.x = player.getPosition().x;
-        positionBak.y = player.getPosition().y;
-
         // Fix resume mess after long inactivity
         delta = Math.min(delta, 0.025f);
 
@@ -159,18 +157,16 @@ public class PlayerController {
             player.getVelocity().x = -MAX_VEL;
         }
 
-        if (player.getVelocity().y < MAX_FALL_VEL) {
+        if (player.getState() == State.SLIDING && player.getVelocity().y < MAX_SLIDING_VEL) {
+            player.getVelocity().y = MAX_SLIDING_VEL;
+        }
+        else if (player.getVelocity().y < MAX_FALL_VEL) {
             player.getVelocity().y = MAX_FALL_VEL;
         }
 
-//        if (player.getPosition().x < positionBak.x - epsilon || player.getPosition().x > positionBak.x + epsilon
-//         || player.getPosition().y < positionBak.y - epsilon || player.getPosition().y > positionBak.y + epsilon) {
-            ClientPlayerStateTickManager.getInstance().setCurrentState(
-                    new PlayerState(ClientPlayerStateTickManager.getInstance().getPlayerID(),
-                            player.getPosition().x, player.getPosition().y, System.nanoTime()));
-//        } else {
-//            ClientPlayerStateTickManager.getInstance().getCurrentState().currentTime = System.nanoTime();
-//        }
+        ClientPlayerStateTickManager.getInstance().setCurrentState(
+                new PlayerState(ClientPlayerStateTickManager.getInstance().getPlayerID(),
+                        player.getPosition().x, player.getPosition().y, System.nanoTime()));
     }
 
     //Mort ou arrivé
@@ -197,6 +193,12 @@ public class PlayerController {
             finish();
         }
 
+        boolean fakeVeloctiy = false;
+        if (player.getState() == State.SLIDING && player.getVelocity().x == 0) {
+            player.getVelocity().x = player.isFacingLeft() ? -0.1f : 0.1f;
+            fakeVeloctiy = true;
+        }
+
         // we first check the movement on the horizontal X axis
         int startX, endX;
         int startY = (int) player.getBounds().y;
@@ -213,20 +215,32 @@ public class PlayerController {
         populateCollidableBlocks(startX, startY, endX, endY);
 
         // simulate player's movement on the X
+
         playerRect.x += player.getVelocity().x;
 
         // clear collision boxes in world
         world.getCollisionRects().clear();
 
-
+        boolean collide = false;
         // if player collides, make his horizontal velocity 0
         for (Block block : collidable) {
             if (block == null) continue;
             if (!block.isSolid()) continue;
             if (playerRect.overlaps(block.getBounds())) {
-                jumpingActive = false;
+                collide = true;
+
+                if (player.getPosition().x < jumpingPosition - epsilon
+                        || player.getPosition().x > jumpingPosition + epsilon) {
+                    jumpingActive = false;
+                }
                 if(!grounded) {
                     player.setState(State.SLIDING);
+
+                    if (player.getVelocity().x < 0) {
+                        player.setFacingLeft(true);
+                    } else if (player.getVelocity().x > 0){
+                        player.setFacingLeft(false);
+                    }
                 }
 
                 // Apply block action if any
@@ -245,6 +259,10 @@ public class PlayerController {
             }
         }
 
+        if (fakeVeloctiy) {
+            player.getVelocity().x = 0;
+        }
+
         // reset the x position of the collision box
         playerRect.x = player.getBounds().x;
 
@@ -257,13 +275,14 @@ public class PlayerController {
             startY = endY = (int) Math.floor(player.getBounds().y + player.getBounds().height + player.getVelocity().y);
         }
 
-        populateCollidableBlocks(startX, startY, endX, endY);
-
         playerRect.y += player.getVelocity().y;
 
+        populateCollidableBlocks(startX, startY, endX, endY);
+
         State backup = player.getState();
-        if (player.getState() != State.SLIDING)
+        if (player.getState() != State.SLIDING || !collide) {
             player.setState(State.JUMPING);
+        }
         grounded = false;
         for (Block block : collidable) {
             if (block == null) continue;
@@ -322,11 +341,13 @@ public class PlayerController {
                     jumpingActive = true;
                     jumpingPressed = false;
                     jumpPressedTime = System.currentTimeMillis();
+                    jumpingPosition = player.getPosition().x;
 
                     player.getVelocity().y = MAX_JUMP_SPEED;
                     grounded = false;
 
                     if (player.getState() == State.SLIDING) {
+                        jumpingPosition = -1;
                         recoilBeginTime = System.currentTimeMillis();
                         player.getAcceleration().x = 0;
 
