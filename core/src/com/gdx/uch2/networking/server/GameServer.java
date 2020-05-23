@@ -3,16 +3,26 @@ package com.gdx.uch2.networking.server;
 import com.gdx.uch2.controller.LevelLoader;
 import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.GameState;
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import com.gdx.uch2.networking.MessageType;
+import com.gdx.uch2.networking.PlayerContext;
+import com.gdx.uch2.util.Constants;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameServer implements Runnable {
+    //2 premiers joueurs à se connecter.
+    private static List<PlayerContext> players = new ArrayList<>();
+
+
+    //indique si la partie est pleine
+    private static boolean full = false;
+    private static final int MAX_PLAYERS = 2;
+    private static boolean gameStarted = false;
+
     private int port;
     private Level level;
 
@@ -22,30 +32,60 @@ public class GameServer implements Runnable {
         GameState.setUpKryo();
     }
 
+    @Override
     public void run() {
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        System.out.println("Start server");
+        ServerSocket serverSocket;
 
-        try{
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup)
-                    .channel(NioServerSocketChannel.class)
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new PlayersAmountHandler(level));
-                        }
-                    }).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
-
-
-            ChannelFuture f = b.bind(port).sync();
-            f.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally{
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
+        try {
+            serverSocket = new ServerSocket(port);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
         }
+
+        while (!full) {
+            try {
+                Socket clientSocket = serverSocket.accept();
+                PlayerContext ctx = new PlayerContext(players.size(), clientSocket);
+                players.add(ctx);
+                if(players.size() == MAX_PLAYERS){
+                    full = true;
+                    startGame();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    private void startGame(){
+        if(players.size() > MAX_PLAYERS) throw new RuntimeException("Nombre de joueurs trop élevé");
+
+        gameStarted = true;
+        System.out.println("2 joueurs connectés. Lancer la partie.");
+
+
+
+        //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
+        for(PlayerContext ctx : players){
+
+            ctx.out.writeMessage(MessageType.GameStart);
+            ctx.out.writeMessage(ctx.getId());
+
+            System.out.println("Message envoyé au joueur #" + ctx.getId());
+        }
+
+        CentralGameManager manager = new CentralGameManager(players, level);
+
+        for (PlayerContext player : players) {
+            new Thread(new PlayerHandler(manager, player)).start();
+        }
+
+        //Démarre les ticks de serveur
+        ServerGameStateTickManager.getInstance().setPlayers(players);
+        ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
     }
 
     public static void main(String[] args) throws Exception {

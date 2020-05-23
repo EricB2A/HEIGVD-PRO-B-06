@@ -5,11 +5,7 @@ import java.util.List;
 
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.World;
-import com.gdx.uch2.networking.GamePhase;
-import com.gdx.uch2.networking.GameState;
-import com.gdx.uch2.networking.MessageType;
-import com.gdx.uch2.networking.ObjectPlacement;
-import com.gdx.uch2.networking.PlayerState;
+import com.gdx.uch2.networking.*;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.util.Constants;
 
@@ -19,97 +15,55 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
-public class GameClientHandler extends ChannelInboundHandlerAdapter {
+public class GameClientHandler {
 
     private int playerID = -1;
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
     static public GamePhase currentPhase; //TODO quand même c'est un peu abusé là
-    private ChannelHandlerContext ctx = null;
+    private PlayerContext ctx;
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        if(this.ctx == null) this.ctx = ctx;
+    public GameClientHandler(PlayerContext ctx) {
+        this.ctx = ctx;
+        this.playerID = ctx.getId();
+    }
 
-        ByteBuf m = (ByteBuf) msg;
-
-        int msgType = m.readChar();
-        //System.out.println("CLI : msgType = " + msgType);
-        try{
-            if(msgType == MessageType.GameStateUpdate.getChar()){
+    public void readMessage(MessageType type) {
+            if(type == MessageType.GameStateUpdate){
                 if(currentPhase == GamePhase.Moving){
-                    processGameStateUpdate(m);
+                    processGameStateUpdate();
                 }
 //                else System.out.println("CLI: Gamestate Recu mais on est en phase de placement");
             }
-            else if(msgType == MessageType.GameStart.getChar()){
-                processGameStart(m);
+            else if(type == MessageType.BlockPlaced) {
+                processBlockPlacement();
             }
-            else if(msgType == MessageType.BlockPlaced.getChar()) {
-                processBlockPlacement(m);
-            }
-            else if(msgType == MessageType.AckBlockPlaced.getChar()) {
+            else if(type == MessageType.AckBlockPlaced) {
                 processAckBlockPlaced();
             }
-            else if(msgType == MessageType.StartMovementPhase.getChar()) {
+            else if(type == MessageType.StartMovementPhase) {
                 startMovementPhase();
             }
-            //else if(msgType == MessageType.StartEditingPhase.getChar()) {
-            //    startEditingPhase();
-            //}
             else {
-                while (m.isReadable()) {
-                    System.out.print(m.readByte());
-                    System.out.flush();
-                }
-                System.out.println();
+                System.out.println("CLI: Message non traitable par le client : " + type);
             }
-        } finally {
-            ReferenceCountUtil.release(msg);
-        }
-
     }
 
-    private void processGameStateUpdate(ByteBuf m){
-        List<Object> objects = new ArrayList<>();
-
-        if (!decoder.decode(m, objects)) return;
-        OnlinePlayerManager.getInstance().update((GameState) objects.get(0));
+    private void processGameStateUpdate(){
+        OnlinePlayerManager.getInstance().update(ctx.in.readGameState());
 //        System.out.println("CLI: Gamestate reçu par le client :" + objects.get(0).toString());
     }
 
-    private void processGameStart(ByteBuf m){
-        if (playerID < 0) {
-            playerID = m.readInt();
-            ClientPlayerStateTickManager.getInstance().setPlayerID(playerID);
-            OnlinePlayerManager.getInstance().init(playerID);
-            System.out.println("CLI: PlayerID = " + playerID);
-            startSending(ctx);
-        }
 
-        //Sends an ACK to the server meaning the client recieved it's ID
-        ByteBuf out = Unpooled.buffer(128);
-        out.writeChar(MessageType.AckGameStart.getChar());
-        ctx.writeAndFlush(out);
-    }
 
-    private void processBlockPlacement(ByteBuf m){
-        List<Object> objects = new ArrayList<>();
-        if (!decoder.decode(m, objects)) return;
-
-        ByteBuf out = Unpooled.buffer(128);
-        out.writeChar(MessageType.AckBlockPlaced.getChar());
-        ctx.writeAndFlush(out);
-
-        ObjectPlacement op = (ObjectPlacement) objects.get(0);
+    private void processBlockPlacement(){
+        ObjectPlacement op = ctx.in.readObjectPlacement();
         System.out.println("CLI: placement de bloc recu avec ID = " + op.getPlayerID() + " , block = " + (op.getBlock() == null? "null":"NOT null"));
 
-        if(op.getBlock() == null && currentPhase != GamePhase.Editing) {
+        if(op.getBlock() == null) {
             startEditingPhase();
-        }else if (op.getBlock() != null && currentPhase == GamePhase.Editing){
+        }else{
             World.currentWorld.placeBlock(op.getBlock());
             System.out.println("CLI: placement du bloc reçu");
-        } else {
-            return;
         }
 
         if(op.getPlayerID() == playerID){
@@ -117,17 +71,15 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         }else if(op.getPlayerID() == -1){
             startMovementPhase();
         }
+
+        ctx.out.writeMessage(MessageType.AckBlockPlaced);
     }
 
     private void processAckBlockPlaced(){
         ClientPlayerStateTickManager.getInstance().setRecievedAck(true);
     }
 
-    private void startSending(ChannelHandlerContext ctx){
-        ClientPlayerStateTickManager.getInstance().setContext(ctx);
-        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(playerID, 20, 30, 0));
-        ClientPlayerStateTickManager.getInstance().start(0, Constants.TICK_DURATION);
-    }
+
 
 
     private void startMovementPhase(){
@@ -140,11 +92,4 @@ public class GameClientHandler extends ChannelInboundHandlerAdapter {
         ClientPlayerStateTickManager.getInstance().setCanPlace(false);
         System.out.println("CLI: START EDITING PHASE");
     }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
-        ctx.close();
-    }
-
 }

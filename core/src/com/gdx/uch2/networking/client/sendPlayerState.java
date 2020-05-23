@@ -14,19 +14,14 @@ import static io.netty.buffer.Unpooled.buffer;
 
 public class sendPlayerState extends TimerTask {
 
-    private ChannelHandlerContext ctx;
+    private PlayerContext ctx;
 
-    public sendPlayerState(ChannelHandlerContext ctx){
+    public sendPlayerState(PlayerContext ctx){
         this.ctx = ctx;
     }
 
     @Override
     public void run() {
-
-        NettyKryoEncoder encoder = new NettyKryoEncoder();
-        ByteBuf out = Unpooled.buffer(1024);
-        encoder.encode(ClientPlayerStateTickManager.getInstance().getCurrentState(), out, MessageType.PlayerStateUpdate.getChar());
-        ctx.channel().writeAndFlush(out);
-
+        ctx.out.writeMessage(ClientPlayerStateTickManager.getInstance().getCurrentState());
     }
 }

@@ -3,6 +3,7 @@ package com.gdx.uch2.networking2.serialization;
 import com.badlogic.gdx.Game;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
 
@@ -23,10 +24,14 @@ public class MyOuputStream {
     }
 
     public void writeMessage(MessageType messageType) {
+        writeMessage(messageType.ordinal());
+    }
+
+    public void writeMessage(int i) {
         try {
             mutex.acquire();
             try {
-                stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
+                stream.writeInt(i);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

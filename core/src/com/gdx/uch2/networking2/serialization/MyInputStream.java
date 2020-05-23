@@ -5,6 +5,7 @@ import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.ProtectedArea;
 import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
 
@@ -20,6 +21,7 @@ public class MyInputStream  {
     }
 
     public MessageType getType() {
+
         MessageType m = null;
         try {
             m = MessageType.values()[in.readInt()];

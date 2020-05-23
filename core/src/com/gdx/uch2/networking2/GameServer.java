@@ -3,9 +3,9 @@ package com.gdx.uch2.networking2;
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
-import com.gdx.uch2.networking2.serialization.MessageType;
 import com.gdx.uch2.networking2.serialization.MyInputStream;
 import com.gdx.uch2.networking2.serialization.MyOuputStream;
 
