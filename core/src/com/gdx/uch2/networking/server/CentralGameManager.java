@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import static io.netty.buffer.Unpooled.buffer;
 
@@ -29,6 +30,7 @@ public class CentralGameManager {
     private GamePhase currentPhase;
     private Level map;
     private int nbPlayersReady = 0;
+    public static Semaphore BigMutex = new Semaphore(1);
 
 
     public CentralGameManager(final List<ChannelHandlerContext> players, Level map){
@@ -68,7 +70,7 @@ public class CentralGameManager {
     }
 
 
-    public void readMessage(ChannelHandlerContext ctx, Object msg, int playerID) throws Exception {
+    public void readMessage(ChannelHandlerContext ctx, Object msg, int playerID, NettyKryoEncoder encoder, NettyKryoDecoder decoder) throws Exception {
 
         try{
             ByteBuf m = (ByteBuf) msg;
