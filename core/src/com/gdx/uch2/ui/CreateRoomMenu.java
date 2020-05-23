@@ -50,17 +50,28 @@ public class CreateRoomMenu implements Screen {
         portLabel.setWidth(100);
         Label levelLabel = new Label("Level:", skin);
         levelLabel.setWidth(100);
+        Label playersLabel = new Label("Players:", skin);
+        playersLabel.setWidth(100);
+        Label nbRoundsLabel = new Label("Number of rounds:", skin);
+        nbRoundsLabel.setWidth(100);
+        final Label errorLabel = new Label("", skin);
+        errorLabel.setWidth(100);
 
         // Create TextField
+        TextField.TextFieldFilter.DigitsOnlyFilter digitsFilter = new TextField.TextFieldFilter.DigitsOnlyFilter();
         final TextField nicknameTF = new TextField("Player 1", skin);
-        final TextField ipTF = new TextField("127.0.0.1", skin);
         final TextField portTF = new TextField("12345", skin);
+        final TextField nbRoundsTF = new TextField("10", skin);
         nicknameTF.setMaxLength(20);
-        ipTF.setMaxLength(15);
+        portTF.setTextFieldFilter(digitsFilter);
         portTF.setMaxLength(5);
+        nbRoundsTF.setMaxLength(2);
+        nbRoundsTF.setTextFieldFilter(digitsFilter);
         final SelectBox<Integer> levelSB = new SelectBox<Integer>(skin);
         levelSB.setItems(1,2,3);
 //        levelSB.setSelected(3);
+        final SelectBox<Integer> playersSB = new SelectBox<>(skin);
+        playersSB.setItems(2,3,4,5,6);
 
         // Title
         HorizontalGroup titleGroup = new HorizontalGroup();
@@ -86,11 +97,21 @@ public class CreateRoomMenu implements Screen {
         table.add(portGroup).colspan(2).center();
         table.row();
 
-        // Level
+        // Nb rounds
+        HorizontalGroup roundsGroup = new HorizontalGroup();
+        roundsGroup.space(10);
+        roundsGroup.addActor(nbRoundsLabel);
+        roundsGroup.addActor(nbRoundsTF);
+        table.add(roundsGroup).colspan(2).center();
+        table.row();
+
+        // Level & players
         HorizontalGroup levelGroup = new HorizontalGroup();
         levelGroup.space(10);
         levelGroup.addActor(levelLabel);
         levelGroup.addActor(levelSB);
+        levelGroup.addActor(playersLabel);
+        levelGroup.addActor(playersSB);
         table.add(levelGroup).colspan(2).center();
         table.row();
 
@@ -102,18 +123,44 @@ public class CreateRoomMenu implements Screen {
         table.add(createButton).width(200).colspan(2);
         table.row();
         table.add(mainMenuButton).width(200).colspan(2);
+        table.row();
+
+        // Error label
+        table.add(errorLabel).colspan(2).center();
+
 
         // create button listeners
         createButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("création de la partie");
-                int port = Integer.parseInt(String.valueOf(portTF.getText()));
+                boolean somethingWentWrong = false;
+
+                int port = 0, nbOfRounds = 0;
+                String nickname = null;
+                try {
+                    port = Integer.parseInt(String.valueOf(portTF.getText()));
+                    nbOfRounds = Integer.parseInt(nbRoundsTF.getText());
+                    nickname = nicknameTF.getText();
+
+                    if (port < 1025 || port > 65535 || nbOfRounds == 0 || nickname.length() == 0) {
+                        somethingWentWrong = true;
+                    }
+                } catch (NumberFormatException e) {
+                    somethingWentWrong = true;
+                }
+
+                if (somethingWentWrong) {
+                    errorLabel.setText("One or more invalid arguments");
+                    return;
+                }
+
                 int level = levelSB.getSelected();
-                String nickname = String.valueOf(nicknameTF.getText());
+
+                System.out.println("création de la partie");
+
                 Thread tServer = new Thread(new GameServer(port, level));
                 tServer.start();
-                Thread tClient = new Thread(new GameClient(ipTF.getText(), port, nickname));
+                Thread tClient = new Thread(new GameClient("localhost", port, nickname));
                 tClient.start();
                 Screen s = new WaitingRoomMenu(nickname);
                 ScreenManager.getInstance().setPlacementScreen(s);

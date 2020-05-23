@@ -20,7 +20,7 @@ public class GameServer implements Runnable {
 
     //indique si la partie est pleine
     private static boolean full = false;
-    private static final int MAX_PLAYERS = 1;
+    private static final int MAX_PLAYERS = 2;
     private static boolean gameStarted = false;
 
     private int port;

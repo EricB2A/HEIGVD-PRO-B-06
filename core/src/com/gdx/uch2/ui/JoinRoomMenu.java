@@ -39,15 +39,19 @@ public class JoinRoomMenu implements Screen {
         Label titleLabel = new Label("Ultimate Chicken Horse 2", skin);
         titleLabel.setFontScale(2);
         final Label nicknameLabel = new Label("Nickname:", skin);
-        Label ipLabel = new Label("ip:", skin);
-        Label portLabel = new Label("port:", skin);
+        Label ipLabel = new Label("Hostname:", skin);
+        Label portLabel = new Label("Port:", skin);
+        final Label errorLabel = new Label("", skin);
+        errorLabel.setWidth(100);
 
         // Create TextField
+        TextField.TextFieldFilter.DigitsOnlyFilter digitsFilter = new TextField.TextFieldFilter.DigitsOnlyFilter();
         final TextField nicknameTF = new TextField("Player 1", skin);
         final TextField ipTF = new TextField("127.0.0.1", skin);
         final TextField portTF = new TextField("12345", skin);
+        portTF.setTextFieldFilter(digitsFilter);
         nicknameTF.setMaxLength(20);
-        ipTF.setMaxLength(15);
+        ipTF.setMaxLength(30);
         portTF.setMaxLength(5);
 
         // Title
@@ -90,6 +94,10 @@ public class JoinRoomMenu implements Screen {
         table.add(joinButton).width(200).colspan(2);
         table.row();
         table.add(mainMenuButton).width(200).colspan(2);
+        table.row();
+
+        // Error label
+        table.add(errorLabel).colspan(2).center();
 
         // create button listeners
         mainMenuButton.addListener(new InputListener(){
@@ -107,8 +115,25 @@ public class JoinRoomMenu implements Screen {
         joinButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                int port = Integer.parseInt(String.valueOf(portTF.getText()));
-                String nickname = String.valueOf(nicknameTF.getText());
+                boolean somethingWentWrong = false;
+                int port = 0;
+                String nickname = null;
+                try {
+                    port = Integer.parseInt(String.valueOf(portTF.getText()));
+                    nickname = String.valueOf(nicknameTF.getText());
+
+                    if (port < 1025 || port > 65535 || nickname.length() == 0) {
+                        somethingWentWrong = true;
+                    }
+                } catch (NumberFormatException e) {
+                    somethingWentWrong = true;
+                }
+
+                if (somethingWentWrong) {
+                    errorLabel.setText("One or more invalid arguments");
+                    return;
+                }
+
                 Thread tClient = new Thread(new GameClient(ipTF.getText(), port, nickname));
                 tClient.start();
                 Screen s = new WaitingRoomMenu(nickname);
