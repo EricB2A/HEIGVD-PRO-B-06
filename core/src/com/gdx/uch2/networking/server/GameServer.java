@@ -72,10 +72,6 @@ public class GameServer implements Runnable {
             new Thread(new PlayerHandler(manager, player)).start();
         }
 
-        //Démarre les ticks de serveur
-        ServerGameStateTickManager.getInstance().setPlayers(players);
-//        ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
-
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
         for(PlayerContext ctx : players){
 
@@ -84,6 +80,10 @@ public class GameServer implements Runnable {
 
             System.out.println("Message envoyé au joueur #" + ctx.getId());
         }
+
+        //Démarre les ticks de serveur
+        ServerGameStateTickManager.getInstance().setPlayers(players);
+        ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
     }
 
     public static void main(String[] args) throws Exception {

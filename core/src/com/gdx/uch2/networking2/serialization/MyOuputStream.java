@@ -8,6 +8,7 @@ import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,7 +22,7 @@ public class MyOuputStream {
 
     public MyOuputStream(OutputStream stream) {
         this.mutex = new Semaphore(1);
-        this.stream = new DataOutputStream(stream);
+        this.stream = new DataOutputStream( new BufferedOutputStream(stream));
     }
 
     public void writeMessage(MessageType messageType) {
@@ -33,6 +34,7 @@ public class MyOuputStream {
             mutex.acquire();
             try {
                 stream.writeInt(i);
+                stream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -47,7 +49,8 @@ public class MyOuputStream {
         try {
             mutex.acquire();
             writeMessage(playerState, true);
-        } catch (InterruptedException e) {
+            stream.flush();
+        } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
         finally {
@@ -77,9 +80,10 @@ public class MyOuputStream {
                 stream.writeInt(MessageType.GameStateUpdate.ordinal());
                 // Taille.
                 stream.writeInt(gameState.getPlayerStates().size());
-                for (PlayerState p : gameState.getPlayerStates().values()) {
-                    writeMessage(p, false);
+                for (PlayerState playerState : gameState.getPlayerStates().values()) {
+                    writeMessage(playerState, false);
                 }
+                stream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -106,6 +110,7 @@ public class MyOuputStream {
                     stream.writeFloat(objectPlacement.getBlock().getPosition().x);
                     stream.writeFloat(objectPlacement.getBlock().getPosition().y);
                 }
+                stream.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

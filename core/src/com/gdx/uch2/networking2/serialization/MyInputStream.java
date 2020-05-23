@@ -51,8 +51,6 @@ public class MyInputStream  {
     }
 
     public GameState readGameState() {
-        System.out.println("Reading gamestate");
-
         int size;
         try {
             size = in.readInt();
