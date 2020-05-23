@@ -77,47 +77,51 @@ public class GameServer {
                 try {
 
                     while((shouldRun)){
+
                         MessageType type = in.getType();
 
-                        switch (type){
-                            case GameStateUpdate:
-                                GameState gs = in.readGameState();
-                                System.out.println("Gamestate lu : " + gs.toString());
+                        if(type != null){
+                            switch (type){
+                                case GameStateUpdate:
+                                    GameState gs = in.readGameState();
+                                    System.out.println("Gamestate lu : " + gs.toString());
 
-                                try {
-                                    mutex.acquire();
-                                    protectedStuff = 1000;
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }finally {
-                                    mutex.release();
-                                }
-                                System.out.println("protected stuff (should be 1000): " + protectedStuff);
+                                    try {
+                                        mutex.acquire();
+                                        protectedStuff = 1000;
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }finally {
+                                        mutex.release();
+                                    }
+                                    System.out.println("protected stuff (should be 1000): " + protectedStuff);
 
-                                Block b = new Block(new Vector2(5, 5));
-                                ObjectPlacement op = new ObjectPlacement(3, b);
-                                out.writeMessage(op);
+                                    Block b = new Block(new Vector2(5, 5));
+                                    ObjectPlacement op = new ObjectPlacement(3, b);
+                                    out.writeMessage(op);
 
-                                break;
-                            case PlayerStateUpdate:
-                                PlayerState ps = in.readPlayerState();
-                                System.out.println("PlayerState lu : " + ps.toString());
+                                    break;
+                                case PlayerStateUpdate:
+                                    PlayerState ps = in.readPlayerState();
+                                    System.out.println("PlayerState lu : " + ps.toString());
 
-                                try {
-                                    mutex.acquire();
-                                    protectedStuff = 200;
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }finally {
-                                    mutex.release();
-                                }
+                                    try {
+                                        mutex.acquire();
+                                        protectedStuff = 200;
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }finally {
+                                        mutex.release();
+                                    }
 
-                                System.out.println("protected stuff (should be 200): " + protectedStuff);
+                                    System.out.println("protected stuff (should be 200): " + protectedStuff);
 
-                                break;
-                            default:
-                                break;
-                        }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }else break;
+
                     }
 
 
