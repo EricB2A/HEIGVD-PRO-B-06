@@ -112,7 +112,8 @@ public class PlayerController {
 
     /** The main update method **/
     public void update(float delta) {
-        if (!finished || player.getState() != State.DEAD) {
+        State bak = player.getState();
+        if (!finished && !player.isDead()) {
             // Processing the input - setting the states of Player
             processInput();
         }
@@ -164,6 +165,10 @@ public class PlayerController {
             player.getVelocity().y = MAX_FALL_VEL;
         }
 
+        if (player.isDead()) {
+            finish();
+        }
+
         ClientPlayerStateTickManager.getInstance().setCurrentState(
                 new PlayerState(ClientPlayerStateTickManager.getInstance().getPlayerID(),
                         player.getPosition().x, player.getPosition().y, System.nanoTime()));
@@ -172,10 +177,14 @@ public class PlayerController {
     //Mort ou arrivé
     private void finish() {
         if(!finished){
-            ClientPlayerStateTickManager.getInstance().sendFinish();
+            if (player.isDead()) {
+                ClientPlayerStateTickManager.getInstance().sendDeath();
+            } else {
+                ClientPlayerStateTickManager.getInstance().sendFinish();
+            }
             finished = true;
         }
-        player.setState(State.IDLE);
+//        player.setState(State.IDLE);
     }
 
     /** Collision checking **/

@@ -27,6 +27,7 @@ public class Player {
     boolean		facingLeft = false;
     float		stateTime = 0;
     boolean		longJump = false;
+    boolean     dead = false;
 
     public Player(Vector2 position) {
         this.bounds.height = HITBOX_HEIGHT;
@@ -76,6 +77,14 @@ public class Player {
 
     public void setLongJump(boolean longJump) {
         this.longJump = longJump;
+    }
+
+    public void kill() {
+        dead = true;
+    }
+
+    public boolean isDead() {
+        return dead;
     }
 
     public void setPosition(Vector2 position) {

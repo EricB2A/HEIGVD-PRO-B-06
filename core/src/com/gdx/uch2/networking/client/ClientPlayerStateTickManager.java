@@ -79,6 +79,10 @@ public class ClientPlayerStateTickManager {
         ctx.out.writeMessage(MessageType.ReachedEnd);
     }
 
+    public void sendDeath() {
+        ctx.out.writeMessage(MessageType.Death);
+    }
+
     //TODO placer dans un endroit plus évident ou renommer la classe
     public void sendBlockPlacement(final Block block){
         setCanPlace(false);

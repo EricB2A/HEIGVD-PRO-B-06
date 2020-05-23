@@ -7,7 +7,7 @@ public class Kill implements Effect{
 
     @Override
     public void apply(Player player) {
-        player.setState(Player.State.DEAD);
+        player.kill();
     }
 
     @Override

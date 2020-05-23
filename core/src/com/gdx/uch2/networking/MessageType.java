@@ -8,6 +8,7 @@ public enum MessageType {
     AckBlockPlaced,
     PlayerStateUpdate,
     ReachedEnd,
+    Death,
     CanPlace,
     StartMovementPhase,
     StartEditingPhase

@@ -17,7 +17,7 @@ public class Trap extends Block {
 
     @Override
     public boolean isLethal() {
-        return true;
+        return type == Type.LETHAL;
     }
 
     @Override

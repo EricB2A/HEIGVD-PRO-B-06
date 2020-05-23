@@ -38,6 +38,8 @@ public class WorldRenderer {
     private TextureRegion playerFallLeft;
     private TextureRegion playerJumpRight;
     private TextureRegion playerFallRight;
+    private TextureRegion playerDeadRight;
+    private TextureRegion playerDeadLeft;
     private TextureRegion onlinePlayerRight;
     private TextureRegion onlinePlayerLeft;
 
@@ -122,6 +124,9 @@ public class WorldRenderer {
         playerFallRight = playerAtlas.findRegion("jump2");
         playerFallLeft = new TextureRegion(playerFallRight);
         playerFallLeft.flip(true, false);
+        playerDeadRight = playerAtlas.findRegion("dead");
+        playerDeadLeft = new TextureRegion((playerDeadRight));
+        playerDeadLeft.flip(true, false);
 
         onlinePlayerRight = opponentsAtlas.findRegion("tile000");
         onlinePlayerLeft = new TextureRegion(onlinePlayerRight);
@@ -188,7 +193,9 @@ public class WorldRenderer {
     private void drawPlayer() {
         Player player = world.getPlayer();
         playerFrame = (TextureRegion) (player.isFacingLeft() ? idleLeftAnimation.getKeyFrame(player.getStateTime(), true) : idleRightAnimation.getKeyFrame(player.getStateTime(), true));
-        if(player.getState().equals(State.WALKING)) {
+        if (player.isDead()) {
+            playerFrame = player.isFacingLeft() ? playerDeadLeft : playerDeadRight;
+        } else if(player.getState().equals(State.WALKING)) {
             playerFrame = (TextureRegion) (player.isFacingLeft() ? walkLeftAnimation.getKeyFrame(player.getStateTime(), true) : walkRightAnimation.getKeyFrame(player.getStateTime(), true));
         } else if (player.getState().equals(State.JUMPING) || player.getState().equals(State.SLIDING)) {
             if (player.getVelocity().y > 0) {

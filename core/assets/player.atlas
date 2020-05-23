@@ -6,7 +6,7 @@ filter: Nearest,Nearest
 repeat: none
 dash1
   rotate: false
-  xy: 288, 2
+  xy: 496, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
@@ -53,6 +53,13 @@ dash7
   orig: 24, 24
   offset: 0, 0
   index: -1
+dead
+  rotate: false
+  xy: 236, 2
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
 hit2
   rotate: false
   xy: 522, 2
@@ -76,7 +83,7 @@ hit4
   index: -1
 idle2
   rotate: false
-  xy: 470, 2
+  xy: 262, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
@@ -146,28 +153,28 @@ walk-right2
   index: -1
 walk-right3
   rotate: false
-  xy: 210, 2
+  xy: 548, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 walk-right4
   rotate: false
-  xy: 236, 2
+  xy: 210, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 walk-right5
   rotate: false
-  xy: 496, 2
+  xy: 470, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: -1
 walk-right6
   rotate: false
-  xy: 262, 2
+  xy: 288, 2
   size: 24, 24
   orig: 24, 24
   offset: 0, 0

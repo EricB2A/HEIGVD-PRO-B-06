@@ -17,7 +17,7 @@ public class CentralGameManager {
     private List<PlayerContext> players;
     private boolean[] finished;
     private boolean[] recievedBlockPlacement;
-    private boolean[] connected;
+    private boolean[] dead;
     private NettyKryoEncoder encoder = new NettyKryoEncoder();
     private NettyKryoDecoder decoder = new NettyKryoDecoder();
     private GamePhase currentPhase;
@@ -32,7 +32,7 @@ public class CentralGameManager {
         finished = new boolean[players.size()];
         Arrays.fill(finished, false);
         recievedBlockPlacement = new boolean[players.size()];
-        connected = new boolean[players.size()];
+        dead = new boolean[players.size()];
         //startEditingPhase();
 
     }
@@ -47,6 +47,9 @@ public class CentralGameManager {
         }
         else if(type == MessageType.ReachedEnd){
             processPlayerReachedEnd(context);
+        }
+        else if (type == MessageType.Death) {
+            processPlayerDeath(context);
         }
         else if(type == MessageType.AckGameStart){
             processAckGameStart(context);
@@ -101,16 +104,26 @@ public class CentralGameManager {
         }
     }
 
+    private void processPlayerDeath(PlayerContext ctx) {
+        dead[ctx.getId()] = true;
+        checkEndgame();
+    }
+
     private void processPlayerReachedEnd(PlayerContext ctx){
         finished[ctx.getId()] = true;
+        System.out.println("SRV: Le joueur #" + ctx.getId() + " est arrivé à la fin!");
+        checkEndgame();
+    }
+
+    private void checkEndgame() {
         boolean allFinished = true;
-        for (boolean b : finished) {
-            if (!b) {
+        for (int i = 0; i < finished.length; ++i) {
+            if (!finished[i] && !dead[i]) {
                 allFinished = false;
                 break;
             }
         }
-        System.out.println("SRV: Le joueur #" + ctx.getId() + " est arrivé à la fin!");
+
 
         if(allFinished){
             computePoints();
@@ -120,14 +133,9 @@ public class CentralGameManager {
     }
 
     private void processAckGameStart(PlayerContext ctx){
-        int playerId = ctx.getId();
-
-        if (!connected[playerId]) {
-            nbPlayersReady++;
-            connected[playerId] = true;
-            if (nbPlayersReady == players.size()) {
-                startEditingPhase();
-            }
+        nbPlayersReady++;
+        if (nbPlayersReady == players.size()) {
+            startEditingPhase();
         }
     }
 
