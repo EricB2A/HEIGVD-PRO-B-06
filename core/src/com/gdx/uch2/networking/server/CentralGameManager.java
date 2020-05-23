@@ -102,8 +102,7 @@ public class CentralGameManager {
     }
 
     private void processPlayerReachedEnd(PlayerContext ctx){
-        int playerThatFinished = ctx.in.readInt();
-        finished[playerThatFinished] = true;
+        finished[ctx.getId()] = true;
         boolean allFinished = true;
         for (boolean b : finished) {
             if (!b) {
@@ -111,7 +110,7 @@ public class CentralGameManager {
                 break;
             }
         }
-        System.out.println("SRV: Le joueur #" + playerThatFinished + " est arrivé à la fin!");
+        System.out.println("SRV: Le joueur #" + ctx.getId() + " est arrivé à la fin!");
 
         if(allFinished){
             computePoints();
