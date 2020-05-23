@@ -103,6 +103,6 @@ public class GameClient implements Runnable {
         ClientPlayerStateTickManager.getInstance().setContext(ctx);
         ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(ctx.getId(),
                 pos.x, pos.y, 0));
-        ClientPlayerStateTickManager.getInstance().start(0, Constants.TICK_DURATION);
+//        ClientPlayerStateTickManager.getInstance().start(0, Constants.TICK_DURATION);
     }
 }

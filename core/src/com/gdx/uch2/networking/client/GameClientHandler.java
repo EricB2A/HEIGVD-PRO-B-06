@@ -57,7 +57,7 @@ public class GameClientHandler {
 
     private void processBlockPlacement(){
         ObjectPlacement op = ctx.in.readObjectPlacement();
-        System.out.println("CLI: placement de bloc recu avec ID = " + op.getPlayerID() + " , block = " + (op.getBlock() == null? "null":"NOT null"));
+        System.out.println("CLI: placement de bloc recu avec " + op);
 
         if(op.getBlock() == null) {
             startEditingPhase();

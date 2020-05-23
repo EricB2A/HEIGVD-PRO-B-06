@@ -72,19 +72,24 @@ public class MyInputStream  {
 
     public ObjectPlacement readObjectPlacement() {
         int id;
-        Block.Type type;
-        float x;
-        float y;
+        Block.Type type = null;
+        float x = 0;
+        float y = 0;
 
         try {
             id = in.readInt();
-            type = Block.Type.values()[in.readInt()];
-            x = in.readFloat();
-            y = in.readFloat();
+            int typeIdx = in.readInt();
+            if (typeIdx >= 0) {
+                type = Block.Type.values()[typeIdx];
+                x = in.readFloat();
+                y = in.readFloat();
+            }
         } catch(IOException e) {
             e.printStackTrace();
             return null;
         }
+
+        if (type == null) return new ObjectPlacement(id, null);
 
         switch (type) {
             case PROTECTED_AREA:
@@ -107,7 +112,7 @@ public class MyInputStream  {
             return -1;
         }
 
-        return 0;
+        return i;
     }
 
     public void close() {

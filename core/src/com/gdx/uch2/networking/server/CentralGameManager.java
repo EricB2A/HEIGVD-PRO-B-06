@@ -84,8 +84,8 @@ public class CentralGameManager {
 
         //Send an object with Block = null to inform players that the editing phase is starting
         ObjectPlacement op = new ObjectPlacement(STARTER_ID, null);
-        sendBlockToAllPlayers(op);
         System.out.println("SRV: envoie objet de placement avec block = null et ID = " + op.getPlayerID());
+        sendBlockToAllPlayers(op);
     }
 
     private void computePoints(){

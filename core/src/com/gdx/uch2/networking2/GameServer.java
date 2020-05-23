@@ -117,6 +117,14 @@ public class GameServer {
                                     System.out.println("protected stuff (should be 200): " + protectedStuff);
 
                                     break;
+                                case GameStart:
+                                    int id = in.readInt();
+                                    System.out.println("Id du cul : " + id);
+                                    break;
+                                case BlockPlaced:
+                                    ObjectPlacement o = in.readObjectPlacement();
+                                    System.out.println("Block étrange " + o);
+                                    break;
                                 default:
                                     break;
                             }

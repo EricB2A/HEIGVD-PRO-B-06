@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking2.serialization;
 
 import com.badlogic.gdx.Game;
+import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.MessageType;
@@ -97,9 +98,14 @@ public class MyOuputStream {
                 stream.writeInt(MessageType.BlockPlaced.ordinal());
                 stream.writeInt(objectPlacement.getPlayerID());
                 // Bloc.
-                stream.writeInt(objectPlacement.getBlock().getType().ordinal());
-                stream.writeFloat(objectPlacement.getBlock().getPosition().x);
-                stream.writeFloat(objectPlacement.getBlock().getPosition().y);
+                Block b = objectPlacement.getBlock();
+                if (b == null) {
+                    stream.writeInt(-1);
+                } else {
+                    stream.writeInt(b.getType().ordinal());
+                    stream.writeFloat(objectPlacement.getBlock().getPosition().x);
+                    stream.writeFloat(objectPlacement.getBlock().getPosition().y);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

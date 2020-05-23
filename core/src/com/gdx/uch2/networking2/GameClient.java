@@ -1,6 +1,10 @@
 package com.gdx.uch2.networking2;
 
+import com.badlogic.gdx.math.Vector2;
+import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.MessageType;
+import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.networking2.serialization.MyInputStream;
 import com.gdx.uch2.networking2.serialization.MyOuputStream;
@@ -25,12 +29,19 @@ public class GameClient {
             GameState gs = new GameState(new PlayerState[]{ps1, ps2});
 
 
+
             System.out.println("Sending ps1");
             out.writeMessage(ps1);
             System.out.println("Sending ps2");
             out.writeMessage(ps2);
             System.out.println("Sending gs");
             out.writeMessage(gs);
+
+            out.writeMessage(MessageType.GameStart);
+            out.writeMessage(345);
+
+            out.writeMessage(new ObjectPlacement(23, new Block(new Vector2(3,4))));
+            out.writeMessage(new ObjectPlacement(532, null));
 
             out.flush();
 
