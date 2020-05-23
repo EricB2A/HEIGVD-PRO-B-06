@@ -1,33 +1,55 @@
 package com.gdx.uch2.networking.server;
 
-import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
-import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
+import com.gdx.uch2.networking.*;
 
-public class PlayerHandler extends ChannelInboundHandlerAdapter {
+import java.io.IOException;
 
-    public PlayerHandler(CentralGameManager manager, int playerID) {
-        this.manager = manager;
-        this.playerID = playerID;
-    }
+public class PlayerHandler implements Runnable {
 
     private CentralGameManager manager;
-    private int playerID;
-    private NettyKryoEncoder encoder = new NettyKryoEncoder();
-    private NettyKryoDecoder decoder = new NettyKryoDecoder();
+    private PlayerContext context;
 
-
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        CentralGameManager.BigMutex.acquire();
-        manager.readMessage(ctx, msg, playerID, encoder, decoder);
-        CentralGameManager.BigMutex.release();
+    public PlayerHandler(CentralGameManager manager, PlayerContext context) {
+        this.manager = manager;
+        this.context = context;
     }
 
+
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause){
-        cause.printStackTrace();
-        ctx.close();
+    public void run() {
+        boolean shouldRun = true;
+        MessageType type;
+
+        try {
+
+            while((shouldRun)){ // TODO : vraie condition d'arrêt
+
+                type = context.in.getType();
+
+                if(type != null){
+                    manager.readMessage(type, context);
+                }else break;
+
+            }
+
+            context.in.close();
+            context.out.close();
+            context.getSocket().close();
+
+        } catch (IOException ex) {
+            if (context.in != null) {
+                context.in.close();
+            }
+            if (context.out != null) {
+                context.out.close();
+            }
+            if (context.getSocket() != null) {
+                try {
+                    context.getSocket().close();
+                } catch (IOException ex1) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 }

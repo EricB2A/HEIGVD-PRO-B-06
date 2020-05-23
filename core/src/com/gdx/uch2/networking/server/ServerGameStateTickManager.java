@@ -1,8 +1,8 @@
 package com.gdx.uch2.networking.server;
 
 import com.gdx.uch2.networking.GameState;
+import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.PlayerState;
-import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
 import java.util.Timer;
@@ -13,7 +13,7 @@ public class ServerGameStateTickManager {
     }
 
     private Timer timer;
-    private List<ChannelHandlerContext> players;
+    private List<PlayerContext> players;
     private GameState gameState;
 
     private ServerGameStateTickManager(){
@@ -32,7 +32,7 @@ public class ServerGameStateTickManager {
         return Instance.instance;
     }
 
-    public void setPlayers(List<ChannelHandlerContext> players){
+    public void setPlayers(List<PlayerContext> players){
         this.players = players;
     }
 

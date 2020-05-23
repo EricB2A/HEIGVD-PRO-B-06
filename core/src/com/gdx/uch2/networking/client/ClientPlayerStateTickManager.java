@@ -1,10 +1,7 @@
 package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.entities.Block;
-import com.gdx.uch2.networking.MessageType;
-import com.gdx.uch2.networking.ObjectPlacement;
-import com.gdx.uch2.networking.PlayerState;
-import com.gdx.uch2.networking.UserActionSequence;
+import com.gdx.uch2.networking.*;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
 import io.netty.buffer.ByteBuf;
@@ -23,7 +20,7 @@ public class ClientPlayerStateTickManager {
     NettyKryoEncoder encoder = new NettyKryoEncoder();
 
     private Timer timer;
-    private ChannelHandlerContext ctx;
+    private PlayerContext ctx;
     private PlayerState currentState;
     private int playerID = -1;
     private boolean canPlace;
@@ -64,7 +61,7 @@ public class ClientPlayerStateTickManager {
         this.currentState = newState;
     }
 
-    public void setContext(ChannelHandlerContext ctx){
+    public void setContext(PlayerContext ctx){
         this.ctx = ctx;
     }
 
@@ -78,47 +75,16 @@ public class ClientPlayerStateTickManager {
 
 
     public void sendFinish(){
-        ByteBuf out = Unpooled.buffer(128);
-        out.writeChar(MessageType.ReachedEnd.getChar());
-        out.writeInt(currentState.getPlayerID());
-        ctx.channel().writeAndFlush(out);
+        System.out.println("CLI: Envoi ReachEnd");
+        ctx.out.writeMessage(MessageType.ReachedEnd);
     }
 
     //TODO placer dans un endroit plus évident ou renommer la classe
     public void sendBlockPlacement(final Block block){
         setCanPlace(false);
 
-        new Thread(new Runnable(){
-
-            @Override
-            public void run() {
-                ObjectPlacement op = new ObjectPlacement(playerID, block);
-                ByteBuf out = buffer(1024);
-                encoder.encode(op, out, MessageType.BlockPlaced.getChar());
-                while(!getRecievedAck()){
-                    try{
-                        out.retain();
-                        ctx.writeAndFlush(out);
-                        System.out.println("CLI: Tentative d'envoi de BlocPlacement...");
-                        Thread.sleep(100);
-                    }catch (InterruptedException ex){
-                        Thread.currentThread().interrupt();
-                    }
-
-                }
-                System.out.println("CLI: BlocPlacement envoyé avec succes!");
-                setRecievedAck(false);
-            }
-        }).start();
-
-        /*
         System.out.println("CLI: Sending block placement as player #" + playerID);
-        ObjectPlacement op = new ObjectPlacement(playerID, block);
-        ByteBuf out = Unpooled.buffer(2048);
-        encoder.encode(op, out, MessageType.BlockPlaced.getChar());
-        ctx.writeAndFlush(out);
-
-         */
+        ctx.out.writeMessage(new ObjectPlacement(playerID, block));
     }
 
     //Crée le timer et envoie régulièrement une séquence d'acitons au serveur.

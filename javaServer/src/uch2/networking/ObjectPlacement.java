@@ -58,7 +58,7 @@ public class ObjectPlacement {
 
 
     public String toString(){
-        return "ID : " + playerID + " - " + (block == null ? "Block null" : (block.isLethal()? "Trap : " : "Block : ") +  "(" + getX() + ", " + getY() + ")");
+        return block.isLethal()? "Trap : " : "Block : " + "(" + getX() + ", " + getY() + ")";
     }
 
 }

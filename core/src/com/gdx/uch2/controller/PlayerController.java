@@ -176,7 +176,6 @@ public class PlayerController {
     //Mort ou arrivé
     private void finish() {
         if(!finished){
-            System.out.println("FINISH");
             ClientPlayerStateTickManager.getInstance().sendFinish();
             finished = true;
         }

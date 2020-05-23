@@ -5,15 +5,8 @@ import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.*;
 import com.gdx.uch2.networking.kryo.NettyKryoDecoder;
 import com.gdx.uch2.networking.kryo.NettyKryoEncoder;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.ReferenceCountUtil;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -21,7 +14,7 @@ import static io.netty.buffer.Unpooled.buffer;
 
 public class CentralGameManager {
 
-    private List<ChannelHandlerContext> players;
+    private List<PlayerContext> players;
     private boolean[] finished;
     private boolean[] recievedBlockPlacement;
     private boolean[] connected;
@@ -33,7 +26,7 @@ public class CentralGameManager {
     public static Semaphore BigMutex = new Semaphore(1);
 
 
-    public CentralGameManager(final List<ChannelHandlerContext> players, Level map){
+    public CentralGameManager(final List<PlayerContext> players, Level map){
         this.players = players;
         this.map = map;
         finished = new boolean[players.size()];
@@ -42,67 +35,32 @@ public class CentralGameManager {
         connected = new boolean[players.size()];
         //startEditingPhase();
 
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                while (nbPlayersReady < CentralGameManager.this.players.size()) {
-                    try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-
-                    for (int i=0; i < connected.length; ++i) {
-                        if (!connected[i]) {
-                            ByteBuf out = Unpooled.buffer(128);
-                            out.writeChar(MessageType.GameStart.getChar());
-                            out.writeInt(i);
-                            CentralGameManager.this.players.get(i).writeAndFlush(out);
-                            System.out.println("Message envoyé au joueur #" + i);
-                        }
-                    }
-
-                }
-            }
-        }).start();
     }
 
 
-    public void readMessage(ChannelHandlerContext ctx, Object msg, int playerID, NettyKryoEncoder encoder, NettyKryoDecoder decoder) throws Exception {
-
-        try{
-            ByteBuf m = (ByteBuf) msg;
-            m.readChar();
-            if(m.getChar(0) == MessageType.PlayerStateUpdate.getChar()){
-                processPlayerState(m);
-            }
-            else if(m.getChar(0) == MessageType.BlockPlaced.getChar()){
-                processObjectPlacement(ctx, m);
-            }
-            else if(m.getChar(0) == MessageType.ReachedEnd.getChar()){
-                processPlayerReachedEnd(m);
-            }
-            else if(m.getChar(0) == MessageType.AckGameStart.getChar()){
-                processAckGameStart(playerID);
-            }
-            else if(m.getChar(0) == MessageType.AckBlockPlaced.getChar()){
-                processAckBlockPlaced(playerID);
-            }
-            else{
-                while (m.isReadable()) {
-                    System.out.print((char) m.readByte());
-                    System.out.flush();
-                }
-            }
-        }finally {
-            ReferenceCountUtil.release(msg);
+    public void readMessage(MessageType type, PlayerContext context) {
+        if(type == MessageType.PlayerStateUpdate) {
+            processPlayerState(context);
+        }
+        else if(type == MessageType.BlockPlaced){
+            processObjectPlacement(context);
+        }
+        else if(type == MessageType.ReachedEnd){
+            processPlayerReachedEnd(context);
+        }
+        else if(type == MessageType.AckGameStart){
+            processAckGameStart(context);
+        }
+        else if(type == MessageType.AckBlockPlaced){
+            processAckBlockPlaced(context);
+        }
+        else{
+            System.out.println("SRV: Type de messages inconnu : " + type);
         }
     }
 
-    private void processAckBlockPlaced(int playerID) {
-        recievedBlockPlacement[playerID] = true;
+    private void processAckBlockPlaced(PlayerContext ctx) {
+        recievedBlockPlacement[ctx.getId()] = true;
     }
 
     private void startMovementPhase(){
@@ -126,8 +84,8 @@ public class CentralGameManager {
 
         //Send an object with Block = null to inform players that the editing phase is starting
         ObjectPlacement op = new ObjectPlacement(STARTER_ID, null);
-        sendBlockToAllPlayers(op);
         System.out.println("SRV: envoie objet de placement avec block = null et ID = " + op.getPlayerID());
+        sendBlockToAllPlayers(op);
     }
 
     private void computePoints(){
@@ -143,9 +101,8 @@ public class CentralGameManager {
         }
     }
 
-    private void processPlayerReachedEnd(ByteBuf m){
-        int playerThatFinished = m.readInt();
-        finished[playerThatFinished] = true;
+    private void processPlayerReachedEnd(PlayerContext ctx){
+        finished[ctx.getId()] = true;
         boolean allFinished = true;
         for (boolean b : finished) {
             if (!b) {
@@ -153,7 +110,7 @@ public class CentralGameManager {
                 break;
             }
         }
-        System.out.println("SRV: Le joueur #" + playerThatFinished + " est arrivé à la fin!");
+        System.out.println("SRV: Le joueur #" + ctx.getId() + " est arrivé à la fin!");
 
         if(allFinished){
             computePoints();
@@ -162,7 +119,9 @@ public class CentralGameManager {
         }
     }
 
-    private void processAckGameStart(int playerId){
+    private void processAckGameStart(PlayerContext ctx){
+        int playerId = ctx.getId();
+
         if (!connected[playerId]) {
             nbPlayersReady++;
             connected[playerId] = true;
@@ -172,28 +131,16 @@ public class CentralGameManager {
         }
     }
 
-    private void processPlayerState(ByteBuf m){
-
-        List<Object> objects = new ArrayList<>();
-        if(!decoder.decode(m, objects)) return;
-
-        PlayerState state = (PlayerState) objects.get(0);
-        //System.out.println("SRV: playerState reçu du joueur #" + state.getPlayerID());
-        ServerGameStateTickManager.getInstance().setPlayerState(state);
+    private void processPlayerState(PlayerContext ctx){
+        ServerGameStateTickManager.getInstance().setPlayerState(ctx.in.readPlayerState());
 
     }
 
-    private void processObjectPlacement(ChannelHandlerContext ctx, ByteBuf m){
+    private void processObjectPlacement(PlayerContext ctx){
 
         if(currentPhase == GamePhase.Editing) {
             //Reads the message
-            List<Object> objects = new ArrayList<>();
-            if (!decoder.decode(m, objects)) {
-                System.out.println("SRV: Placement de bloc invalide");
-                return;
-            }
-
-            ObjectPlacement op = (ObjectPlacement) objects.get(0);
+            ObjectPlacement op = ctx.in.readObjectPlacement();
             System.out.println("SRV: Placement de block reçu par le joueur #" + op.getPlayerID());
 
             int newID;
@@ -209,53 +156,17 @@ public class CentralGameManager {
 
         }
 
-        ByteBuf out = buffer(128);
-        out.writeChar(MessageType.AckBlockPlaced.getChar());
-        ctx.writeAndFlush(out);
+        ctx.out.writeMessage(MessageType.AckBlockPlaced);
+
+//        ByteBuf out = buffer(128);
+//        out.writeChar(MessageType.AckBlockPlaced.getChar());
+//        ctx.writeAndFlush(out);
 
     }
 
     private void sendBlockToAllPlayers(final ObjectPlacement op){
-        Arrays.fill(recievedBlockPlacement, false);
-
-        new Thread(new Runnable(){
-
-            @Override
-            public void run() {
-                ByteBuf out = buffer(1024);
-                encoder.encode(op, out, MessageType.BlockPlaced.getChar());
-                boolean allPlayersRecievedBlockPlacement = false;
-                while(!allPlayersRecievedBlockPlacement){
-                    try{
-                        out.retain();
-                        broadcast(out);
-                        System.out.println("SRV: Tentative d'envoi de BlocPlacement...");
-                        Thread.sleep(100);
-
-                        boolean tmp = true;
-                        for(boolean b : recievedBlockPlacement){
-                            if(!b){
-                                tmp = false;
-                                break;
-                            }
-                            allPlayersRecievedBlockPlacement = tmp;
-                        }
-
-                    }catch (InterruptedException ex){
-                        Thread.currentThread().interrupt();
-                    }
-                }
-                System.out.println("SRV: BlocPlacement envoyé avec succes!");
-            }
-        }).start();
-    }
-
-
-    private void broadcast(ByteBuf out){
-        if(players.size() > 1) out.retain(players.size() - 1);
-        for(ChannelHandlerContext player : players){
-            player.writeAndFlush(out);
+        for (PlayerContext ctx : players) {
+            ctx.out.writeMessage(op);
         }
     }
-
 }
