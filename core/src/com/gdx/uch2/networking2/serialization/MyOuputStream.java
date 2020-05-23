@@ -38,25 +38,27 @@ public class MyOuputStream {
     }
 
     public void writeMessage(PlayerState playerState){
-        writeMessage(playerState, true);
+        try {
+            mutex.acquire();
+            writeMessage(playerState, true);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        finally {
+            mutex.release();
+        }
+
     }
 
     private void writeMessage(PlayerState playerState, boolean writeMessageType){
         try {
-            mutex.acquire();
-            try {
-                // PlayerStateUpdate.
-                if (writeMessageType) stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
-                stream.writeInt(playerState.getPlayerID());
-                stream.writeFloat(playerState.getPosX());
-                stream.writeFloat(playerState.getPosY());
-                stream.writeLong(playerState.getTime());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                mutex.release();
-            }
-        } catch (InterruptedException e) {
+            // PlayerStateUpdate.
+            if (writeMessageType) stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
+            stream.writeInt(playerState.getPlayerID());
+            stream.writeFloat(playerState.getPosX());
+            stream.writeFloat(playerState.getPosY());
+            stream.writeLong(playerState.getTime());
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

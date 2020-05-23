@@ -36,6 +36,8 @@ public class GameClient {
 
             System.out.println("sent all and flushed");
 
+            Thread.sleep(1000);
+
             srv.close();
             in.close();
             out.close();
