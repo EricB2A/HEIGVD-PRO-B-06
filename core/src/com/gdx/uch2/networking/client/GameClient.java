@@ -91,6 +91,7 @@ public class GameClient {
         private void processGameStart(PlayerContext ctx) {
             ClientPlayerStateTickManager.getInstance().setPlayerID(ctx.getId());
             OnlinePlayerManager.getInstance().init(ctx.getId());
+            World.currentWorld = new World(ctx.in.readInt());
             System.out.println("CLI: PlayerID = " + ctx.getId());
 
             ctx.out.writeMessage(MessageType.AckGameStart);

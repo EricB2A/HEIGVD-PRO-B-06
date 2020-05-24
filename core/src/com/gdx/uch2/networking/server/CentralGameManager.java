@@ -13,7 +13,7 @@ import static io.netty.buffer.Unpooled.buffer;
 public class CentralGameManager {
 
     private PlayerContext[] players;
-    private boolean[] finished;
+    private int[] finished; // 0 = pas arrivé, 1 = arrivé, 2 = premier arrivé.
     private boolean[] recievedBlockPlacement;
     private boolean[] dead;
     private GamePhase currentPhase;
@@ -22,17 +22,22 @@ public class CentralGameManager {
     private int round;
     private final int nbRounds;
     private boolean isOver;
-    public static Semaphore BigMutex = new Semaphore(1);
-
+    public static Semaphore BigMutex = new Semaphore(1); //TODO: On l'utilise ce mutex ?
+    private final int PTS_FIRST = 10, PTS_ARRIVED = 5;
+    private int[] scoring;
+    private boolean firstArrived;
 
     public CentralGameManager(final PlayerContext[] players, Level map, int nbRounds){
         this.players = players;
         this.map = map;
         this.nbRounds = nbRounds;
-        finished = new boolean[players.length];
-        Arrays.fill(finished, false);
+        finished = new int[players.length];
+        Arrays.fill(finished, 0);
         recievedBlockPlacement = new boolean[players.length];
         dead = new boolean[players.length];
+        scoring = new int[players.length];
+        Arrays.fill(scoring, 0);
+        firstArrived = true;
         //startEditingPhase();
 
     }
@@ -69,7 +74,8 @@ public class CentralGameManager {
 
     private void startMovementPhase(){
         currentPhase = GamePhase.Moving;
-        Arrays.fill(finished, false);
+        Arrays.fill(finished, 0);
+        firstArrived = true;
 
         /*
         //Sends a message to all clients announcing the movement phase starts
@@ -93,7 +99,19 @@ public class CentralGameManager {
     }
 
     private void computePoints(){
-        //TODO
+        for(int i = 0; i < players.length; ++i){
+            if(finished[i] > 0){
+                if(finished[i] == 2){ // Premier
+                    scoring[i] += PTS_FIRST;
+                }else if (finished[i] == 1){
+                    scoring[i] += PTS_ARRIVED;
+                }
+            }
+        }
+
+        for(int i = 0; i < players.length; ++i){
+            System.out.printf("SRV: joureur#%d possède [%d] pts\n", i, scoring[i]);
+        }
     }
 
     private void resetPlayersPositions(){
@@ -106,7 +124,12 @@ public class CentralGameManager {
     }
 
     private void processPlayerReachedEnd(PlayerContext ctx){
-        finished[ctx.getId()] = true;
+        if(firstArrived){
+            finished[ctx.getId()] = 2;
+        }else{
+            finished[ctx.getId()] = 1;
+        }
+        firstArrived = false;
         System.out.println("SRV: Le joueur #" + ctx.getId() + " est arrivé à la fin!");
         checkEndRound();
     }
@@ -114,7 +137,7 @@ public class CentralGameManager {
     private void checkEndRound() {
         boolean allFinished = true;
         for (int i = 0; i < finished.length; ++i) {
-            if (!players[i].getSocket().isClosed() && !finished[i] && !dead[i]) {
+            if (!players[i].getSocket().isClosed() && finished[i] == 0 && !dead[i]) {
                 allFinished = false;
                 break;
             }

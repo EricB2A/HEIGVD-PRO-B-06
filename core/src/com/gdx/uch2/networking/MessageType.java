@@ -16,7 +16,4 @@ public enum MessageType {
     EndGame
     ;
 
-    public char getChar(){
-        return (char)this.ordinal();
-    }
 }
