@@ -14,6 +14,8 @@ import java.io.*;
 public class DecoderStream {
 
     private final DataInputStream in;
+    public IOException e = null;
+
 
     public DecoderStream(InputStream stream) {
         this.in = new DataInputStream(new BufferedInputStream(stream));
@@ -25,7 +27,7 @@ public class DecoderStream {
         try {
             m = MessageType.values()[in.readInt()];
         } catch (IOException e) {
-            e.printStackTrace();
+            this.e = e;
         }
 
         return m;
@@ -42,7 +44,7 @@ public class DecoderStream {
             y = in.readFloat();
             time = in.readLong();
         } catch (IOException e) {
-            e.printStackTrace();
+            this.e = e;
             return null;
         }
 
@@ -54,7 +56,7 @@ public class DecoderStream {
         try {
             size = in.readInt();
         } catch (IOException e) {
-            e.printStackTrace();
+            this.e = e;
             return null;
         }
 
@@ -82,7 +84,7 @@ public class DecoderStream {
                 y = in.readFloat();
             }
         } catch(IOException e) {
-            e.printStackTrace();
+            this.e = e;
             return null;
         }
 
@@ -105,7 +107,7 @@ public class DecoderStream {
         try {
             i = in.readInt();
         } catch (IOException e) {
-            e.printStackTrace();
+            this.e = e;
             return -1;
         }
 
@@ -116,7 +118,7 @@ public class DecoderStream {
         try {
             in.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            this.e = e;
         }
     }
 }

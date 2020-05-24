@@ -15,6 +15,7 @@ import java.util.concurrent.Semaphore;
 public class EncoderStream {
     private Semaphore mutex;
     private DataOutputStream stream;
+    public IOException e = null;
 
     public EncoderStream(OutputStream stream) {
         this.mutex = new Semaphore(1);
@@ -32,7 +33,7 @@ public class EncoderStream {
                 stream.writeInt(i);
                 stream.flush();
             } catch (IOException e) {
-                e.printStackTrace();
+                this.e = e;
             } finally {
                 mutex.release();
             }
@@ -46,8 +47,10 @@ public class EncoderStream {
             mutex.acquire();
             writeMessage(playerState, true);
             stream.flush();
-        } catch (InterruptedException | IOException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            this.e = e;
         }
         finally {
             mutex.release();
@@ -64,7 +67,7 @@ public class EncoderStream {
             stream.writeFloat(playerState.getPosY());
             stream.writeLong(playerState.getTime());
         } catch (IOException e) {
-            e.printStackTrace();
+            this.e = e;
         }
     }
 
@@ -81,7 +84,7 @@ public class EncoderStream {
                 }
                 stream.flush();
             } catch (IOException e) {
-                e.printStackTrace();
+                this.e = e;
             } finally {
                 mutex.release();
             }
@@ -108,7 +111,7 @@ public class EncoderStream {
                 }
                 stream.flush();
             } catch (IOException e) {
-                e.printStackTrace();
+                this.e = e;
             } finally {
                 mutex.release();
             }

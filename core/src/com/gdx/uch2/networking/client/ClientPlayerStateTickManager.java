@@ -83,7 +83,7 @@ public class ClientPlayerStateTickManager {
     //Crée le timer et envoie régulièrement une séquence d'acitons au serveur.
     public void start(int delay, int tickDuration){
         this.timer = new Timer();
-        timer.schedule(new SendPlayerState(ctx), delay, tickDuration);
+        timer.schedule(new SendPlayerState(timer, ctx), delay, tickDuration);
     }
 
 }

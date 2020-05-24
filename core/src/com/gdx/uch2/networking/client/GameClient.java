@@ -56,6 +56,9 @@ public class GameClient implements Runnable {
                     handler.readMessage(type);
                 } else break;
 
+                if (ctx.in.e != null) {
+                    throw ctx.in.e;
+                }
             }
         } catch (IOException e) {
             ErrorHandler.getInstance().setError(e.toString());
