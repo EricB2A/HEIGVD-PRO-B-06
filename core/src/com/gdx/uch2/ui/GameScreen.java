@@ -1,7 +1,6 @@
 package com.gdx.uch2.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +9,7 @@ import com.gdx.uch2.controller.PlayerController;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.client.ErrorHandler;
+import com.gdx.uch2.networking.client.GameClientHandler;
 import com.gdx.uch2.view.WorldRenderer;
 import com.badlogic.gdx.Input.Keys;
 
@@ -35,6 +35,12 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
     public void render(float delta) {
         if (ErrorHandler.getInstance().isSet()) {
             ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
+            return;
+        } else if (GameClientHandler.isOver()) {
+            ScreenManager.getInstance().showScreen(new EndGameScreen(null));
+            return;
+        } else if (GameClientHandler.isRoundOver()) {
+            ScreenManager.getInstance().showScreen(new ScoreScreen(null));
             return;
         }
 
@@ -96,9 +102,9 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if (button == Input.Buttons.LEFT && controller.isDone()) {
-            ScreenManager.getInstance().showScreen(ScreenManager.getInstance().getPlacementScreen());
-        }
+//        if (button == Input.Buttons.LEFT && controller.isDone()) {
+//            ScreenManager.getInstance().showScreen(ScreenManager.getInstance().getPlacementScreen());
+//        }
         return true;
     }
 

@@ -8,12 +8,17 @@ public class GameClientHandler {
 
     private int playerID = -1;
     static public GamePhase currentPhase; //TODO quand même c'est un peu abusé là
+    static private boolean isOver;
+    static private boolean roundOver;
     private PlayerContext ctx;
+    private int roundCounter;
 
     public GameClientHandler(PlayerContext ctx) {
         this.ctx = ctx;
         this.playerID = ctx.getId();
         currentPhase = null;
+        isOver = false;
+        roundOver = false;
     }
 
     public void readMessage(MessageType type) {
@@ -31,12 +36,19 @@ public class GameClientHandler {
                 startMovementPhase();
             }
             else if (type == MessageType.EndGame) {
-                // TODO : Afficher l'écran de fin
-                System.out.println("CLI: BYE BYE BANDE DE PUTES");
+                isOver = true;
             }
             else {
                 System.out.println("CLI: Message non traitable par le client : " + type);
             }
+    }
+
+    public static boolean isOver() {
+        return isOver;
+    }
+
+    public static boolean isRoundOver() {
+        return roundOver;
     }
 
     private void processGameStateUpdate(){
@@ -51,8 +63,12 @@ public class GameClientHandler {
         System.out.println("CLI: placement de bloc recu avec " + op);
 
         if(op.getBlock() == null) {
+            if (roundCounter++ > 0) {
+                roundOver = true;
+            }
             startEditingPhase();
         }else{
+            roundOver = false;
             World.currentWorld.placeBlock(op.getBlock());
             System.out.println("CLI: placement du bloc reçu");
         }

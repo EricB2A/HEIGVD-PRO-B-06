@@ -1,25 +1,24 @@
 package com.gdx.uch2.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 
-
 import java.util.ArrayList;
+import java.util.List;
 
-public class ScoreScreen implements Screen {
+public class EndGameScreen implements Screen {
     private Stage stage;
     List<Object> objects = new ArrayList<>();
 
-    public ScoreScreen(List<Object> objects){
+    public EndGameScreen(List<Object> objects){
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         this.objects = objects;
@@ -107,7 +106,9 @@ public class ScoreScreen implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 //TODO Add player nickname for waiting room
-                ScreenManager.getInstance().showScreen(ScreenManager.getInstance().getPlacementScreen());
+                Screen s = new WaitingRoomMenu("nickname");
+                ScreenManager.getInstance().setPlacementScreen(s);
+                ScreenManager.getInstance().showScreen(s);
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -118,6 +119,7 @@ public class ScoreScreen implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 Screen s = new MainMenu();
+                ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override
