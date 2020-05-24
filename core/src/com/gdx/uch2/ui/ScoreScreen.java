@@ -54,22 +54,18 @@ public class ScoreScreen implements Screen {
         Label score = new Label("Score", skin);
         score.setFontScale(1);
 
+        int[] scores = getScore();
         //TODO Change text with nickname and points of players
         // Create TextField
-        final Label nicknamePlayer1 = new Label("Player 1", skin);
-        final Label nicknamePlayer2 = new Label("Player 2", skin);
+        Label[] nickNamePlayers = new Label[scores.length];
+        Label[] scorePlayers = new Label[scores.length];
 
-        Label scorePlayer1 = new Label("0", skin);
-        Label scorePlayer2 = new Label("0", skin);
-        if(getScore().length > 0){
-            scorePlayer1 = new Label(Integer.toString(getScore()[0]), skin);
-            scorePlayer2 = new Label(Integer.toString(getScore()[1]), skin);
-
+        for(int i = 0; i < scores.length; ++i){
+            nickNamePlayers[i] = new Label("Player " + i, skin);
+            nickNamePlayers[i].setWidth(100);
+            scorePlayers[i] = new Label(Integer.toString(scores[i]), skin);
+            scorePlayers[i].setWidth(100);
         }
-        nicknamePlayer1.setWidth(100);
-        nicknamePlayer2.setWidth(100);
-        scorePlayer1.setWidth(100);
-        scorePlayer2.setWidth(100);
 
         // Title
         HorizontalGroup titleGroup = new HorizontalGroup();
@@ -88,20 +84,15 @@ public class ScoreScreen implements Screen {
         table.row();
 
         //Players
-        HorizontalGroup player1Group = new HorizontalGroup();
-        player1Group.space(30);
-        player1Group.addActor(nicknamePlayer1);
-        player1Group.addActor(scorePlayer1);
-        table.add(player1Group).colspan(2).uniform();
-        table.row();
+        for(int i = 0; i < scores.length; ++i){
+           HorizontalGroup playerGroup = new HorizontalGroup();
+           playerGroup.space(30);
+           playerGroup.addActor(nickNamePlayers[i]);
+           playerGroup.addActor(scorePlayers[i]);
+           table.add(playerGroup).colspan(2).uniform();
+           table.row();
+        }
 
-        //Players
-        HorizontalGroup player2Group = new HorizontalGroup();
-        player2Group.space(30);
-        player2Group.addActor(nicknamePlayer2);
-        player2Group.addActor(scorePlayer2);
-        table.add(player2Group).colspan(2).uniform();
-        table.row();
 
         //create buttons
         TextButton continueButton = new TextButton("Continue", skin);
