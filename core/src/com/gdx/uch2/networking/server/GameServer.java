@@ -5,6 +5,7 @@ import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerContext;
+import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.util.Constants;
 
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class GameServer implements Runnable {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            ErrorHandler.getInstance().setError(ex.toString());
             return;
         }
 

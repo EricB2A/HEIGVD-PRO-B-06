@@ -12,6 +12,7 @@ import com.gdx.uch2.networking.client.GameClient;
 
 public class JoinRoomMenu implements Screen {
     private Stage stage;
+    private static String hostname = "localhost";
 
     public JoinRoomMenu(){
         // create stage and set it as input processor
@@ -47,7 +48,7 @@ public class JoinRoomMenu implements Screen {
         // Create TextField
         TextField.TextFieldFilter.DigitsOnlyFilter digitsFilter = new TextField.TextFieldFilter.DigitsOnlyFilter();
         final TextField nicknameTF = new TextField("Player 1", skin);
-        final TextField ipTF = new TextField("127.0.0.1", skin);
+        final TextField ipTF = new TextField(hostname, skin);
         final TextField portTF = new TextField("12345", skin);
         portTF.setTextFieldFilter(digitsFilter);
         nicknameTF.setMaxLength(20);
@@ -133,6 +134,7 @@ public class JoinRoomMenu implements Screen {
                     return;
                 }
 
+                hostname = ipTF.getText();
                 new GameClient(ipTF.getText(), port, nickname);
                 Screen s = new WaitingRoomMenu(nickname);
                 ScreenManager.getInstance().showScreen(s);

@@ -107,7 +107,6 @@ public class EndGameScreen implements Screen {
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 //TODO Add player nickname for waiting room
                 Screen s = new WaitingRoomMenu("nickname");
-                ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override
@@ -119,7 +118,6 @@ public class EndGameScreen implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 Screen s = new MainMenu();
-                ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override
