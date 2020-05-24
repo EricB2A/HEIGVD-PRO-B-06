@@ -25,22 +25,6 @@ public class WaitingRoomMenu implements Screen {
        // getPlayersList();
     }
 
-    public void getPlayersList(){
-        // Get the lis of players from the server
-        playersName.add("MEME-LORD");
-        playersName.add("MEME-LORD");
-        playersName.add("MEME-LORD");
-        playersName.add("MEME-LORD");
-    }
-
-    public boolean canStartGame(){
-        if(playersName.size() <= 2){
-            //return false;
-        }
-        // Ask the server if enough peoples are connected
-        return true;
-    }
-
     @Override
     public void show() {
         if (ErrorHandler.getInstance().isSet()) {
@@ -61,16 +45,6 @@ public class WaitingRoomMenu implements Screen {
         titleLabel.setFontScale(2);
         table.add(titleLabel).center();
         table.row();
-
-        for (String s : playersName){
-            TextButton playerName = new TextButton(s, skin);
-            playerName.padTop(20);
-            table.add(playerName).width(200);
-            table.row();
-        }
-
-
-
     }
 
     @Override
