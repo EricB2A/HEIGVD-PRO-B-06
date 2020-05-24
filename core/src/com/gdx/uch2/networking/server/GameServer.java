@@ -24,11 +24,13 @@ public class GameServer implements Runnable {
 
     private int port;
     private Level level;
+    private int numlevel;
     private int nbPlayers;
     private int nbRounds;
 
     public GameServer(int port, int noLevel, int nbPlayers, int nbRounds){
         this.port = port;
+        this.numlevel = noLevel;
         this.level = LevelLoader.loadLevel(noLevel);
         this.nbPlayers = nbPlayers;
         players = new PlayerContext[nbPlayers];
@@ -57,7 +59,6 @@ public class GameServer implements Runnable {
                         players[i].out.writeMessage(MessageType.Ping);
                         System.out.println(i + " : " + players[i].in.getType());
                         if (players[i].in.e != null) {
-                            System.out.println("ZOOM ZOOM " + i);
                             if (id < 0) {
                                 id = i;
                             } else {
@@ -104,6 +105,7 @@ public class GameServer implements Runnable {
 
             ctx.out.writeMessage(MessageType.GameStart);
             ctx.out.writeMessage(ctx.getId());
+            ctx.out.writeMessage(numlevel);
 
             System.out.println("Message envoyé au joueur #" + ctx.getId());
         }
