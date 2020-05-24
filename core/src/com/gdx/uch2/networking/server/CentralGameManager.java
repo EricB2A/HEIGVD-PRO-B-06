@@ -31,11 +31,11 @@ public class CentralGameManager {
         this.players = players;
         this.map = map;
         this.nbRounds = nbRounds;
-        finished = new boolean[players.length];
-        Arrays.fill(finished, false);
+        finished = new int[players.length];
+        Arrays.fill(finished, 0);
         recievedBlockPlacement = new boolean[players.length];
         dead = new boolean[players.length];
-        scoring = new int[players.size()];
+        scoring = new int[players.length];
         Arrays.fill(scoring, 0);
         firstArrived = true;
         //startEditingPhase();
@@ -99,7 +99,7 @@ public class CentralGameManager {
     }
 
     private void computePoints(){
-        for(int i = 0; i < players.size(); ++i){
+        for(int i = 0; i < players.length; ++i){
             if(finished[i] > 0){
                 if(finished[i] == 2){ // Premier
                     scoring[i] += PTS_FIRST;
@@ -109,7 +109,7 @@ public class CentralGameManager {
             }
         }
 
-        for(int i = 0; i < players.size(); ++i){
+        for(int i = 0; i < players.length; ++i){
             System.out.printf("SRV: joureur#%d possède [%d] pts\n", i, scoring[i]);
         }
     }
@@ -137,7 +137,7 @@ public class CentralGameManager {
     private void checkEndRound() {
         boolean allFinished = true;
         for (int i = 0; i < finished.length; ++i) {
-            if (!players.get(i).getSocket().isClosed() && finished[i] == 0 && !dead[i]) {
+            if (!players[i].getSocket().isClosed() && finished[i] == 0 && !dead[i]) {
                 allFinished = false;
                 break;
             }
