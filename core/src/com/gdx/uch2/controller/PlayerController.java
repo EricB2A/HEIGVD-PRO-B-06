@@ -106,8 +106,8 @@ public class PlayerController {
         jumpingActive = false;
     }
 
-    public void fireReleased() {
-        keys.get(keys.put(Keys.FIRE, false));
+    public void giveUp() {
+        player.kill();
     }
 
     /** The main update method **/

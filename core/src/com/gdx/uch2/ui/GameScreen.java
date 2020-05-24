@@ -5,12 +5,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.controller.PlayerController;
-import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.World;
+import com.gdx.uch2.networking.ErrorHandler;
 import com.gdx.uch2.view.WorldRenderer;
 import com.badlogic.gdx.Input.Keys;
 
@@ -69,8 +68,6 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
             controller.rightPressed();
         if (keycode == Keys.W)
             controller.jumpPressed();
-        if (keycode == Keys.X)
-            controller.firePressed();
         return true;
     }
 
@@ -82,8 +79,8 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
             controller.rightReleased();
         if (keycode == Keys.W)
             controller.jumpReleased();
-        if (keycode == Keys.X)
-            controller.fireReleased();
+        if (keycode == Keys.K)
+            controller.giveUp();
         return true;
     }
 

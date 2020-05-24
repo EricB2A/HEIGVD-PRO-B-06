@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
-import com.gdx.uch2.entities.World;
+import com.gdx.uch2.networking.ErrorHandler;
 
 import java.util.ArrayList;
 
