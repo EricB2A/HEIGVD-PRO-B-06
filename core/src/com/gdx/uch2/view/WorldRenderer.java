@@ -130,7 +130,7 @@ public class WorldRenderer {
         playerDeadLeft = new TextureRegion((playerDeadRight));
         playerDeadLeft.flip(true, false);
 
-        onlinePlayerRight = opponentsAtlas.findRegion("tile000");
+        onlinePlayerRight = opponentsAtlas.findRegion("tile002");
         onlinePlayerLeft = new TextureRegion(onlinePlayerRight);
         onlinePlayerLeft.flip(true, false);
     }

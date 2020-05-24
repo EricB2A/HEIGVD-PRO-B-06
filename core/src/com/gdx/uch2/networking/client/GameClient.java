@@ -9,6 +9,7 @@ import com.gdx.uch2.networking.PlayerState;
 import com.gdx.uch2.util.Constants;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class GameClient {
@@ -35,7 +36,9 @@ public class GameClient {
             context = null;
 
             try {
-                socket = new Socket(hostname, port);
+                socket = new Socket();
+                socket.connect(new InetSocketAddress(hostname, port), 2000);
+
                 context = new PlayerContext(socket);
 
                 while((type = context.in.getType()) == MessageType.Ping) {
@@ -70,11 +73,13 @@ public class GameClient {
                 ErrorHandler.getInstance().setError(e.toString());
             } finally {
                 if (socket != null) {
-                    if (context.in != null) {
-                        context.in.close();
-                    }
-                    if (context.out != null) {
-                        context.out.close();
+                    if (context != null) {
+                        if (context.in != null) {
+                            context.in.close();
+                        }
+                        if (context.out != null) {
+                            context.out.close();
+                        }
                     }
 
                     try {

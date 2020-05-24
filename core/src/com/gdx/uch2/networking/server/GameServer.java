@@ -54,6 +54,7 @@ public class GameServer implements Runnable {
         while (!full) {
             try {
                 Socket clientSocket = serverSocket.accept();
+
                 for (int i = 0; i < players.length; ++i) {
                     if (players[i] != null) {
                         players[i].out.writeMessage(MessageType.Ping);
