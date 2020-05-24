@@ -8,10 +8,9 @@ import java.util.List;
 import java.util.TimerTask;
 
 public class SendUpdate extends TimerTask {
-    //TODO: Eric Broadcast
     private List<PlayerContext> players;
 
-    public SendUpdate(List<PlayerContext> players){  //TODO remplacer Object toSend par un GameState
+    public SendUpdate(List<PlayerContext> players){
         this.players = players;
     }
 

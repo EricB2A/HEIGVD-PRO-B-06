@@ -19,7 +19,7 @@ public class PlayerHandler implements Runnable {
     public void run() {
         MessageType type;
 
-        while(true){ // TODO : vraie condition d'arrêt
+        while(!manager.isOver()){
 
             type = context.in.getType();
 
@@ -47,7 +47,8 @@ public class PlayerHandler implements Runnable {
             }
         }
 
-        manager.disconnectedClient(context);
-//        manager.checkEndRound();
+        if (!manager.isOver()) {
+            manager.disconnectedClient(context);
+        }
     }
 }

@@ -25,7 +25,6 @@ public class SendPlayerState extends TimerTask {
         if (ctx.out.e != null) {
             timer.cancel();
             timer.purge();
-            ErrorHandler.getInstance().setError(ctx.out.e.toString());
         }
     }
 }

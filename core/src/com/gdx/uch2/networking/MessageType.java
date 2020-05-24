@@ -11,7 +11,8 @@ public enum MessageType {
     Death,
     CanPlace,
     StartMovementPhase,
-    StartEditingPhase
+    StartEditingPhase,
+    EndGame
     ;
 
     public char getChar(){

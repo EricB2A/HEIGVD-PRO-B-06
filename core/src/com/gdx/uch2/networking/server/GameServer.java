@@ -70,7 +70,7 @@ public class GameServer implements Runnable {
         gameStarted = true;
         System.out.println("2 joueurs connectés. Lancer la partie.");
 
-        CentralGameManager manager = new CentralGameManager(players, level);
+        CentralGameManager manager = new CentralGameManager(players, level, nbRounds);
 
         for (PlayerContext player : players) {
             Thread t = new Thread(new PlayerHandler(manager, player));

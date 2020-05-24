@@ -19,12 +19,16 @@ public class CentralGameManager {
     private GamePhase currentPhase;
     private Level map;
     private int nbPlayersReady = 0;
+    private int round;
+    private final int nbRounds;
+    private boolean isOver;
     public static Semaphore BigMutex = new Semaphore(1);
 
 
-    public CentralGameManager(final List<PlayerContext> players, Level map){
+    public CentralGameManager(final List<PlayerContext> players, Level map, int nbRounds){
         this.players = players;
         this.map = map;
+        this.nbRounds = nbRounds;
         finished = new boolean[players.size()];
         Arrays.fill(finished, false);
         recievedBlockPlacement = new boolean[players.size()];
@@ -56,11 +60,25 @@ public class CentralGameManager {
     }
 
     public void disconnectedClient(PlayerContext context) {
-        // TODO : si un seul joueur restant -> fin du jeu
+        int c = 0;
+        for (PlayerContext p : players) {
+            if (!p.getSocket().isClosed()) {
+                c++;
+            }
+        }
+
+        if (c < 2) {
+            endGame();
+            return;
+        }
 
         if (currentPhase == GamePhase.Editing) {
             // TODO : déconnexion alors que c'était au tour du joueur de placer un bloc
         }
+    }
+
+    public boolean isOver() {
+        return isOver;
     }
 
     private void startMovementPhase(){
@@ -93,14 +111,7 @@ public class CentralGameManager {
     }
 
     private void resetPlayersPositions(){
-        // TODO : Mettre tout ça dans le gamestate
-        GameState state = ServerGameStateTickManager.getInstance().getGameState();
-        Vector2 spawn = map.getSpanPosition();
-        for(int i = 0; i < players.size(); ++i){
-            if (players.get(i).getSocket().isClosed()) continue;
-            state.setPosX(spawn.x, i);
-            state.setPosY(spawn.y, i);
-        }
+        ServerGameStateTickManager.getInstance().getGameState().setPositions(map.getSpanPosition());
     }
 
     private void processPlayerDeath(PlayerContext ctx) {
@@ -127,8 +138,23 @@ public class CentralGameManager {
         if(allFinished){
             computePoints();
             resetPlayersPositions();
-            startEditingPhase();
+            if (++round < nbRounds) {
+                startEditingPhase();
+            } else {
+                endGame();
+            }
+
         }
+    }
+
+    private void endGame() {
+        for (PlayerContext p : players) {
+            if (!p.getSocket().isClosed()) {
+                p.out.writeMessage(MessageType.EndGame);
+            }
+        }
+
+        isOver = true;
     }
 
     private void processAckGameStart(PlayerContext ctx){

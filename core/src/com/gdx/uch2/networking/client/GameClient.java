@@ -28,7 +28,7 @@ public class GameClient {
         @Override
         public void run() {
             boolean shouldRun = true;
-            MessageType type;
+            MessageType type = null;
             Socket socket = null;
             PlayerContext ctx = null;
 
@@ -48,13 +48,13 @@ public class GameClient {
 
                 GameClientHandler handler = new GameClientHandler(ctx);
 
-                while ((shouldRun)) { // TODO : vraie condition d'arrêt
+                while (type != MessageType.EndGame) {
 
                     type = ctx.in.getType();
 
                     if (type != null) {
                         handler.readMessage(type);
-                    } else break;
+                    }
 
                     if (ctx.in.e != null) {
                         throw ctx.in.e;

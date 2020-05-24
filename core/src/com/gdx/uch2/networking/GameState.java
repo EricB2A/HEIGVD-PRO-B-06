@@ -1,6 +1,8 @@
 package com.gdx.uch2.networking;
 
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
+import com.gdx.uch2.networking.server.ServerGameStateTickManager;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -58,6 +60,13 @@ public class GameState {
 
     public void removePlayer(int id) {
         playersStates.remove(id);
+    }
+
+    public void setPositions(Vector2 pos) {
+        for (PlayerState state : playersStates.values()) {
+            state.setPosX(pos.x);
+            state.setPosY(pos.y);
+        }
     }
 
     public Map<Integer, PlayerState> getPlayerStates() {

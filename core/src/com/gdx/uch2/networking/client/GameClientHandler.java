@@ -29,6 +29,10 @@ public class GameClientHandler {
             else if(type == MessageType.StartMovementPhase) {
                 startMovementPhase();
             }
+            else if (type == MessageType.EndGame) {
+                // TODO : Afficher l'écran de fin
+                System.out.println("CLI: BYE BYE BANDE DE PUTES");
+            }
             else {
                 System.out.println("CLI: Message non traitable par le client : " + type);
             }
