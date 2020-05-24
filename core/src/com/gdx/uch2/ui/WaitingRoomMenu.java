@@ -3,25 +3,31 @@ package com.gdx.uch2.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.client.ErrorHandler;
+import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.client.GameClientHandler;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class WaitingRoomMenu implements Screen {
     private Stage stage;
     static private ArrayList<String> playersName = new ArrayList<>();
+    private boolean isCreator;
+    private Thread toKillIfLeave;
 
-    public WaitingRoomMenu(String nickname){
+    public WaitingRoomMenu(String nickname, boolean isCreator, Thread toKillIfLeave ){
         // create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         playersName.add(nickname);
+        this.isCreator = isCreator;
+        this.toKillIfLeave = toKillIfLeave;
        // getPlayersList();
     }
 
@@ -42,6 +48,33 @@ public class WaitingRoomMenu implements Screen {
         titleLabel.setFontScale(2);
         table.add(titleLabel).center();
         table.row();
+
+        TextButton goBackButton = new TextButton(isCreator?"Cancel" : "Leave", skin);
+        table.add(goBackButton).bottom();
+
+        goBackButton.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                /*
+                if(!isCreator){
+                    try {
+                        //GameClient.context.getSocket().close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                 */
+                toKillIfLeave.interrupt();
+                Screen s = new MainMenu();
+                ScreenManager.getInstance().showScreen(s);
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
     }
 
     @Override

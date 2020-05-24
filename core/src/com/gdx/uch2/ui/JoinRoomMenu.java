@@ -111,6 +111,7 @@ public class JoinRoomMenu implements Screen {
                 return true;
             }
         });
+        
         joinButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
@@ -134,7 +135,7 @@ public class JoinRoomMenu implements Screen {
                 }
 
                 new GameClient(ipTF.getText(), port, nickname);
-                Screen s = new WaitingRoomMenu(nickname);
+                Screen s = new WaitingRoomMenu(nickname, false, GameClient.thread);
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override

@@ -66,7 +66,7 @@ public class World {
             y2 = level.getHeight() - 1;
         }
 
-        List<Block> blocks = new ArrayList<Block>();
+        List<Block> blocks = new ArrayList<>();
         Block block;
         for (int col = x; col <= x2; col++) {
             for (int row = y; row <= y2; row++) {

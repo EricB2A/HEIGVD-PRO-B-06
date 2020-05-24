@@ -72,7 +72,7 @@ public class GameServer implements Runnable {
 
                 PlayerContext ctx = new PlayerContext(id, clientSocket);
                 players[id] = ctx;
-
+                System.out.println("New player joined");
                 if(id == nbPlayers - 1){
                     full = true;
                     serverSocket.close();

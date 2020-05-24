@@ -161,7 +161,7 @@ public class CreateRoomMenu implements Screen {
                 Thread tServer = new Thread(new GameServer(port, level, playersSB.getSelected(), nbOfRounds));
                 tServer.start();
                 new GameClient("localhost", port, nickname);
-                Screen s = new WaitingRoomMenu(nickname);
+                Screen s = new WaitingRoomMenu(nickname, true, tServer);
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }

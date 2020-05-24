@@ -40,6 +40,7 @@ public class GameClient {
 
                 while((type = context.in.getType()) == MessageType.Ping) {
                     context.out.writeMessage(MessageType.Ping);
+
                 }
 
                 if (type != MessageType.GameStart) {
@@ -68,7 +69,8 @@ public class GameClient {
                 }
             } catch (IOException e) {
                 ErrorHandler.getInstance().setError(e.toString());
-            } finally {
+            }
+            finally {
                 if (socket != null) {
                     if (context.in != null) {
                         context.in.close();
