@@ -22,7 +22,6 @@ public class GameClientHandler {
     public void readMessage(MessageType type) {
             if(type == MessageType.GameStateUpdate){
                 processGameStateUpdate();
-//                else System.out.println("CLI: Gamestate Recu mais on est en phase de placement");
             }
             else if(type == MessageType.BlockPlaced) {
                 processBlockPlacement();

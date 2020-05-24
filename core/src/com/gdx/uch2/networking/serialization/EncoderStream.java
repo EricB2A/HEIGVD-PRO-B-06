@@ -32,7 +32,6 @@ public class EncoderStream extends FilterOutputStream {
                 stream.flush();
                 this.e = null;
             } catch (IOException e) {
-                e.printStackTrace();
                 this.e = e;
             } finally {
                 mutex.release();

@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Select;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.Player;
+import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.server.GameServer;
 
@@ -160,10 +161,21 @@ public class CreateRoomMenu implements Screen {
 
                 Thread tServer = new Thread(new GameServer(port, level, playersSB.getSelected(), nbOfRounds));
                 tServer.start();
-                new GameClient("localhost", port, nickname);
-                Screen s = new WaitingRoomMenu(nickname);
-                ScreenManager.getInstance().setPlacementScreen(s);
-                ScreenManager.getInstance().showScreen(s);
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (ErrorHandler.getInstance().isSet()) {
+                    ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
+                } else {
+                    System.out.println("OCTUPLE ZOOM ");
+                    new GameClient("localhost", port, nickname);
+                    Screen s = new WaitingRoomMenu(nickname);
+                    ScreenManager.getInstance().showScreen(s);
+                }
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -174,7 +186,6 @@ public class CreateRoomMenu implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 Screen s = new MainMenu();
-                ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override

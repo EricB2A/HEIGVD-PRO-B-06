@@ -18,7 +18,4 @@ public enum MessageType {
 
     ;
 
-    public char getChar(){
-        return (char)this.ordinal();
-    }
 }
