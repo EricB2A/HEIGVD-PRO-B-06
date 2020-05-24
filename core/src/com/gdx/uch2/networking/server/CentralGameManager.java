@@ -75,6 +75,7 @@ public class CentralGameManager {
     private void startMovementPhase(){
         currentPhase = GamePhase.Moving;
         Arrays.fill(finished, 0);
+        Arrays.fill(dead, false);
         firstArrived = true;
 
         /*

@@ -58,13 +58,7 @@ public class PlayerController {
         }
     };
 
-    static Map<Keys, Boolean> keys = new HashMap<PlayerController.Keys, Boolean>();
-    static {
-        keys.put(Keys.LEFT, false);
-        keys.put(Keys.RIGHT, false);
-        keys.put(Keys.JUMP, false);
-        keys.put(Keys.FIRE, false);
-    };
+    private Map<Keys, Boolean> keys = new HashMap<PlayerController.Keys, Boolean>();
 
     // Blocks that Player can collide with any given frame
     private Array<Block> collidable = new Array<Block>();
@@ -72,6 +66,10 @@ public class PlayerController {
     public PlayerController(World world) {
         this.world = world;
         this.player = world.getPlayer();
+        keys.put(Keys.LEFT, false);
+        keys.put(Keys.RIGHT, false);
+        keys.put(Keys.JUMP, false);
+        keys.put(Keys.FIRE, false);
     }
 
     // ** Key presses and touches **************** //
@@ -107,7 +105,8 @@ public class PlayerController {
     }
 
     public void giveUp() {
-        player.kill();
+        if (!finished)
+            player.kill();
     }
 
     /** The main update method **/
@@ -183,8 +182,8 @@ public class PlayerController {
                 ClientPlayerStateTickManager.getInstance().sendFinish();
             }
             finished = true;
+            player.setState(State.IDLE);
         }
-//        player.setState(State.IDLE);
     }
 
     /** Collision checking **/
