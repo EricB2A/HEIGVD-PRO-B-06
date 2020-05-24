@@ -37,6 +37,7 @@ public class GameClient implements Runnable {
 
             if (ctx.in.getType() != MessageType.GameStart) {
                 System.out.println("CLI: Message de départ inconnu");
+                ErrorHandler.getInstance().setError("Something went wrong.");
                 return;
             }
 

@@ -11,16 +11,18 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class GameServer implements Runnable {
     //2 premiers joueurs à se connecter.
-    private static List<PlayerContext> players = new ArrayList<>();
+    private List<PlayerContext> players = new ArrayList<>();
+    private static List<Thread> playerThreads = new LinkedList<>();
 
 
     //indique si la partie est pleine
-    private static boolean full = false;
-    private static boolean gameStarted = false;
+    private boolean full = false;
+    private boolean gameStarted = false;
 
     private int port;
     private Level level;
@@ -32,6 +34,7 @@ public class GameServer implements Runnable {
         this.level = LevelLoader.loadLevel(noLevel);
         this.nbPlayers = nbPlayers;
         this.nbRounds = nbRounds;
+        playerThreads.clear();
         GameState.setUpKryo();
     }
 
@@ -72,7 +75,9 @@ public class GameServer implements Runnable {
         CentralGameManager manager = new CentralGameManager(players, level);
 
         for (PlayerContext player : players) {
-            new Thread(new PlayerHandler(manager, player)).start();
+            Thread t = new Thread(new PlayerHandler(manager, player));
+            playerThreads.add(t);
+            t.start();
         }
 
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
@@ -87,6 +92,12 @@ public class GameServer implements Runnable {
         //Démarre les ticks de serveur
         ServerGameStateTickManager.getInstance().setPlayers(players);
         ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
+    }
+
+    public static void quit() {
+        for (Thread t : playerThreads) {
+            t.interrupt();
+        }
     }
 
     public static void main(String[] args) throws Exception {

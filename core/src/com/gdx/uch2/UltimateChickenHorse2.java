@@ -14,4 +14,9 @@ public class UltimateChickenHorse2 extends Game {
 		MainMenu main = new MainMenu();
 		setScreen(main);
 	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
 }
