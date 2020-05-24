@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.client;
 
+import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.*;
@@ -99,6 +100,10 @@ public class GameClientHandler {
     private void startEditingPhase(){
         currentPhase = GamePhase.Editing;
         ClientPlayerStateTickManager.getInstance().setCanPlace(false);
+        Vector2 pos = World.currentWorld.getLevel().getSpanPosition();
+        ClientPlayerStateTickManager.getInstance().setContext(ctx);
+        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(ctx.getId(),
+                pos.x, pos.y, 0));
         System.out.println("CLI: START EDITING PHASE");
     }
 }

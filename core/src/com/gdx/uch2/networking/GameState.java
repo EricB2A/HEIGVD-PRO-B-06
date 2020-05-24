@@ -28,12 +28,6 @@ public class GameState {
                 '}';
     }
 
-    public static void setUpKryo() {
-        Kryo kryo = new Kryo();
-        kryo.register(PlayerState.class);
-        GameState.kryo = kryo;
-    }
-
     public static Kryo getKryo(){
         return GameState.kryo;
     }

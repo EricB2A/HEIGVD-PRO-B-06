@@ -24,6 +24,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
         this.world = world;
         renderer = new WorldRenderer(world, false);
         controller = new PlayerController(world);
+//        OnlinePlayerManager.getInstance().resetPlayers();
     }
 
     @Override

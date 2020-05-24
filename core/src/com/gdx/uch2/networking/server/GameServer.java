@@ -36,7 +36,6 @@ public class GameServer implements Runnable {
         this.nbPlayers = nbPlayers;
         players = new PlayerContext[nbPlayers];
         this.nbRounds = nbRounds;
-        GameState.setUpKryo();
     }
 
     @Override
