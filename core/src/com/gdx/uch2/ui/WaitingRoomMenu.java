@@ -7,7 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
-import com.gdx.uch2.networking.ErrorHandler;
+import com.gdx.uch2.networking.GamePhase;
+import com.gdx.uch2.networking.client.ErrorHandler;
+import com.gdx.uch2.networking.client.GameClientHandler;
 
 import java.util.ArrayList;
 
@@ -67,16 +69,19 @@ public class WaitingRoomMenu implements Screen {
             table.row();
         }
 
-        if(canStartGame()){
-            Screen s = new PlacementScreen();
-            ScreenManager.getInstance().setPlacementScreen(s);
-            ScreenManager.getInstance().showScreen(s);
-        }
+
 
     }
 
     @Override
     public void render(float delta) {
+        if(GameClientHandler.currentPhase == GamePhase.Editing){
+            Screen s = new PlacementScreen();
+            ScreenManager.getInstance().setPlacementScreen(s);
+            ScreenManager.getInstance().showScreen(s);
+            return;
+        }
+
         // clear the screen ready for next set of images to be drawn
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

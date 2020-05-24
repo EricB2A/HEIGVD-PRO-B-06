@@ -1,4 +1,4 @@
-package com.gdx.uch2.networking;
+package com.gdx.uch2.networking.client;
 
 public class ErrorHandler {
     private String error;

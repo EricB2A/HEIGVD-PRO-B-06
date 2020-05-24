@@ -10,7 +10,7 @@ import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
-import com.gdx.uch2.networking.ErrorHandler;
+import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.ClientPlayerStateTickManager;
 import com.gdx.uch2.view.WorldRenderer;
 

@@ -1,7 +1,6 @@
 package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.networking.*;
-import com.gdx.uch2.networking.ErrorHandler;
 
 import java.util.Timer;
 import java.util.TimerTask;

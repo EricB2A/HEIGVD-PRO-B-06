@@ -13,6 +13,7 @@ public class GameClientHandler {
     public GameClientHandler(PlayerContext ctx) {
         this.ctx = ctx;
         this.playerID = ctx.getId();
+        currentPhase = null;
     }
 
     public void readMessage(MessageType type) {

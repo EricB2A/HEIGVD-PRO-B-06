@@ -9,7 +9,7 @@ import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.controller.PlayerController;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.World;
-import com.gdx.uch2.networking.ErrorHandler;
+import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.view.WorldRenderer;
 import com.badlogic.gdx.Input.Keys;
 

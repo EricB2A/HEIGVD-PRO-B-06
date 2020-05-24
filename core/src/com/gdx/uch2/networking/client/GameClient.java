@@ -6,7 +6,6 @@ import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.PlayerState;
-import com.gdx.uch2.networking.ErrorHandler;
 import com.gdx.uch2.util.Constants;
 
 import java.io.IOException;

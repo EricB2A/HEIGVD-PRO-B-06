@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
-import com.gdx.uch2.networking.ErrorHandler;
+import com.gdx.uch2.networking.client.ErrorHandler;
 
 public class ErrorScreen extends ScreenAdapter {
     private Stage stage;
