@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
+import com.gdx.uch2.entities.OnlinePlayerManager;
 
 
 import java.util.ArrayList;
@@ -23,6 +24,10 @@ public class ScoreScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         this.objects = objects;
+    }
+
+    private int[] getScore(){
+       return OnlinePlayerManager.getInstance().getScores();
     }
 
     @Override
@@ -54,8 +59,13 @@ public class ScoreScreen implements Screen {
         final Label nicknamePlayer1 = new Label("Player 1", skin);
         final Label nicknamePlayer2 = new Label("Player 2", skin);
 
-        final Label scorePlayer1 = new Label("100", skin);
-        final Label scorePlayer2 = new Label("80", skin);
+        Label scorePlayer1 = new Label("0", skin);
+        Label scorePlayer2 = new Label("0", skin);
+        if(getScore().length > 0){
+            scorePlayer1 = new Label(Integer.toString(getScore()[0]), skin);
+            scorePlayer2 = new Label(Integer.toString(getScore()[1]), skin);
+
+        }
         nicknamePlayer1.setWidth(100);
         nicknamePlayer2.setWidth(100);
         scorePlayer1.setWidth(100);

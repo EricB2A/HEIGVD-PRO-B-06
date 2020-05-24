@@ -22,7 +22,6 @@ public class CentralGameManager {
     private int round;
     private final int nbRounds;
     private boolean isOver;
-    public static Semaphore BigMutex = new Semaphore(1); //TODO: On l'utilise ce mutex ?
     private final int PTS_FIRST = 10, PTS_ARRIVED = 5;
     private int[] scoring;
     private boolean firstArrived;
@@ -111,6 +110,11 @@ public class CentralGameManager {
 
         for(int i = 0; i < players.length; ++i){
             System.out.printf("SRV: joureur#%d possède [%d] pts\n", i, scoring[i]);
+        }
+        for (PlayerContext ctx : players) {
+            if (!ctx.getSocket().isClosed()) {
+                ctx.out.writeMessage(scoring);
+            }
         }
     }
 
