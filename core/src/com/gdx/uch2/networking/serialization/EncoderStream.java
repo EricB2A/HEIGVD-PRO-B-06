@@ -6,20 +6,18 @@ import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.ObjectPlacement;
 import com.gdx.uch2.networking.PlayerState;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.concurrent.Semaphore;
 
-public class EncoderStream {
+public class EncoderStream extends FilterOutputStream {
     private Semaphore mutex;
     private DataOutputStream stream;
     public IOException e = null;
 
     public EncoderStream(OutputStream stream) {
+        super(new DataOutputStream( new BufferedOutputStream(stream)));
         this.mutex = new Semaphore(1);
-        this.stream = new DataOutputStream( new BufferedOutputStream(stream));
+        this.stream = (DataOutputStream) out;
     }
 
     public void writeMessage(MessageType messageType) {
@@ -32,7 +30,9 @@ public class EncoderStream {
             try {
                 stream.writeInt(i);
                 stream.flush();
+                this.e = null;
             } catch (IOException e) {
+                e.printStackTrace();
                 this.e = e;
             } finally {
                 mutex.release();
@@ -47,6 +47,7 @@ public class EncoderStream {
             mutex.acquire();
             writeMessage(playerState, true);
             stream.flush();
+            this.e = null;
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -66,6 +67,7 @@ public class EncoderStream {
             stream.writeFloat(playerState.getPosX());
             stream.writeFloat(playerState.getPosY());
             stream.writeLong(playerState.getTime());
+            this.e = null;
         } catch (IOException e) {
             this.e = e;
         }
@@ -83,6 +85,7 @@ public class EncoderStream {
                     writeMessage(playerState, false);
                 }
                 stream.flush();
+                this.e = null;
             } catch (IOException e) {
                 this.e = e;
             } finally {
@@ -110,6 +113,7 @@ public class EncoderStream {
                     stream.writeFloat(objectPlacement.getBlock().getPosition().y);
                 }
                 stream.flush();
+                this.e = null;
             } catch (IOException e) {
                 this.e = e;
             } finally {

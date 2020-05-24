@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.TimerTask;
 
 public class SendUpdate extends TimerTask {
-    private List<PlayerContext> players;
+    private PlayerContext[] players;
 
-    public SendUpdate(List<PlayerContext> players){
+    public SendUpdate(PlayerContext[] players){
         this.players = players;
     }
 

@@ -45,6 +45,9 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         } else if (GameClientHandler.currentPhase == GamePhase.Moving) {
             ScreenManager.getInstance().showScreen(new GameScreen(world));
             return;
+        } else if (GameClientHandler.isOver()) {
+            ScreenManager.getInstance().showScreen(new EndGameScreen(null));
+            return;
         }
 
         Gdx.gl.glClearColor(153f / 255, 187f / 255, 1, 1);

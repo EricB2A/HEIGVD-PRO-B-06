@@ -16,7 +16,7 @@ import java.util.List;
 
 public class GameServer implements Runnable {
     //2 premiers joueurs à se connecter.
-    private List<PlayerContext> players = new ArrayList<>();
+    private PlayerContext[] players;
 
     //indique si la partie est pleine
     private boolean full = false;
@@ -31,6 +31,7 @@ public class GameServer implements Runnable {
         this.port = port;
         this.level = LevelLoader.loadLevel(noLevel);
         this.nbPlayers = nbPlayers;
+        players = new PlayerContext[nbPlayers];
         this.nbRounds = nbRounds;
         GameState.setUpKryo();
     }
@@ -47,22 +48,37 @@ public class GameServer implements Runnable {
             return;
         }
 
+        int id = -1;
         while (!full) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                for (PlayerContext p : players) {
-                    if(p.getSocket().isClosed()) {
-                        players.remove(p);
+                for (int i = 0; i < players.length; ++i) {
+                    if (players[i] != null) {
+                        players[i].out.writeMessage(MessageType.Ping);
+                        System.out.println(i + " : " + players[i].in.getType());
+                        if (players[i].in.e != null) {
+                            System.out.println("ZOOM ZOOM " + i);
+                            if (id < 0) {
+                                id = i;
+                            } else {
+                                players[i] = null;
+                            }
+                        }
+                    } else if (id < 0) {
+                        id = i;
                     }
                 }
 
-                PlayerContext ctx = new PlayerContext(players.size(), clientSocket);
-                players.add(ctx);
-                if(players.size() == nbPlayers){
+                PlayerContext ctx = new PlayerContext(id, clientSocket);
+                players[id] = ctx;
+
+                if(id == nbPlayers - 1){
                     full = true;
                     serverSocket.close();
                     startGame();
                 }
+
+                id = -1;
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -71,10 +87,10 @@ public class GameServer implements Runnable {
     }
 
     private void startGame(){
-        if(players.size() > nbPlayers) throw new RuntimeException("Nombre de joueurs trop élevé");
+        if(players.length > nbPlayers) throw new RuntimeException("Nombre de joueurs trop élevé");
 
         gameStarted = true;
-        System.out.println(players.size() + " joueurs connectés. Lancer la partie.");
+        System.out.println(players.length + " joueurs connectés. Lancer la partie.");
 
         CentralGameManager manager = new CentralGameManager(players, level, nbRounds);
 

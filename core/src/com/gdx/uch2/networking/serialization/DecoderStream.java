@@ -11,21 +11,23 @@ import com.gdx.uch2.networking.PlayerState;
 
 import java.io.*;
 
-public class DecoderStream {
+public class DecoderStream extends FilterInputStream {
 
-    private final DataInputStream in;
+    private final DataInputStream stream;
     public IOException e = null;
 
 
     public DecoderStream(InputStream stream) {
-        this.in = new DataInputStream(new BufferedInputStream(stream));
+        super(new DataInputStream(new BufferedInputStream(stream)));
+        this.stream = (DataInputStream) in;
     }
 
     public MessageType getType() {
 
         MessageType m = null;
         try {
-            m = MessageType.values()[in.readInt()];
+            m = MessageType.values()[stream.readInt()];
+            this.e = null;
         } catch (IOException e) {
             this.e = e;
         }
@@ -39,10 +41,11 @@ public class DecoderStream {
         float y;
         long time;
         try {
-            id = in.readInt();
-            x = in.readFloat();
-            y = in.readFloat();
-            time = in.readLong();
+            id = stream.readInt();
+            x = stream.readFloat();
+            y = stream.readFloat();
+            time = stream.readLong();
+            this.e = null;
         } catch (IOException e) {
             this.e = e;
             return null;
@@ -54,7 +57,8 @@ public class DecoderStream {
     public GameState readGameState() {
         int size;
         try {
-            size = in.readInt();
+            size = stream.readInt();
+            this.e = null;
         } catch (IOException e) {
             this.e = e;
             return null;
@@ -76,13 +80,14 @@ public class DecoderStream {
         float y = 0;
 
         try {
-            id = in.readInt();
-            int typeIdx = in.readInt();
+            id = stream.readInt();
+            int typeIdx = stream.readInt();
             if (typeIdx >= 0) {
                 type = Block.Type.values()[typeIdx];
-                x = in.readFloat();
-                y = in.readFloat();
+                x = stream.readFloat();
+                y = stream.readFloat();
             }
+            this.e = null;
         } catch(IOException e) {
             this.e = e;
             return null;
@@ -105,7 +110,8 @@ public class DecoderStream {
     public int readInt() {
         int i;
         try {
-            i = in.readInt();
+            i = stream.readInt();
+            this.e = null;
         } catch (IOException e) {
             this.e = e;
             return -1;
@@ -116,7 +122,8 @@ public class DecoderStream {
 
     public void close() {
         try {
-            in.close();
+            stream.close();
+            this.e = null;
         } catch (IOException e) {
             this.e = e;
         }

@@ -27,10 +27,7 @@ public class WaitingRoomMenu implements Screen {
 
     @Override
     public void show() {
-        if (ErrorHandler.getInstance().isSet()) {
-            ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
-            return;
-        }
+
 
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
@@ -49,6 +46,11 @@ public class WaitingRoomMenu implements Screen {
 
     @Override
     public void render(float delta) {
+        if (ErrorHandler.getInstance().isSet()) {
+            ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
+            return;
+        }
+
         if(GameClientHandler.currentPhase == GamePhase.Editing){
             Screen s = new PlacementScreen();
             ScreenManager.getInstance().setPlacementScreen(s);
