@@ -50,16 +50,17 @@ public class CentralGameManager {
         else if(type == MessageType.AckGameStart){
             processAckGameStart(context);
         }
-        else if(type == MessageType.AckBlockPlaced){
-            processAckBlockPlaced(context);
-        }
         else{
             System.out.println("SRV: Type de messages inconnu : " + type);
         }
     }
 
-    private void processAckBlockPlaced(PlayerContext ctx) {
-        recievedBlockPlacement[ctx.getId()] = true;
+    public void disconnectedClient(PlayerContext context) {
+        // TODO : si un seul joueur restant -> fin du jeu
+
+        if (currentPhase == GamePhase.Editing) {
+            // TODO : déconnexion alors que c'était au tour du joueur de placer un bloc
+        }
     }
 
     private void startMovementPhase(){
@@ -92,9 +93,11 @@ public class CentralGameManager {
     }
 
     private void resetPlayersPositions(){
+        // TODO : Mettre tout ça dans le gamestate
         GameState state = ServerGameStateTickManager.getInstance().getGameState();
         Vector2 spawn = map.getSpanPosition();
         for(int i = 0; i < players.size(); ++i){
+            if (players.get(i).getSocket().isClosed()) continue;
             state.setPosX(spawn.x, i);
             state.setPosY(spawn.y, i);
         }
@@ -102,19 +105,19 @@ public class CentralGameManager {
 
     private void processPlayerDeath(PlayerContext ctx) {
         dead[ctx.getId()] = true;
-        checkEndgame();
+        checkEndRound();
     }
 
     private void processPlayerReachedEnd(PlayerContext ctx){
         finished[ctx.getId()] = true;
         System.out.println("SRV: Le joueur #" + ctx.getId() + " est arrivé à la fin!");
-        checkEndgame();
+        checkEndRound();
     }
 
-    private void checkEndgame() {
+    private void checkEndRound() {
         boolean allFinished = true;
         for (int i = 0; i < finished.length; ++i) {
-            if (!finished[i] && !dead[i]) {
+            if (!players.get(i).getSocket().isClosed() && !finished[i] && !dead[i]) {
                 allFinished = false;
                 break;
             }
@@ -147,11 +150,15 @@ public class CentralGameManager {
             ObjectPlacement op = ctx.in.readObjectPlacement();
             System.out.println("SRV: Placement de block reçu par le joueur #" + op.getPlayerID());
 
-            int newID;
-            if(op.getPlayerID() < players.size() - 1){
-                newID = op.getPlayerID() + 1;
-            }else{
-                newID = -1;
+            int newID = -1;
+            int i = op.getPlayerID();
+            while(newID < 0 && i < players.size() - 1) {
+                if (!players.get(++i).getSocket().isClosed()) {
+                    newID = i;
+                }
+            }
+
+            if (newID < 0) {
                 startMovementPhase();
             }
 
@@ -159,18 +166,13 @@ public class CentralGameManager {
             System.out.println("SRV: broadcasted new block, next player to place is #" + newID);
 
         }
-
-        ctx.out.writeMessage(MessageType.AckBlockPlaced);
-
-//        ByteBuf out = buffer(128);
-//        out.writeChar(MessageType.AckBlockPlaced.getChar());
-//        ctx.writeAndFlush(out);
-
     }
 
     private void sendBlockToAllPlayers(final ObjectPlacement op){
         for (PlayerContext ctx : players) {
-            ctx.out.writeMessage(op);
+            if (!ctx.getSocket().isClosed()) {
+                ctx.out.writeMessage(op);
+            }
         }
     }
 }

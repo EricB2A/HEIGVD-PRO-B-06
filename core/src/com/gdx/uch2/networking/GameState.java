@@ -56,6 +56,10 @@ public class GameState {
         playersStates.put(p.getPlayerID(), p);
     }
 
+    public void removePlayer(int id) {
+        playersStates.remove(id);
+    }
+
     public Map<Integer, PlayerState> getPlayerStates() {
         return playersStates;
     }

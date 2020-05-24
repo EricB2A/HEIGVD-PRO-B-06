@@ -17,8 +17,6 @@ import java.util.List;
 public class GameServer implements Runnable {
     //2 premiers joueurs à se connecter.
     private List<PlayerContext> players = new ArrayList<>();
-    private static List<Thread> playerThreads = new LinkedList<>();
-
 
     //indique si la partie est pleine
     private boolean full = false;
@@ -34,7 +32,6 @@ public class GameServer implements Runnable {
         this.level = LevelLoader.loadLevel(noLevel);
         this.nbPlayers = nbPlayers;
         this.nbRounds = nbRounds;
-        playerThreads.clear();
         GameState.setUpKryo();
     }
 
@@ -57,6 +54,7 @@ public class GameServer implements Runnable {
                 players.add(ctx);
                 if(players.size() == nbPlayers){
                     full = true;
+                    serverSocket.close();
                     startGame();
                 }
             } catch (IOException ex) {
@@ -76,7 +74,6 @@ public class GameServer implements Runnable {
 
         for (PlayerContext player : players) {
             Thread t = new Thread(new PlayerHandler(manager, player));
-            playerThreads.add(t);
             t.start();
         }
 
@@ -92,12 +89,6 @@ public class GameServer implements Runnable {
         //Démarre les ticks de serveur
         ServerGameStateTickManager.getInstance().setPlayers(players);
         ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
-    }
-
-    public static void quit() {
-        for (Thread t : playerThreads) {
-            t.interrupt();
-        }
     }
 
     public static void main(String[] args) throws Exception {

@@ -30,6 +30,10 @@ public class OnlinePlayerManager {
     }
 
     public void update(GameState state) {
+        if (players.size() == state.getPlayerStates().size()) {
+            syncState(state);
+        }
+
         for (Map.Entry<Integer, PlayerState> entry : state.getPlayerStates().entrySet()) {
             if (entry.getKey() != playerId){
                 if (!players.containsKey(entry.getKey())) {
@@ -37,6 +41,14 @@ public class OnlinePlayerManager {
                 } else {
                     players.get(entry.getKey()).addUpdate(entry.getValue());
                 }
+            }
+        }
+    }
+
+    private void syncState(GameState state) {
+        for (Integer id : players.keySet()) {
+            if (!state.getPlayerStates().containsKey(id)) {
+                players.remove(id);
             }
         }
     }

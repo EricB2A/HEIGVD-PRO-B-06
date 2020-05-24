@@ -133,8 +133,7 @@ public class JoinRoomMenu implements Screen {
                     return;
                 }
 
-                Thread tClient = new Thread(new GameClient(ipTF.getText(), port, nickname));
-                tClient.start();
+                new GameClient(ipTF.getText(), port, nickname);
                 Screen s = new WaitingRoomMenu(nickname);
                 ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);

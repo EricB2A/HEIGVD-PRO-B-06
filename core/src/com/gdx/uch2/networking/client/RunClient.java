@@ -8,7 +8,5 @@ public class RunClient {
     public static void main(String[] args) throws Exception {
         GameClient c = new GameClient("localhost", 12345, "Player 1");
 
-        c.run();
-
     }
 }

@@ -17,21 +17,20 @@ public class PlayerHandler implements Runnable {
 
     @Override
     public void run() {
-        boolean shouldRun = true;
         MessageType type;
 
-        while((shouldRun)){ // TODO : vraie condition d'arrêt
+        while(true){ // TODO : vraie condition d'arrêt
 
             type = context.in.getType();
 
             if(type != null){
                 manager.readMessage(type, context);
-            }else break;
+            }else {
+                System.out.println("SRV: connexion fermée pour le joueur #" + context.getId());
+                ServerGameStateTickManager.getInstance().getGameState().removePlayer(context.getId());
+                break;
+            }
 
-        }
-
-        if (context.in.e != null) {
-//            manager.removePlayer(context);
         }
 
         if (context.in != null) {
@@ -47,5 +46,8 @@ public class PlayerHandler implements Runnable {
                 ex1.printStackTrace();
             }
         }
+
+        manager.disconnectedClient(context);
+//        manager.checkEndRound();
     }
 }
