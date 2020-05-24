@@ -37,6 +37,8 @@ public class PlayerHandler implements Runnable {
             context.getSocket().close();
 
         } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
             if (context.in != null) {
                 context.in.close();
             }
@@ -47,7 +49,7 @@ public class PlayerHandler implements Runnable {
                 try {
                     context.getSocket().close();
                 } catch (IOException ex1) {
-                    ex.printStackTrace();
+                    ex1.printStackTrace();
                 }
             }
         }
