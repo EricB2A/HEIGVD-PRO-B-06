@@ -11,11 +11,16 @@ public class OnlinePlayerManager {
     }
     private Map<Integer, OnlinePlayer> players;
     private int playerId;
+    private int[] scores;
 
     private OnlinePlayerManager() {
         players = new TreeMap<>();
 
     }
+
+    public void setScores(int[] scores){ this.scores = scores;}
+
+    public int[] getScores() { return scores; }
 
     public static OnlinePlayerManager getInstance() {
         return Instance.instance;

@@ -35,6 +35,8 @@ public class GameClientHandler {
             }
             else if (type == MessageType.EndGame) {
                 isOver = true;
+            }else if(type == MessageType.Score){
+                processScoreUpdate();
             }
             else {
                 System.out.println("CLI: Message non traitable par le client : " + type);
@@ -52,6 +54,11 @@ public class GameClientHandler {
     private void processGameStateUpdate(){
         OnlinePlayerManager.getInstance().update(ctx.in.readGameState());
 //        System.out.println("CLI: Gamestate reçu par le client :" + objects.get(0).toString());
+    }
+
+    private void processScoreUpdate(){
+        OnlinePlayerManager.getInstance().setScores(ctx.in.readScore());
+        System.out.println("CLI: Received les scores mec.");
     }
 
 
