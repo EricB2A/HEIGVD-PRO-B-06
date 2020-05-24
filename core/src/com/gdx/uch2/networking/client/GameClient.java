@@ -15,59 +15,66 @@ public class GameClient {
     private int port;
     private String hostname;
     private String nickname;
+    public static PlayerContext context = null;
+    public static Thread thread = null;
 
     public GameClient(String hostname, int port, String nickname){
         this.port = port;
         this.hostname = hostname;
         this.nickname = nickname;
-        new Thread(new GameClientWorker()).start();
+        Thread t = new Thread(new GameClientWorker());
+        t.start();
+        thread = t;
     }
 
     private class GameClientWorker implements Runnable {
         @Override
         public void run() {
-            boolean shouldRun = true;
-            MessageType type = null;
+            MessageType type;
             Socket socket = null;
-            PlayerContext ctx = null;
+            context = null;
 
             try {
                 socket = new Socket(hostname, port);
-                ctx = new PlayerContext(socket);
+                context = new PlayerContext(socket);
 
-                if (ctx.in.getType() != MessageType.GameStart) {
+                while((type = context.in.getType()) == MessageType.Ping) {
+                    context.out.writeMessage(MessageType.Ping);
+                }
+
+                if (type != MessageType.GameStart) {
                     System.out.println("CLI: Message de départ inconnu");
                     ErrorHandler.getInstance().setError("Something went wrong.");
                     return;
                 }
 
-                int id = ctx.in.readInt();
-                ctx.setId(id);
-                processGameStart(ctx);
+                int id = context.in.readInt();
+                context.setId(id);
+                processGameStart(context);
 
-                GameClientHandler handler = new GameClientHandler(ctx);
+                GameClientHandler handler = new GameClientHandler(context);
 
                 while (type != MessageType.EndGame) {
 
-                    type = ctx.in.getType();
+                    type = context.in.getType();
 
                     if (type != null) {
                         handler.readMessage(type);
                     }
 
-                    if (ctx.in.e != null) {
-                        throw ctx.in.e;
+                    if (context.in.e != null) {
+                        throw context.in.e;
                     }
                 }
             } catch (IOException e) {
                 ErrorHandler.getInstance().setError(e.toString());
             } finally {
                 if (socket != null) {
-                    if (ctx.in != null) {
-                        ctx.in.close();
+                    if (context.in != null) {
+                        context.in.close();
                     }
-                    if (ctx.out != null) {
-                        ctx.out.close();
+                    if (context.out != null) {
+                        context.out.close();
                     }
 
                     try {
@@ -77,6 +84,8 @@ public class GameClient {
                     }
                 }
             }
+
+            thread = null;
         }
 
         private void processGameStart(PlayerContext ctx) {

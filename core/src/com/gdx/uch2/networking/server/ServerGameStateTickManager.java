@@ -13,7 +13,7 @@ public class ServerGameStateTickManager {
     }
 
     private Timer timer;
-    private List<PlayerContext> players;
+    private PlayerContext[] players;
     private GameState gameState;
 
     private ServerGameStateTickManager(){
@@ -32,7 +32,7 @@ public class ServerGameStateTickManager {
         return Instance.instance;
     }
 
-    public void setPlayers(List<PlayerContext> players){
+    public void setPlayers(PlayerContext[] players){
         this.players = players;
     }
 
@@ -42,7 +42,7 @@ public class ServerGameStateTickManager {
 
     //Crée le timer et envoie régulièrement un nouveau gameState à tous les channels dans players.
     public void start(int delay, int tickDuration){
-        initGameState(players.size(), 10, 10); //TODO initialiser la partie selon des paramètres moins arbitraires
+        initGameState(players.length, 10, 10); //TODO initialiser la partie selon des paramètres moins arbitraires
 
         this.timer = new Timer();
         timer.schedule(new SendUpdate(players), delay, tickDuration);

@@ -135,7 +135,6 @@ public class JoinRoomMenu implements Screen {
 
                 new GameClient(ipTF.getText(), port, nickname);
                 Screen s = new WaitingRoomMenu(nickname);
-                ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override

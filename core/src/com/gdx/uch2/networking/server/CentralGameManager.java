@@ -12,7 +12,7 @@ import static io.netty.buffer.Unpooled.buffer;
 
 public class CentralGameManager {
 
-    private List<PlayerContext> players;
+    private PlayerContext[] players;
     private int[] finished; // 0 = pas arrivé, 1 = arrivé, 2 = premier arrivé.
     private boolean[] recievedBlockPlacement;
     private boolean[] dead;
@@ -27,14 +27,14 @@ public class CentralGameManager {
     private int[] scoring;
     private boolean firstArrived;
 
-    public CentralGameManager(final List<PlayerContext> players, Level map, int nbRounds){
+    public CentralGameManager(final PlayerContext[] players, Level map, int nbRounds){
         this.players = players;
         this.map = map;
         this.nbRounds = nbRounds;
-        finished = new int[players.size()];
-        Arrays.fill(finished, 0);
-        recievedBlockPlacement = new boolean[players.size()];
-        dead = new boolean[players.size()];
+        finished = new boolean[players.length];
+        Arrays.fill(finished, false);
+        recievedBlockPlacement = new boolean[players.length];
+        dead = new boolean[players.length];
         scoring = new int[players.size()];
         Arrays.fill(scoring, 0);
         firstArrived = true;
@@ -65,21 +65,7 @@ public class CentralGameManager {
     }
 
     public void disconnectedClient(PlayerContext context) {
-        int c = 0;
-        for (PlayerContext p : players) {
-            if (!p.getSocket().isClosed()) {
-                c++;
-            }
-        }
-
-        if (c < 2) {
-            endGame();
-            return;
-        }
-
-        if (currentPhase == GamePhase.Editing) {
-            // TODO : déconnexion alors que c'était au tour du joueur de placer un bloc
-        }
+        endGame();
     }
 
     public boolean isOver() {
@@ -182,7 +168,7 @@ public class CentralGameManager {
 
     private void processAckGameStart(PlayerContext ctx){
         nbPlayersReady++;
-        if (nbPlayersReady == players.size()) {
+        if (nbPlayersReady == players.length) {
             startEditingPhase();
         }
     }
@@ -201,8 +187,8 @@ public class CentralGameManager {
 
             int newID = -1;
             int i = op.getPlayerID();
-            while(newID < 0 && i < players.size() - 1) {
-                if (!players.get(++i).getSocket().isClosed()) {
+            while(newID < 0 && i < players.length - 1) {
+                if (!players[++i].getSocket().isClosed()) {
                     newID = i;
                 }
             }

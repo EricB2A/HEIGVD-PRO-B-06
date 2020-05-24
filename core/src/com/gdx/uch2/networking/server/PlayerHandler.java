@@ -27,7 +27,6 @@ public class PlayerHandler implements Runnable {
                 manager.readMessage(type, context);
             }else {
                 System.out.println("SRV: connexion fermée pour le joueur #" + context.getId());
-                ServerGameStateTickManager.getInstance().getGameState().removePlayer(context.getId());
                 break;
             }
 
