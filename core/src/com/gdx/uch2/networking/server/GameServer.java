@@ -50,6 +50,12 @@ public class GameServer implements Runnable {
         while (!full) {
             try {
                 Socket clientSocket = serverSocket.accept();
+                for (PlayerContext p : players) {
+                    if(p.getSocket().isClosed()) {
+                        players.remove(p);
+                    }
+                }
+
                 PlayerContext ctx = new PlayerContext(players.size(), clientSocket);
                 players.add(ctx);
                 if(players.size() == nbPlayers){
@@ -68,7 +74,7 @@ public class GameServer implements Runnable {
         if(players.size() > nbPlayers) throw new RuntimeException("Nombre de joueurs trop élevé");
 
         gameStarted = true;
-        System.out.println("2 joueurs connectés. Lancer la partie.");
+        System.out.println(players.size() + " joueurs connectés. Lancer la partie.");
 
         CentralGameManager manager = new CentralGameManager(players, level, nbRounds);
 

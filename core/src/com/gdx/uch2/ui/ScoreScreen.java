@@ -94,19 +94,16 @@ public class ScoreScreen implements Screen {
         table.row();
 
         //create buttons
-        TextButton createButton = new TextButton("Continue", skin);
-        TextButton mainMenuButton = new TextButton("Main menu", skin);
+        TextButton continueButton = new TextButton("Continue", skin);
 
         //add buttons to table
-        table.add(createButton).width(200).colspan(2);
+        table.add(continueButton).width(200).colspan(2);
         table.row();
-        table.add(mainMenuButton).width(200).colspan(2);
 
         // create button listeners
-        createButton.addListener(new InputListener(){
+        continueButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                //TODO Add player nickname for waiting room
                 ScreenManager.getInstance().showScreen(ScreenManager.getInstance().getPlacementScreen());
             }
             @Override
@@ -114,18 +111,6 @@ public class ScoreScreen implements Screen {
                 return true;
             }
         });
-        mainMenuButton.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                Screen s = new MainMenu();
-                ScreenManager.getInstance().showScreen(s);
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
-
     }
 
     @Override
