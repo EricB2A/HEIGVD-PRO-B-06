@@ -11,14 +11,12 @@ public class GameClientHandler {
     static private boolean isOver;
     static private boolean roundOver;
     private PlayerContext ctx;
-    private int roundCounter;
 
     public GameClientHandler(PlayerContext ctx) {
         this.ctx = ctx;
         this.playerID = ctx.getId();
         currentPhase = null;
         isOver = false;
-        roundOver = false;
     }
 
     public void readMessage(MessageType type) {
@@ -63,9 +61,7 @@ public class GameClientHandler {
         System.out.println("CLI: placement de bloc recu avec " + op);
 
         if(op.getBlock() == null) {
-            if (roundCounter++ > 0) {
-                roundOver = true;
-            }
+            roundOver = true;
             startEditingPhase();
         }else{
             roundOver = false;

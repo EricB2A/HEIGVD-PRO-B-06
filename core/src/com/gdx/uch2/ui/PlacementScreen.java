@@ -10,8 +10,11 @@ import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
+import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.ClientPlayerStateTickManager;
+import com.gdx.uch2.networking.client.GameClient;
+import com.gdx.uch2.networking.client.GameClientHandler;
 import com.gdx.uch2.view.WorldRenderer;
 
 public class PlacementScreen extends ScreenAdapter implements InputProcessor {
@@ -38,6 +41,9 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     public void render(float delta) {
         if (ErrorHandler.getInstance().isSet()) {
             ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
+            return;
+        } else if (GameClientHandler.currentPhase == GamePhase.Moving) {
+            ScreenManager.getInstance().showScreen(new GameScreen(world));
             return;
         }
 
@@ -116,7 +122,6 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                         case G_UP: block = new Trap(new Vector2(x, y), blockType); break;
                         default: block = new Block(new Vector2(x, y), Block.Type.BOX); break;
                     }
-                    ScreenManager.getInstance().showScreen(new GameScreen(world));
                     ClientPlayerStateTickManager.getInstance().sendBlockPlacement(block);
                 }
             }
