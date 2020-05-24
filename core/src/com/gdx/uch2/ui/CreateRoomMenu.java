@@ -158,7 +158,7 @@ public class CreateRoomMenu implements Screen {
 
                 System.out.println("création de la partie");
 
-                Thread tServer = new Thread(new GameServer(port, level));
+                Thread tServer = new Thread(new GameServer(port, level, playersSB.getSelected(), nbOfRounds));
                 tServer.start();
                 Thread tClient = new Thread(new GameClient("localhost", port, nickname));
                 tClient.start();

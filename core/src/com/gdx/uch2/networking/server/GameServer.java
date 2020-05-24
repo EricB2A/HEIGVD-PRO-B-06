@@ -20,15 +20,18 @@ public class GameServer implements Runnable {
 
     //indique si la partie est pleine
     private static boolean full = false;
-    private static final int MAX_PLAYERS = 2;
     private static boolean gameStarted = false;
 
     private int port;
     private Level level;
+    private int nbPlayers;
+    private int nbRounds;
 
-    public GameServer(int port, int noLevel){
+    public GameServer(int port, int noLevel, int nbPlayers, int nbRounds){
         this.port = port;
         this.level = LevelLoader.loadLevel(noLevel);
+        this.nbPlayers = nbPlayers;
+        this.nbRounds = nbRounds;
         GameState.setUpKryo();
     }
 
@@ -49,7 +52,7 @@ public class GameServer implements Runnable {
                 Socket clientSocket = serverSocket.accept();
                 PlayerContext ctx = new PlayerContext(players.size(), clientSocket);
                 players.add(ctx);
-                if(players.size() == MAX_PLAYERS){
+                if(players.size() == nbPlayers){
                     full = true;
                     startGame();
                 }
@@ -61,7 +64,7 @@ public class GameServer implements Runnable {
     }
 
     private void startGame(){
-        if(players.size() > MAX_PLAYERS) throw new RuntimeException("Nombre de joueurs trop élevé");
+        if(players.size() > nbPlayers) throw new RuntimeException("Nombre de joueurs trop élevé");
 
         gameStarted = true;
         System.out.println("2 joueurs connectés. Lancer la partie.");
@@ -90,7 +93,7 @@ public class GameServer implements Runnable {
         int port = 12345;
         int level = 1;
 
-        new GameServer(port, level).run();
+        new GameServer(port, level,2 ,10).run();
     }
 
 }

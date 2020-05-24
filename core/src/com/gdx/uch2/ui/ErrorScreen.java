@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.networking.ErrorHandler;
 
-// TODO : reporter les erreurs sur cet écran
 public class ErrorScreen extends ScreenAdapter {
     private Stage stage;
     private String error;

@@ -20,37 +20,31 @@ public class PlayerHandler implements Runnable {
         boolean shouldRun = true;
         MessageType type;
 
-        try {
+        while((shouldRun)){ // TODO : vraie condition d'arrêt
 
-            while((shouldRun)){ // TODO : vraie condition d'arrêt
+            type = context.in.getType();
 
-                type = context.in.getType();
+            if(type != null){
+                manager.readMessage(type, context);
+            }else break;
 
-                if(type != null){
-                    manager.readMessage(type, context);
-                }else break;
+        }
 
-            }
+        if (context.in.e != null) {
+//            manager.removePlayer(context);
+        }
 
+        if (context.in != null) {
             context.in.close();
+        }
+        if (context.out != null) {
             context.out.close();
-            context.getSocket().close();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (context.in != null) {
-                context.in.close();
-            }
-            if (context.out != null) {
-                context.out.close();
-            }
-            if (context.getSocket() != null) {
-                try {
-                    context.getSocket().close();
-                } catch (IOException ex1) {
-                    ex1.printStackTrace();
-                }
+        }
+        if (context.getSocket() != null) {
+            try {
+                context.getSocket().close();
+            } catch (IOException ex1) {
+                ex1.printStackTrace();
             }
         }
     }
