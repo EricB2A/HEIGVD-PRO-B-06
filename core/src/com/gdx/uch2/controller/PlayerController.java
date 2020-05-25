@@ -48,7 +48,7 @@ public class PlayerController {
     private boolean finished = false;
     private float epsilon = 0.02f;
 
-    private Sound jumpingSound = Gdx.audio.newSound(Gdx.files.internal("sound/jump2.mp3"));
+    private Sound jumpingSound = Gdx.audio.newSound(Gdx.files.internal("sound/jump.mp3"));
     private Sound deathSound = Gdx.audio.newSound(Gdx.files.internal("sound/death.mp3"));
     private Sound finishSound = Gdx.audio.newSound(Gdx.files.internal("sound/finish.mp3"));
 
