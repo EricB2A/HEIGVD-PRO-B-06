@@ -18,17 +18,12 @@ import java.util.ArrayList;
 public class WaitingRoomMenu implements Screen {
     private Stage stage;
     static private ArrayList<String> playersName = new ArrayList<>();
-    private boolean isCreator;
-    private Thread toKillIfLeave;
 
-    public WaitingRoomMenu(String nickname, boolean isCreator, Thread toKillIfLeave ){
+    public WaitingRoomMenu(String nickname){
         // create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         playersName.add(nickname);
-        this.isCreator = isCreator;
-        this.toKillIfLeave = toKillIfLeave;
-       // getPlayersList();
     }
 
     @Override
@@ -48,32 +43,6 @@ public class WaitingRoomMenu implements Screen {
         titleLabel.setFontScale(2);
         table.add(titleLabel).center();
         table.row();
-
-        TextButton goBackButton = new TextButton(isCreator?"Cancel" : "Leave", skin);
-        table.add(goBackButton).bottom();
-
-        goBackButton.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                /*
-                if(!isCreator){
-                    try {
-                        //GameClient.context.getSocket().close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                 */
-                toKillIfLeave.interrupt();
-                Screen s = new MainMenu();
-                ScreenManager.getInstance().showScreen(s);
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
 
     }
 
