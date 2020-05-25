@@ -17,12 +17,10 @@ import java.util.List;
 
 public class EndGameScreen implements Screen {
     private Stage stage;
-    List<Object> objects = new ArrayList<>();
 
-    public EndGameScreen(List<Object> objects){
+    public EndGameScreen(){
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        this.objects = objects;
     }
 
     private int[] getScore(){
