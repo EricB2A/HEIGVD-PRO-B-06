@@ -15,16 +15,6 @@ public class ClientPlayerStateTickManager {
     private PlayerState currentState;
     private int playerID = -1;
     private boolean canPlace;
-    private boolean recievedAck = false;
-
-
-    public boolean getRecievedAck() {
-        return recievedAck;
-    }
-
-    public void setRecievedAck(boolean recievedAck) {
-        this.recievedAck = recievedAck;
-    }
 
     public boolean getCanPlace() {
         return canPlace;

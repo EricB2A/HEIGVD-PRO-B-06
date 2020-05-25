@@ -28,9 +28,6 @@ public class GameClientHandler {
             else if(type == MessageType.BlockPlaced) {
                 processBlockPlacement();
             }
-            else if(type == MessageType.AckBlockPlaced) {
-                processAckBlockPlaced();
-            }
             else if(type == MessageType.StartMovementPhase) {
                 startMovementPhase();
             }
@@ -82,15 +79,7 @@ public class GameClientHandler {
         }else if(op.getPlayerID() == -1){
             startMovementPhase();
         }
-
-        ctx.out.writeMessage(MessageType.AckBlockPlaced);
     }
-
-    private void processAckBlockPlaced(){
-        ClientPlayerStateTickManager.getInstance().setRecievedAck(true);
-    }
-
-
 
 
     private void startMovementPhase(){
