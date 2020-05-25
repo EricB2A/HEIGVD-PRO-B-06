@@ -37,6 +37,10 @@ public class World {
         sound.loop(0.2f);
     }
 
+    public void stopMusic(){
+        sound.stop();
+    }
+
     // Getters -----------
     public Player getPlayer() {
         return player;
