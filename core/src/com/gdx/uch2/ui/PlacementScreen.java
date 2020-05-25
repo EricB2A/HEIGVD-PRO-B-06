@@ -5,8 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Trap;
@@ -22,7 +27,9 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private World world;
     private WorldRenderer renderer;
     private String text;
+    private Stage stage;
     private Block.Type blockType;
+    private Label message;
 
     private int width, height;
 
@@ -34,8 +41,25 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     public void show() {
         text = "Place a block";
         world.resetPlayer();
-        renderer = new WorldRenderer(world, new SpriteBatch(), false);
+        stage = new Stage(new ScreenViewport());
+        renderer = new WorldRenderer(world, stage.getBatch(), false);
         Gdx.input.setInputProcessor(this);
+
+        Table table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+
+        message = new Label("...", new Label.LabelStyle(new BitmapFont(), null));
+
+        table.add(message).colspan(2).center();
+        table.row();
+        table.add(new Label("TOOLBOX", new Label.LabelStyle(new BitmapFont(), null))).colspan(2).center();
+        table.row();
+        table.add(new Label("Key [1] : Choose a box", new Label.LabelStyle(new BitmapFont(), null))).colspan(2).center();
+        table.row();
+        table.add(new Label("Key [2] : Choose a block", new Label.LabelStyle(new BitmapFont(), null))).colspan(2).center();
+        table.row();
+        table.add(new Label("Key [3] : Choose a lethal trap", new Label.LabelStyle(new BitmapFont(), null))).colspan(2).center();
     }
 
     @Override
@@ -55,6 +79,14 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.renderBackground();
+
+        if(ClientPlayerStateTickManager.getInstance().getCanPlace()) {
+            message.setText("Place a item on the map");
+        } else {
+            message.setText("Waiting for the other players placing their items");
+        }
+
+        stage.draw();
     }
 
     @Override
