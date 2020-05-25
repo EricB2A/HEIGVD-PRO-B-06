@@ -26,7 +26,7 @@ public class PlayerController {
         LEFT, RIGHT, JUMP, FIRE;
     }
 
-    private static final long LONG_JUMP_PRESS 	= 200;
+    private static final long LONG_JUMP_PRESS 	= 220;
     private static final float ACCELERATION 	= 20;
     public  static final float GRAVITY 			= -36f;
     private static final float MAX_JUMP_SPEED	= 10f;
