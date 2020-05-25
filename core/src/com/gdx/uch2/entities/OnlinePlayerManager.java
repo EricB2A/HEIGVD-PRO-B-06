@@ -11,18 +11,37 @@ public class OnlinePlayerManager {
     }
     private Map<Integer, OnlinePlayer> players;
     private int playerId;
+    private int[] scores;
+    private String nickname;
 
     private OnlinePlayerManager() {
         players = new TreeMap<>();
 
     }
 
+    public void setScores(int[] scores){ this.scores = scores;}
+
+    public int[] getScores() { return scores; }
+
     public static OnlinePlayerManager getInstance() {
         return Instance.instance;
     }
 
-    public void resetPlayers() {
-        players.clear();
+    public void initPlayer(int id, String nickname) {
+        System.out.println("CLI: Nouvel adversaire " + nickname + " #" + id);
+        players.put(id, new OnlinePlayer(id, nickname));
+    }
+
+    public String[] getNicknames() {
+        String[] nicknames = new String[players.size() + 1];
+        nicknames[playerId] = nickname;
+        for (int i = 0; i < players.size() + 1; ++i) {
+            if (i != playerId) {
+                nicknames[i] = players.get(i).getNickname();
+            }
+        }
+
+        return nicknames;
     }
 
     public Collection<OnlinePlayer> getPlayers() {
@@ -30,25 +49,9 @@ public class OnlinePlayerManager {
     }
 
     public void update(GameState state) {
-        if (players.size() == state.getPlayerStates().size()) {
-            syncState(state);
-        }
-
         for (Map.Entry<Integer, PlayerState> entry : state.getPlayerStates().entrySet()) {
             if (entry.getKey() != playerId){
-                if (!players.containsKey(entry.getKey())) {
-                    players.put(entry.getKey(), new OnlinePlayer(entry.getValue()));
-                } else {
-                    players.get(entry.getKey()).addUpdate(entry.getValue());
-                }
-            }
-        }
-    }
-
-    private void syncState(GameState state) {
-        for (Integer id : players.keySet()) {
-            if (!state.getPlayerStates().containsKey(id)) {
-                players.remove(id);
+                players.get(entry.getKey()).addUpdate(entry.getValue());
             }
         }
     }
@@ -59,9 +62,10 @@ public class OnlinePlayerManager {
         }
     }
 
-    public void init(int playerId) {
+    public void init(int playerId, String nickname) {
         players.clear();
         this.playerId = playerId;
+        this.nickname = nickname;
     }
 
 }

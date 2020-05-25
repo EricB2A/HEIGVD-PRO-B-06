@@ -14,9 +14,10 @@ public class OnlinePlayer {
     private long end;
     private float stateTime;
     private boolean facingLeft;
+    private String nickname;
 
 
-    public OnlinePlayer(PlayerState initialState) {
+    private OnlinePlayer(PlayerState initialState) {
         from  = new Vector2(initialState.getPosX(), initialState.getPosY());
         position = new Vector2(initialState.getPosX(), initialState.getPosY());
         to = new Vector2(initialState.getPosX(), initialState.getPosY());
@@ -24,6 +25,15 @@ public class OnlinePlayer {
         end = begin;
         stateTime = 0;
         facingLeft = false;
+    }
+
+    public OnlinePlayer(int playerId, String nickname) {
+        this(new PlayerState(playerId, 0, 0, 0));
+        this.nickname = nickname;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     public void addUpdate(PlayerState update) {

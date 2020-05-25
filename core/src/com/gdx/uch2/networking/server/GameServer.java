@@ -5,6 +5,7 @@ import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerContext;
+import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.util.Constants;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.List;
 public class GameServer implements Runnable {
     //2 premiers joueurs à se connecter.
     private PlayerContext[] players;
+    private String[] nicknames;
 
     //indique si la partie est pleine
     private boolean full = false;
@@ -34,8 +36,8 @@ public class GameServer implements Runnable {
         this.level = LevelLoader.loadLevel(noLevel);
         this.nbPlayers = nbPlayers;
         players = new PlayerContext[nbPlayers];
+        nicknames = new String[nbPlayers];
         this.nbRounds = nbRounds;
-        GameState.setUpKryo();
     }
 
     @Override
@@ -46,7 +48,7 @@ public class GameServer implements Runnable {
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            ErrorHandler.getInstance().setError(ex.toString());
             return;
         }
 
@@ -54,6 +56,7 @@ public class GameServer implements Runnable {
         while (!full) {
             try {
                 Socket clientSocket = serverSocket.accept();
+
                 for (int i = 0; i < players.length; ++i) {
                     if (players[i] != null) {
                         players[i].out.writeMessage(MessageType.Ping);
@@ -72,7 +75,8 @@ public class GameServer implements Runnable {
 
                 PlayerContext ctx = new PlayerContext(id, clientSocket);
                 players[id] = ctx;
-                System.out.println("New player joined");
+                nicknames[id] = ctx.in.readString();
+
                 if(id == nbPlayers - 1){
                     full = true;
                     serverSocket.close();
@@ -106,6 +110,14 @@ public class GameServer implements Runnable {
             ctx.out.writeMessage(MessageType.GameStart);
             ctx.out.writeMessage(ctx.getId());
             ctx.out.writeMessage(numlevel);
+            ctx.out.writeMessage(players.length - 1);
+
+            for (PlayerContext oppCtx : players) {
+                if (oppCtx.getId() != ctx.getId()) {
+                    ctx.out.writeMessage(oppCtx.getId());
+                    ctx.out.writeMessage(nicknames[oppCtx.getId()]);
+                }
+            }
 
             System.out.println("Message envoyé au joueur #" + ctx.getId());
         }

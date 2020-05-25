@@ -12,6 +12,9 @@ import com.gdx.uch2.networking.client.GameClient;
 
 public class JoinRoomMenu implements Screen {
     private Stage stage;
+    private static String hostname = "localhost";
+    private static String nickname = "Player";
+    private static int port = 12345;
 
     public JoinRoomMenu(){
         // create stage and set it as input processor
@@ -46,9 +49,9 @@ public class JoinRoomMenu implements Screen {
 
         // Create TextField
         TextField.TextFieldFilter.DigitsOnlyFilter digitsFilter = new TextField.TextFieldFilter.DigitsOnlyFilter();
-        final TextField nicknameTF = new TextField("Player 1", skin);
-        final TextField ipTF = new TextField("127.0.0.1", skin);
-        final TextField portTF = new TextField("12345", skin);
+        final TextField nicknameTF = new TextField(nickname, skin);
+        final TextField ipTF = new TextField(hostname, skin);
+        final TextField portTF = new TextField(Integer.toString(port), skin);
         portTF.setTextFieldFilter(digitsFilter);
         nicknameTF.setMaxLength(20);
         ipTF.setMaxLength(30);
@@ -111,13 +114,10 @@ public class JoinRoomMenu implements Screen {
                 return true;
             }
         });
-        
         joinButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 boolean somethingWentWrong = false;
-                int port = 0;
-                String nickname = null;
                 try {
                     port = Integer.parseInt(String.valueOf(portTF.getText()));
                     nickname = String.valueOf(nicknameTF.getText());
@@ -134,8 +134,9 @@ public class JoinRoomMenu implements Screen {
                     return;
                 }
 
-                new GameClient(ipTF.getText(), port, nickname);
-                Screen s = new WaitingRoomMenu(nickname, false, GameClient.thread);
+                hostname = ipTF.getText();
+                new GameClient(hostname, port, nickname);
+                Screen s = new WaitingRoomMenu(nickname);
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override

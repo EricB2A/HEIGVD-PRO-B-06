@@ -11,12 +11,6 @@ public class PlayerState {
     static private Kryo kryo;
 
 
-    /**
-     * Ne pas supprimmer.
-     */
-    public PlayerState(){
-    }
-    
     public PlayerState(int playerID, float posX, float posY, long time) {
         this.playerID = playerID;
         this.posX = posX;

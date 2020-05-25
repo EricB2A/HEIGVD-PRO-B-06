@@ -32,13 +32,50 @@ public class EncoderStream extends FilterOutputStream {
                 stream.flush();
                 this.e = null;
             } catch (IOException e) {
-                e.printStackTrace();
                 this.e = e;
             } finally {
                 mutex.release();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void writeMessage(String s) {
+        try {
+            mutex.acquire();
+            try {
+                stream.writeUTF(s);
+                stream.flush();
+                this.e = null;
+            } catch (IOException e) {
+                this.e = e;
+            } finally {
+                mutex.release();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void writeMessage(int[] scores){
+        try {
+            mutex.acquire();
+            stream.writeInt(MessageType.Score.ordinal());
+            stream.writeInt(scores.length);
+            for(int i = 0; i < scores.length; ++i){
+                stream.writeInt(scores[i]);
+            }
+            stream.flush();
+            this.e = null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            this.e = e;
+
+        }finally {
+            mutex.release();
         }
     }
 

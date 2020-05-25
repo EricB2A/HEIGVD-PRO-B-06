@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.client;
 
+import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.*;
@@ -34,6 +35,8 @@ public class GameClientHandler {
             }
             else if (type == MessageType.EndGame) {
                 isOver = true;
+            }else if(type == MessageType.Score){
+                processScoreUpdate();
             }
             else {
                 System.out.println("CLI: Message non traitable par le client : " + type);
@@ -51,6 +54,11 @@ public class GameClientHandler {
     private void processGameStateUpdate(){
         OnlinePlayerManager.getInstance().update(ctx.in.readGameState());
 //        System.out.println("CLI: Gamestate reçu par le client :" + objects.get(0).toString());
+    }
+
+    private void processScoreUpdate(){
+        OnlinePlayerManager.getInstance().setScores(ctx.in.readScore());
+        System.out.println("CLI: Received les scores mec.");
     }
 
 
@@ -92,6 +100,10 @@ public class GameClientHandler {
     private void startEditingPhase(){
         currentPhase = GamePhase.Editing;
         ClientPlayerStateTickManager.getInstance().setCanPlace(false);
+        Vector2 pos = World.currentWorld.getLevel().getSpanPosition();
+        ClientPlayerStateTickManager.getInstance().setContext(ctx);
+        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(ctx.getId(),
+                pos.x, pos.y, 0));
         System.out.println("CLI: START EDITING PHASE");
     }
 }

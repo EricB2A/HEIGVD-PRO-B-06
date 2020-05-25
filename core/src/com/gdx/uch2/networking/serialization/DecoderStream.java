@@ -73,6 +73,24 @@ public class DecoderStream extends FilterInputStream {
         return new GameState(players);
     }
 
+    public int[] readScore(){
+        int size;
+        try{
+            size = stream.readInt();
+
+            int[] scores = new int[size];
+            for(int i = 0; i < size; ++i){
+                scores[i] = stream.readInt();
+            }
+
+            this.e = null;
+            return scores;
+        }catch (IOException e){
+            this.e = e;
+            return null;
+        }
+    }
+
     public ObjectPlacement readObjectPlacement() {
         int id;
         Block.Type type = null;
@@ -118,6 +136,18 @@ public class DecoderStream extends FilterInputStream {
         }
 
         return i;
+    }
+
+    public String readString() {
+        String s = null;
+        try {
+            s = stream.readUTF();
+            this.e = null;
+        } catch (IOException e) {
+            this.e = e;
+        }
+
+        return s;
     }
 
     public void close() {

@@ -21,6 +21,7 @@ public class ErrorHandler {
     }
 
     public void setError(String error) {
+        System.out.println(error);
         this.error = error;
         set = true;
     }

@@ -13,7 +13,9 @@ public enum MessageType {
     CanPlace,
     StartMovementPhase,
     StartEditingPhase,
-    EndGame
+    EndGame,
+    Score
+
     ;
 
 }

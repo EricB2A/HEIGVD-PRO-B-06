@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Select;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.Player;
+import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.server.GameServer;
 
@@ -18,6 +19,11 @@ import javax.sound.sampled.Port;
 
 public class CreateRoomMenu implements Screen {
     private Stage stage;
+    private static String nickname = "Player";
+    private static int port = 12345;
+    private static int level = 1;
+    private static int players = 2;
+    private static int nbRounds = 10;
 
     public CreateRoomMenu(){
         // create stage and set it as input processor
@@ -59,9 +65,9 @@ public class CreateRoomMenu implements Screen {
 
         // Create TextField
         TextField.TextFieldFilter.DigitsOnlyFilter digitsFilter = new TextField.TextFieldFilter.DigitsOnlyFilter();
-        final TextField nicknameTF = new TextField("Player 1", skin);
-        final TextField portTF = new TextField("12345", skin);
-        final TextField nbRoundsTF = new TextField("10", skin);
+        final TextField nicknameTF = new TextField(nickname, skin);
+        final TextField portTF = new TextField(Integer.toString(port), skin);
+        final TextField nbRoundsTF = new TextField(Integer.toString(nbRounds), skin);
         nicknameTF.setMaxLength(20);
         portTF.setTextFieldFilter(digitsFilter);
         portTF.setMaxLength(5);
@@ -69,9 +75,10 @@ public class CreateRoomMenu implements Screen {
         nbRoundsTF.setTextFieldFilter(digitsFilter);
         final SelectBox<Integer> levelSB = new SelectBox<Integer>(skin);
         levelSB.setItems(1,2,3);
-//        levelSB.setSelected(3);
+        levelSB.setSelected(level);
         final SelectBox<Integer> playersSB = new SelectBox<>(skin);
         playersSB.setItems(2,3,4,5,6);
+        playersSB.setSelected(players);
 
         // Title
         HorizontalGroup titleGroup = new HorizontalGroup();
@@ -135,14 +142,13 @@ public class CreateRoomMenu implements Screen {
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 boolean somethingWentWrong = false;
 
-                int port = 0, nbOfRounds = 0;
-                String nickname = null;
+                nickname = null;
                 try {
                     port = Integer.parseInt(String.valueOf(portTF.getText()));
-                    nbOfRounds = Integer.parseInt(nbRoundsTF.getText());
+                    nbRounds = Integer.parseInt(nbRoundsTF.getText());
                     nickname = nicknameTF.getText();
 
-                    if (port < 1025 || port > 65535 || nbOfRounds == 0 || nickname.length() == 0) {
+                    if (port < 1025 || port > 65535 || nbRounds == 0 || nickname.length() == 0) {
                         somethingWentWrong = true;
                     }
                 } catch (NumberFormatException e) {
@@ -154,16 +160,28 @@ public class CreateRoomMenu implements Screen {
                     return;
                 }
 
-                int level = levelSB.getSelected();
+                level = levelSB.getSelected();
+                players = playersSB.getSelected();
 
                 System.out.println("création de la partie");
 
-                Thread tServer = new Thread(new GameServer(port, level, playersSB.getSelected(), nbOfRounds));
+                Thread tServer = new Thread(new GameServer(port, level, players, nbRounds));
                 tServer.start();
-                new GameClient("localhost", port, nickname);
-                Screen s = new WaitingRoomMenu(nickname, true, tServer);
-                ScreenManager.getInstance().setPlacementScreen(s);
-                ScreenManager.getInstance().showScreen(s);
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                if (ErrorHandler.getInstance().isSet()) {
+                    ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
+                } else {
+                    System.out.println("OCTUPLE ZOOM ");
+                    new GameClient("localhost", port, nickname);
+                    Screen s = new WaitingRoomMenu(nickname);
+                    ScreenManager.getInstance().showScreen(s);
+                }
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -174,7 +192,6 @@ public class CreateRoomMenu implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 Screen s = new MainMenu();
-                ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override

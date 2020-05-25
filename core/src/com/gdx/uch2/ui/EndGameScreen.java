@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
+import com.gdx.uch2.entities.OnlinePlayerManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,10 @@ public class EndGameScreen implements Screen {
         this.objects = objects;
     }
 
+    private int[] getScore(){
+        return OnlinePlayerManager.getInstance().getScores();
+    }
+
     @Override
     public void show() {
         // Create a table that fills the screen. Everything else will go inside this table.
@@ -36,75 +41,100 @@ public class EndGameScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("neon/skin/neon-ui.json"));
 
         // Create Image
+        /*
         Image chickenImg = new Image(new Texture(Gdx.files.internal(("chicken.png"))));
         chickenImg.setWidth(129);
         chickenImg.setHeight(200);
+         */
 
-        // Create Text
-        Label titleLabel = new Label("Ultimate Chicken Horse 2 \n\n End Level ! Results", skin);
-        titleLabel.setFontScale(2);
-        final Label nicknameLabel = new Label("Nickname", skin);
-        nicknameLabel.setFontScale(1);
-        Label score = new Label("Score", skin);
-        score.setFontScale(1);
+        int[] scores = getScore();
+        String[] nicknames = OnlinePlayerManager.getInstance().getNicknames();
 
         //TODO Change text with nickname and points of players
         // Create TextField
-        final Label nicknamePlayer1 = new Label("Player 1", skin);
-        final Label nicknamePlayer2 = new Label("Player 2", skin);
+        Label[] nickNamePlayers = new Label[scores.length];
+        Label[] scorePlayers = new Label[scores.length];
 
-        final Label scorePlayer1 = new Label("100", skin);
-        final Label scorePlayer2 = new Label("80", skin);
-        nicknamePlayer1.setWidth(100);
-        nicknamePlayer2.setWidth(100);
-        scorePlayer1.setWidth(100);
-        scorePlayer2.setWidth(100);
+        int winnerScore = 0;
+        int winnerID = -1;
+        for(int i = 0; i < scores.length; ++i){
+            nickNamePlayers[i] = new Label(nicknames[i], skin);
+            nickNamePlayers[i].setWidth(100);
+            scorePlayers[i] = new Label(Integer.toString(scores[i]), skin);
+            scorePlayers[i].setWidth(100);
+            if(scores[i] > winnerScore){
+                winnerScore = scores[i];
+                winnerID = i;
+            }
+        }
+
+        // Create Text
+        Label titleLabel = new Label("End de partie ! ", skin);
+        titleLabel.setFontScale(2);
+       /* final Label nicknameLabel = new Label("Nickname", skin);
+        nicknameLabel.setFontScale(1);*/
+        Label gagnant = new Label("Le winner est : Player " + winnerID, skin);
+        Label score = new Label("Score", skin);
+        score.setFontScale(1);
+        gagnant.setFontScale(2);
 
         // Title
         HorizontalGroup titleGroup = new HorizontalGroup();
         titleGroup.space(10);
         titleGroup.addActor(titleLabel);
-        titleGroup.addActor(chickenImg);
+        //titleGroup.addActor(chickenImg);
         table.add(titleGroup).colspan(2).center();
         table.row();
+
 
         //Infos
         HorizontalGroup infoGroup = new HorizontalGroup();
         infoGroup.space(30);
-        infoGroup.addActor(nicknameLabel);
-        infoGroup.addActor(score);
+//        infoGroup.addActor(nicknameLabel);
+        infoGroup.addActor(gagnant);
         table.add(infoGroup).colspan(2).uniform();
+        infoGroup.space(30);
+        table.row();
+        table.add(score).colspan(2).center();
         table.row();
 
-        //Players
-        HorizontalGroup player1Group = new HorizontalGroup();
-        player1Group.space(30);
-        player1Group.addActor(nicknamePlayer1);
-        player1Group.addActor(scorePlayer1);
-        table.add(player1Group).colspan(2).uniform();
-        table.row();
 
         //Players
-        HorizontalGroup player2Group = new HorizontalGroup();
-        player2Group.space(30);
-        player2Group.addActor(nicknamePlayer2);
-        player2Group.addActor(scorePlayer2);
-        table.add(player2Group).colspan(2).uniform();
-        table.row();
+        for(int i = 0; i < scores.length; ++i){
+            HorizontalGroup playerGroup = new HorizontalGroup();
+            playerGroup.space(30);
+            playerGroup.addActor(nickNamePlayers[i]);
+            playerGroup.addActor(scorePlayers[i]);
+            table.add(playerGroup).colspan(2).uniform();
+            table.row();
+        }
 
         //create buttons
+        TextButton createButton = new TextButton("Continue", skin);
         TextButton mainMenuButton = new TextButton("Main menu", skin);
 
         //add buttons to table
+        table.add(createButton).width(200).colspan(2);
         table.row();
         table.add(mainMenuButton).width(200).colspan(2);
 
         // create button listeners
+        createButton.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                //TODO Add player nickname for waiting room
+                Screen s = new WaitingRoomMenu("nickname");
+                ScreenManager.getInstance().showScreen(s);
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
         mainMenuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 Screen s = new MainMenu();
-                ScreenManager.getInstance().setPlacementScreen(s);
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override
