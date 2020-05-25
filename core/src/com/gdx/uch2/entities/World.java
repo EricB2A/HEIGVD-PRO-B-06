@@ -1,16 +1,14 @@
 package com.gdx.uch2.entities;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.controller.LevelLoader;
-import com.gdx.uch2.ui.GameScreen;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class World {
@@ -27,9 +25,17 @@ public class World {
      **/
     Player player;
 
+    Sound sound;
     Level level;
 
     public static World currentWorld;
+
+
+    public World(int noLevel) {
+        createWorld(noLevel);
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound/music.mp3"));
+        sound.play();
+    }
 
     // Getters -----------
     public Player getPlayer() {
@@ -79,9 +85,7 @@ public class World {
         return blocks;
     }
 
-    public World(int noLevel) {
-        createWorld(noLevel);
-    }
+
 
     public void placeBlock(Block b){
         level.getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] = b;
