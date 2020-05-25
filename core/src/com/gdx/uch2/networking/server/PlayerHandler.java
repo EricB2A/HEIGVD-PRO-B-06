@@ -23,15 +23,25 @@ public class PlayerHandler implements Runnable {
 
             type = context.in.getType();
 
-            if(type != null){
+            if(type != null && type != MessageType.CloseConnection){
                 manager.readMessage(type, context);
             }else {
+                GameServer.players[context.getId()] = null;
+                context.out.writeMessage(MessageType.CloseConnection);
                 System.out.println("SRV: connexion fermée pour le joueur #" + context.getId());
                 break;
             }
 
         }
 
+        clean();
+
+        if (!manager.isOver()) {
+            manager.disconnectedClient();
+        }
+    }
+
+    private void clean() {
         if (context.in != null) {
             context.in.close();
         }
@@ -44,12 +54,6 @@ public class PlayerHandler implements Runnable {
             } catch (IOException ex1) {
                 ex1.printStackTrace();
             }
-        }
-
-        System.out.printf("KJHSKJHFSDKFDSF");
-
-        if (!manager.isOver()) {
-            manager.disconnectedClient(context);
         }
     }
 }

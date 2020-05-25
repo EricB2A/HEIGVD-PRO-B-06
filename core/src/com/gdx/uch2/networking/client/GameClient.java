@@ -20,8 +20,7 @@ public class GameClient {
     private final int port;
     private final String hostname;
     private final String nickname;
-    public static PlayerContext context = null;
-    public static Thread thread = null;
+    private static GameClientWorker worker;
 
     /**
      * Constructeur publique
@@ -33,16 +32,19 @@ public class GameClient {
         this.port = port;
         this.hostname = hostname;
         this.nickname = nickname;
-        Thread t = new Thread(new GameClientWorker());
+        worker = new GameClientWorker();
+        Thread t = new Thread(worker);
         t.start();
-        thread = t;
     }
 
     private class GameClientWorker implements Runnable {
+        private Socket socket;
+        private PlayerContext context;
+
         @Override
         public void run() {
             MessageType type;
-            Socket socket = null;
+            socket = null;
             context = null;
 
             try {
@@ -52,12 +54,11 @@ public class GameClient {
                 context = new PlayerContext(socket);
                 context.out.writeMessage(nickname);
 
-                while((type = context.in.getType()) == MessageType.Ping) {
-                    context.out.writeMessage(MessageType.Ping);
+                type = context.in.getType();
 
-                }
-
-                if (type != MessageType.GameStart) {
+                if (type == MessageType.CloseConnection) {
+                    return;
+                } else if (type != MessageType.GameStart) {
                     System.out.println("CLI: Message de départ inconnu");
                     ErrorHandler.getInstance().setError("Something went wrong.");
                     return;
@@ -73,7 +74,9 @@ public class GameClient {
 
                     type = context.in.getType();
 
-                    if (type != null) {
+                    if (type == MessageType.CloseConnection) {
+                        break;
+                    } else if (type != null) {
                         handler.readMessage(type);
                     }
 
@@ -102,8 +105,6 @@ public class GameClient {
                     }
                 }
             }
-
-            thread = null;
         }
 
         /**
@@ -137,5 +138,9 @@ public class GameClient {
                     Player.State.IDLE, pos.x, pos.y, 0));
             MessageSender.getInstance().start(0, Constants.TICK_DURATION);
         }
+    }
+
+    public static void closeConnection() {
+        worker.context.out.writeMessage(MessageType.CloseConnection);
     }
 }

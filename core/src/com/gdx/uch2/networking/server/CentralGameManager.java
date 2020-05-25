@@ -28,10 +28,16 @@ public class CentralGameManager {
     private int[] scoring;
     private boolean firstArrived;
 
-    public CentralGameManager(final PlayerContext[] players, Level map, int nbRounds){
-        this.players = players;
+    public CentralGameManager(Level map, int nbRounds){
         this.map = map;
         this.nbRounds = nbRounds;
+        firstArrived = true;
+        //startEditingPhase();
+
+    }
+
+    public void init(PlayerContext[] players) {
+        this.players = players;
         finished = new int[players.length];
         Arrays.fill(finished, 0);
         dead = new boolean[players.length];
@@ -63,8 +69,10 @@ public class CentralGameManager {
         }
     }
 
-    public void disconnectedClient(PlayerContext context) {
-        endGame();
+    public void disconnectedClient() {
+        if (players != null) {
+            endGame();
+        }
     }
 
     public boolean isOver() {

@@ -13,7 +13,8 @@ public enum MessageType {
     StartMovementPhase,
     StartEditingPhase,
     EndGame,
-    Score
+    Score,
+    CloseConnection
     ;
 
 }
