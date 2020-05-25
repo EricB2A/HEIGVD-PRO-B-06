@@ -33,8 +33,8 @@ public class World {
 
     public World(int noLevel) {
         createWorld(noLevel);
-        sound = Gdx.audio.newSound(Gdx.files.internal("sound/8bit-game_1.mp3"));
-        sound.loop();
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound/main_theme.mp3"));
+        sound.loop(0.2f);
     }
 
     // Getters -----------

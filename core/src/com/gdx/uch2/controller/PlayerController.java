@@ -3,6 +3,8 @@ package com.gdx.uch2.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -45,6 +47,10 @@ public class PlayerController {
     private long recoilBeginTime;
     private boolean finished = false;
     private float epsilon = 0.02f;
+
+    private Sound jumpingSound = Gdx.audio.newSound(Gdx.files.internal("sound/jump2.mp3"));
+    private Sound deathSound = Gdx.audio.newSound(Gdx.files.internal("sound/death.mp3"));
+    private Sound finishSound = Gdx.audio.newSound(Gdx.files.internal("sound/finish.mp3"));
 
     // This is the rectangle pool used in collision detection
     // Good to avoid instantiation each frame
@@ -175,8 +181,10 @@ public class PlayerController {
     private void finish() {
         if(!finished){
             if (player.isDead()) {
+                deathSound.play(0.6f);
                 MessageSender.getInstance().sendDeath();
             } else {
+                finishSound.play(0.7f);
                 MessageSender.getInstance().sendFinish();
             }
             finished = true;
@@ -344,6 +352,7 @@ public class PlayerController {
         if(GameClientHandler.currentPhase == GamePhase.Moving){
             if (keys.get(Keys.JUMP)) {
                 if (jumpingPressed && (!player.getState().equals(State.JUMPING))) {
+                    jumpingSound.play(0.7f);
                     jumpingActive = true;
                     jumpingPressed = false;
                     jumpPressedTime = System.currentTimeMillis();
