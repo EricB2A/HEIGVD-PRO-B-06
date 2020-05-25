@@ -84,14 +84,18 @@ public class EndGameScreen implements Screen {
         table.add(titleGroup).colspan(2).center();
         table.row();
 
+
         //Infos
         HorizontalGroup infoGroup = new HorizontalGroup();
         infoGroup.space(30);
 //        infoGroup.addActor(nicknameLabel);
         infoGroup.addActor(gagnant);
-        infoGroup.addActor(score);
         table.add(infoGroup).colspan(2).uniform();
+        infoGroup.space(30);
         table.row();
+        table.add(score).colspan(2).center();
+        table.row();
+
 
         //Players
         for(int i = 0; i < scores.length; ++i){
