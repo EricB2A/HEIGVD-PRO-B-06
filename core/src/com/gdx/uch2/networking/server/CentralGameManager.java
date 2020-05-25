@@ -178,6 +178,7 @@ public class CentralGameManager {
         }
 
         isOver = true;
+        GameServer.closeConnection();
     }
 
     private void processAckGameStart(PlayerContext ctx){

@@ -203,7 +203,6 @@ public class EncoderStream extends FilterOutputStream {
         try {
             stream.close();
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -214,7 +213,6 @@ public class EncoderStream extends FilterOutputStream {
         try {
             stream.flush();
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
