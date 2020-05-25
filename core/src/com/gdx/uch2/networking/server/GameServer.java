@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -107,7 +108,7 @@ public class GameServer implements Runnable {
         gameStarted = true;
         System.out.println(players.length + " joueurs connectés. Lancer la partie.");
 
-        manager.init(players);
+        manager.init(Arrays.copyOf(players, players.length));
 
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
         for(PlayerContext ctx : players){
