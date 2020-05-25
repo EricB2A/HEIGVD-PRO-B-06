@@ -138,6 +138,18 @@ public class DecoderStream extends FilterInputStream {
         return i;
     }
 
+    public String readString() {
+        String s = null;
+        try {
+            s = stream.readUTF();
+            this.e = null;
+        } catch (IOException e) {
+            this.e = e;
+        }
+
+        return s;
+    }
+
     public void close() {
         try {
             stream.close();

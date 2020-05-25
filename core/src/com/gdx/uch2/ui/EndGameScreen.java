@@ -48,6 +48,8 @@ public class EndGameScreen implements Screen {
          */
 
         int[] scores = getScore();
+        String[] nicknames = OnlinePlayerManager.getInstance().getNicknames();
+
         //TODO Change text with nickname and points of players
         // Create TextField
         Label[] nickNamePlayers = new Label[scores.length];
@@ -56,7 +58,7 @@ public class EndGameScreen implements Screen {
         int winnerScore = 0;
         int winnerID = -1;
         for(int i = 0; i < scores.length; ++i){
-            nickNamePlayers[i] = new Label("Player " + i, skin);
+            nickNamePlayers[i] = new Label(nicknames[i], skin);
             nickNamePlayers[i].setWidth(100);
             scorePlayers[i] = new Label(Integer.toString(scores[i]), skin);
             scorePlayers[i].setWidth(100);

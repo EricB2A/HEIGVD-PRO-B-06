@@ -41,6 +41,24 @@ public class EncoderStream extends FilterOutputStream {
         }
     }
 
+    public void writeMessage(String s) {
+        try {
+            mutex.acquire();
+            try {
+                stream.writeUTF(s);
+                stream.flush();
+                this.e = null;
+            } catch (IOException e) {
+                this.e = e;
+            } finally {
+                mutex.release();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public void writeMessage(int[] scores){
         try {
             mutex.acquire();

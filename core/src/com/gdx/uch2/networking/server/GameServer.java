@@ -18,6 +18,7 @@ import java.util.List;
 public class GameServer implements Runnable {
     //2 premiers joueurs à se connecter.
     private PlayerContext[] players;
+    private String[] nicknames;
 
     //indique si la partie est pleine
     private boolean full = false;
@@ -35,6 +36,7 @@ public class GameServer implements Runnable {
         this.level = LevelLoader.loadLevel(noLevel);
         this.nbPlayers = nbPlayers;
         players = new PlayerContext[nbPlayers];
+        nicknames = new String[nbPlayers];
         this.nbRounds = nbRounds;
     }
 
@@ -73,6 +75,7 @@ public class GameServer implements Runnable {
 
                 PlayerContext ctx = new PlayerContext(id, clientSocket);
                 players[id] = ctx;
+                nicknames[id] = ctx.in.readString();
 
                 if(id == nbPlayers - 1){
                     full = true;
@@ -107,6 +110,14 @@ public class GameServer implements Runnable {
             ctx.out.writeMessage(MessageType.GameStart);
             ctx.out.writeMessage(ctx.getId());
             ctx.out.writeMessage(numlevel);
+            ctx.out.writeMessage(players.length - 1);
+
+            for (PlayerContext oppCtx : players) {
+                if (oppCtx.getId() != ctx.getId()) {
+                    ctx.out.writeMessage(oppCtx.getId());
+                    ctx.out.writeMessage(nicknames[oppCtx.getId()]);
+                }
+            }
 
             System.out.println("Message envoyé au joueur #" + ctx.getId());
         }

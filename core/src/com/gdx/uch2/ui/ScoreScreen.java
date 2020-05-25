@@ -55,13 +55,14 @@ public class ScoreScreen implements Screen {
         score.setFontScale(1);
 
         int[] scores = getScore();
+        String[] nicknames = OnlinePlayerManager.getInstance().getNicknames();
         //TODO Change text with nickname and points of players
         // Create TextField
         Label[] nickNamePlayers = new Label[scores.length];
         Label[] scorePlayers = new Label[scores.length];
 
         for(int i = 0; i < scores.length; ++i){
-            nickNamePlayers[i] = new Label("Player " + i, skin);
+            nickNamePlayers[i] = new Label(nicknames[i], skin);
             nickNamePlayers[i].setWidth(100);
             scorePlayers[i] = new Label(Integer.toString(scores[i]), skin);
             scorePlayers[i].setWidth(100);

@@ -37,7 +37,9 @@ public class ServerGameStateTickManager {
     }
 
     public void setPlayerState(PlayerState newState){
-        gameState.setPlayerState(newState);
+        if (gameState != null) {
+            gameState.setPlayerState(newState);
+        }
     }
 
     //Crée le timer et envoie régulièrement un nouveau gameState à tous les channels dans players.

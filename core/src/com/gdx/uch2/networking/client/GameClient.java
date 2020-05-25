@@ -13,9 +13,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class GameClient {
-    private int port;
-    private String hostname;
-    private String nickname;
+    private final int port;
+    private final String hostname;
+    private final String nickname;
     public static PlayerContext context = null;
     public static Thread thread = null;
 
@@ -40,6 +40,7 @@ public class GameClient {
                 socket.connect(new InetSocketAddress(hostname, port), 2000);
 
                 context = new PlayerContext(socket);
+                context.out.writeMessage(nickname);
 
                 while((type = context.in.getType()) == MessageType.Ping) {
                     context.out.writeMessage(MessageType.Ping);
@@ -95,8 +96,14 @@ public class GameClient {
 
         private void processGameStart(PlayerContext ctx) {
             ClientPlayerStateTickManager.getInstance().setPlayerID(ctx.getId());
-            OnlinePlayerManager.getInstance().init(ctx.getId());
+            OnlinePlayerManager.getInstance().init(ctx.getId(), nickname);
             World.currentWorld = new World(ctx.in.readInt());
+            int nbPlayers = ctx.in.readInt();
+
+            for (int i = 0; i < nbPlayers; ++i) {
+                OnlinePlayerManager.getInstance().initPlayer(ctx.in.readInt(), ctx.in.readString());
+            }
+
             System.out.println("CLI: PlayerID = " + ctx.getId());
 
             ctx.out.writeMessage(MessageType.AckGameStart);
