@@ -78,7 +78,7 @@ public class WaitingRoomMenu implements Screen {
             ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
             return;
         } else if (GameClientHandler.isOver()) {
-            ScreenManager.getInstance().showScreen(new EndGameScreen(null));
+            ScreenManager.getInstance().showScreen(new EndGameScreen());
             return;
         }
 
