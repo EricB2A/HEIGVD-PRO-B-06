@@ -158,6 +158,10 @@ public class CentralGameManager {
 
 
         if(allFinished){
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+            }
             resetPlayersPositions();
             if (++round < nbRounds) {
                 computePoints();
