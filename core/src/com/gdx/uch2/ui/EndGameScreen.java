@@ -11,18 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.OnlinePlayerManager;
+import com.gdx.uch2.entities.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EndGameScreen implements Screen {
     private Stage stage;
-    List<Object> objects = new ArrayList<>();
 
-    public EndGameScreen(List<Object> objects){
+    public EndGameScreen(){
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        this.objects = objects;
     }
 
     private int[] getScore(){
@@ -119,6 +118,7 @@ public class EndGameScreen implements Screen {
         mainMenuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                World.currentWorld.stopMusic();
                 Screen s = new MainMenu();
                 ScreenManager.getInstance().showScreen(s);
             }

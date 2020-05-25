@@ -33,8 +33,12 @@ public class World {
 
     public World(int noLevel) {
         createWorld(noLevel);
-        sound = Gdx.audio.newSound(Gdx.files.internal("sound/music.mp3"));
-        sound.play();
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound/main_theme.mp3"));
+        sound.loop(0.2f);
+    }
+
+    public void stopMusic(){
+        sound.stop();
     }
 
     // Getters -----------

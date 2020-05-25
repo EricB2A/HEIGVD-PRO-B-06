@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.OnlinePlayerManager;
@@ -18,12 +19,10 @@ import java.util.ArrayList;
 
 public class ScoreScreen implements Screen {
     private Stage stage;
-    List<Object> objects = new ArrayList<>();
 
-    public ScoreScreen(List<Object> objects){
+    public ScoreScreen(){
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        this.objects = objects;
     }
 
     private int[] getScore(){
@@ -81,17 +80,17 @@ public class ScoreScreen implements Screen {
         infoGroup.space(30);
         infoGroup.addActor(nicknameLabel);
         infoGroup.addActor(score);
-        table.add(infoGroup).colspan(2).uniform();
+        table.add(infoGroup).colspan(2).center();
         table.row();
 
         //Players
         for(int i = 0; i < scores.length; ++i){
-           HorizontalGroup playerGroup = new HorizontalGroup();
-           playerGroup.space(30);
-           playerGroup.addActor(nickNamePlayers[i]);
-           playerGroup.addActor(scorePlayers[i]);
-           table.add(playerGroup).colspan(2).uniform();
-           table.row();
+            HorizontalGroup playerGroup = new HorizontalGroup();
+            playerGroup.space(30);
+            playerGroup.addActor(nickNamePlayers[i]);
+            playerGroup.addActor(scorePlayers[i]);
+            table.add(playerGroup).colspan(2).uniform();
+            table.row();
         }
 
 
