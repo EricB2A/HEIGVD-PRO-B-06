@@ -178,8 +178,8 @@ public class CreateRoomMenu implements Screen {
                     Screen s = new WaitingRoomMenu(new GameParameters(hostname, nickname, port), new InputListener(){
                         @Override
                         public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                            // TODO : Close server
                             GameClient.closeConnection();
+                            GameServer.closeConnection();
                             Screen s = new MainMenu();
                             ScreenManager.getInstance().showScreen(s);
                         }

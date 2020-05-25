@@ -31,6 +31,7 @@ public class GameServer implements Runnable {
     private int nbPlayers;
     private int nbRounds;
     private CentralGameManager manager;
+    private static ServerSocket serverSocket;
 
     public GameServer(int port, int noLevel, int nbPlayers, int nbRounds){
         this.port = port;
@@ -45,7 +46,6 @@ public class GameServer implements Runnable {
     @Override
     public void run() {
         System.out.println("Start server");
-        ServerSocket serverSocket;
 
         try {
             serverSocket = new ServerSocket(port);
@@ -96,7 +96,7 @@ public class GameServer implements Runnable {
 
                 id = -1;
             } catch (IOException ex) {
-                ex.printStackTrace();
+                break;
             }
         }
 
@@ -131,6 +131,30 @@ public class GameServer implements Runnable {
         //Démarre les ticks de serveur
         ServerGameStateTickManager.getInstance().setPlayers(players);
         ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
+    }
+
+    public static void closeConnection() {
+        try {
+            serverSocket.close();
+
+            for (PlayerContext ctx : players) {
+                if (ctx != null) {
+                    if (ctx.in != null) {
+                        ctx.in.close();
+                    }
+
+                    if (ctx.out != null) {
+                        ctx.out.close();
+                    }
+
+                    if (ctx.getSocket() != null) {
+                        ctx.getSocket().close();
+                    }
+                }
+            }
+        } catch (IOException e) {
+//            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) throws Exception {

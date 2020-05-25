@@ -66,7 +66,7 @@ public class WaitingRoomMenu implements Screen {
 
         table.row();
 
-        TextButton cancelButton = new TextButton("Go back", skin);
+        TextButton cancelButton = new TextButton("Cancel", skin);
         table.add(cancelButton).width(200).center();
 
         cancelButton.addListener(cancelOperation);
