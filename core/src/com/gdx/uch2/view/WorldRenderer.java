@@ -41,14 +41,24 @@ public class WorldRenderer {
     private TextureRegion playerFallRight;
     private TextureRegion playerDeadRight;
     private TextureRegion playerDeadLeft;
-    private TextureRegion onlinePlayerRight;
-    private TextureRegion onlinePlayerLeft;
+
+    private TextureRegion opponentJumpLeft;
+    private TextureRegion opponentFallLeft;
+    private TextureRegion opponentJumpRight;
+    private TextureRegion opponentFallRight;
+    private TextureRegion opponentDeadRight;
+    private TextureRegion opponentDeadLeft;
 
     /** Animations **/
     private Animation walkLeftAnimation;
     private Animation walkRightAnimation;
     private Animation idleRightAnimation;
     private Animation idleLeftAnimation;
+
+    private Animation opponentWalkLeftAnimation;
+    private Animation opponentWalkRightAnimation;
+    private Animation opponentIdleRightAnimation;
+    private Animation opponentIdleLeftAnimation;
 
     private SpriteBatch spriteBatch;
     private boolean debug = false;
@@ -130,9 +140,40 @@ public class WorldRenderer {
         playerDeadLeft = new TextureRegion((playerDeadRight));
         playerDeadLeft.flip(true, false);
 
-        onlinePlayerRight = opponentsAtlas.findRegion("idle2");
-        onlinePlayerLeft = new TextureRegion(onlinePlayerRight);
-        onlinePlayerLeft.flip(true, false);
+
+        // For opponents
+        Array<TextureAtlas.AtlasRegion> opponentIdleRightFrames = new Array<TextureAtlas.AtlasRegion>();
+        Array<TextureAtlas.AtlasRegion> opponentIdleLeftFrames = new Array<TextureAtlas.AtlasRegion>();
+        for(int i = 1; i <= 4; i++){
+            opponentIdleRightFrames.add(opponentsAtlas.findRegion("idle" + i));
+            TextureAtlas.AtlasRegion tmp = new TextureAtlas.AtlasRegion(opponentIdleRightFrames.get(i-1));
+            tmp.flip(true, false);
+            opponentIdleLeftFrames.add(tmp);
+        }
+
+        opponentIdleRightAnimation = new Animation(Constants.LOOP_SPEED, opponentIdleRightFrames, Animation.PlayMode.LOOP);
+        opponentIdleLeftAnimation = new Animation(Constants.LOOP_SPEED, opponentIdleLeftFrames, Animation.PlayMode.LOOP);
+
+        Array<TextureAtlas.AtlasRegion> opponentWalkingRightFrames = new Array<TextureAtlas.AtlasRegion>();
+        Array<TextureAtlas.AtlasRegion> opponentWalkingLeftFrames = new Array<TextureAtlas.AtlasRegion>();
+        for(int i = 1; i <= 7; i++){
+            opponentWalkingRightFrames.add(opponentsAtlas.findRegion("walk-right" + i));
+            TextureAtlas.AtlasRegion tmp = new TextureAtlas.AtlasRegion(opponentWalkingRightFrames.get(i-1));
+            tmp.flip(true, false);
+            opponentWalkingLeftFrames.add(tmp);
+        }
+        opponentWalkRightAnimation = new Animation(Constants.LOOP_SPEED, opponentWalkingRightFrames, Animation.PlayMode.LOOP);
+        opponentWalkLeftAnimation = new Animation(Constants.LOOP_SPEED, opponentWalkingLeftFrames, Animation.PlayMode.LOOP);
+
+        opponentJumpRight = opponentsAtlas.findRegion("jump1");
+        opponentJumpLeft = new TextureRegion(opponentJumpRight);
+        opponentJumpLeft.flip(true, false);
+        opponentFallRight = opponentsAtlas.findRegion("jump2");
+        opponentFallLeft = new TextureRegion(opponentFallRight);
+        opponentFallLeft.flip(true, false);
+        opponentDeadRight = opponentsAtlas.findRegion("dead");
+        opponentDeadLeft = new TextureRegion((opponentDeadRight));
+        opponentDeadLeft.flip(true, false);
     }
 
 
@@ -185,12 +226,21 @@ public class WorldRenderer {
     }
 
     private void drawOnlinePlayers() {
-        for (OnlinePlayer p : OnlinePlayerManager.getInstance().getPlayers()) {
-            if (p.isFacingLeft()) {
-                spriteBatch.draw(onlinePlayerLeft, p.getPosition().x, p.getPosition().y, Player.SIZE, Player.SIZE);
-            } else {
-                spriteBatch.draw(onlinePlayerRight, p.getPosition().x, p.getPosition().y, Player.SIZE, Player.SIZE);
+        for (OnlinePlayer player : OnlinePlayerManager.getInstance().getPlayers()) {
+            TextureRegion playerFrame = (TextureRegion) (player.isFacingLeft() ? opponentIdleLeftAnimation.getKeyFrame(player.getLocalTime(), true) : opponentIdleRightAnimation.getKeyFrame(player.getLocalTime(), true));
+            if (player.isDead()) {
+                playerFrame = player.isFacingLeft() ? opponentDeadLeft : opponentDeadRight;
+            } else if (player.getState().equals(State.WALKING)) {
+                playerFrame = (TextureRegion) (player.isFacingLeft() ? opponentWalkLeftAnimation.getKeyFrame(player.getLocalTime(), true) : opponentWalkRightAnimation.getKeyFrame(player.getLocalTime(), true));
+            } else if (player.getState().equals(State.JUMPING) || player.getState().equals(State.SLIDING)) {
+                if (!player.isFalling()) {
+                    playerFrame = player.isFacingLeft() ? opponentJumpLeft : opponentJumpRight;
+                } else {
+                    playerFrame = player.isFacingLeft() ? opponentFallLeft : opponentFallRight;
+                }
             }
+
+            spriteBatch.draw(playerFrame, player.getPosition().x, player.getPosition().y, Player.SIZE, Player.SIZE);
         }
     }
 

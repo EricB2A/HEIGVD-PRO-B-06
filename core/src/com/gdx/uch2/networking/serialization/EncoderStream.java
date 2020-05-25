@@ -101,6 +101,7 @@ public class EncoderStream extends FilterOutputStream {
             // PlayerStateUpdate.
             if (writeMessageType) stream.writeInt(MessageType.PlayerStateUpdate.ordinal());
             stream.writeInt(playerState.getPlayerID());
+            stream.writeInt(playerState.getState().ordinal());
             stream.writeFloat(playerState.getPosX());
             stream.writeFloat(playerState.getPosY());
             stream.writeLong(playerState.getTime());

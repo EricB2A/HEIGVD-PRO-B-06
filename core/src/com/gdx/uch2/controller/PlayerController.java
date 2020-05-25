@@ -170,6 +170,7 @@ public class PlayerController {
 
         ClientPlayerStateTickManager.getInstance().setCurrentState(
                 new PlayerState(ClientPlayerStateTickManager.getInstance().getPlayerID(),
+                        player.isDead() ? State.DEAD : player.getState(),
                         player.getPosition().x, player.getPosition().y, System.nanoTime()));
     }
 

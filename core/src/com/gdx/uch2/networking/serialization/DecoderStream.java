@@ -2,6 +2,7 @@ package com.gdx.uch2.networking.serialization;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Block;
+import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.ProtectedArea;
 import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.networking.GameState;
@@ -37,11 +38,13 @@ public class DecoderStream extends FilterInputStream {
 
     public PlayerState readPlayerState() {
         int id;
+        Player.State state;
         float x;
         float y;
         long time;
         try {
             id = stream.readInt();
+            state = Player.State.values()[stream.readInt()];
             x = stream.readFloat();
             y = stream.readFloat();
             time = stream.readLong();
@@ -51,7 +54,7 @@ public class DecoderStream extends FilterInputStream {
             return null;
         }
 
-        return new PlayerState(id, x, y, time);
+        return new PlayerState(id, state, x, y, time);
     }
 
     public GameState readGameState() {

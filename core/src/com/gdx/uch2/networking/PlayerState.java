@@ -1,18 +1,21 @@
 package com.gdx.uch2.networking;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.gdx.uch2.entities.Player;
 
 public class PlayerState {
 
     private int playerID;
+    private Player.State state;
     private float posX;
     private float posY;
     private long time;
     static private Kryo kryo;
 
 
-    public PlayerState(int playerID, float posX, float posY, long time) {
+    public PlayerState(int playerID, Player.State state,  float posX, float posY, long time) {
         this.playerID = playerID;
+        this.state = state;
         this.posX = posX;
         this.posY = posY;
         this.time = time;
@@ -49,5 +52,9 @@ public class PlayerState {
 
     public long getTime() {
         return time;
+    }
+
+    public Player.State getState() {
+        return state;
     }
 }

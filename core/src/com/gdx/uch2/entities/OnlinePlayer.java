@@ -14,7 +14,10 @@ public class OnlinePlayer {
     private long end;
     private float stateTime;
     private boolean facingLeft;
+    private boolean falling;
     private String nickname;
+    private Player.State state;
+    float localTime = 0;
 
 
     private OnlinePlayer(PlayerState initialState) {
@@ -25,10 +28,11 @@ public class OnlinePlayer {
         end = begin;
         stateTime = 0;
         facingLeft = false;
+        falling = false;
     }
 
     public OnlinePlayer(int playerId, String nickname) {
-        this(new PlayerState(playerId, 0, 0, 0));
+        this(new PlayerState(playerId, Player.State.IDLE, 0, 0, 0));
         this.nickname = nickname;
     }
 
@@ -44,11 +48,13 @@ public class OnlinePlayer {
 
         begin = end;
         end = update.getTime();
+        state = update.getState();
         stateTime = 0;
     }
 
     public void update(float delta) {
         stateTime += delta;
+        localTime += delta;
         float diff = (end - begin) / 1e9f;
 
         if (stateTime >= diff) {
@@ -62,6 +68,9 @@ public class OnlinePlayer {
 
         if (position.x - from.x != 0)
             facingLeft = position.x - from.x < 0;
+
+        if (position.y - from.y != 0)
+            falling = position.y - from.y < 0;
     }
 
     public Vector2 getPosition() {
@@ -72,4 +81,19 @@ public class OnlinePlayer {
         return facingLeft;
     }
 
+    public boolean isFalling() {
+        return falling;
+    }
+
+    public Player.State getState() {
+        return state;
+    }
+
+    public boolean isDead() {
+        return state == Player.State.DEAD;
+    }
+
+    public float getLocalTime() {
+        return localTime;
+    }
 }

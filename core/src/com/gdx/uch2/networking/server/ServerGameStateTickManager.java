@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.server;
 
+import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.PlayerState;
@@ -58,7 +59,7 @@ public class ServerGameStateTickManager {
         PlayerState[] newPlayers = new PlayerState[nbPlayers];
 
         for(int i = 0; i < nbPlayers; ++i){
-            newPlayers[i] = new PlayerState(i, posX, posY, 0); //Place tous les joueurs au même endroit
+            newPlayers[i] = new PlayerState(i, Player.State.IDLE, posX, posY, 0); //Place tous les joueurs au même endroit
         }
         gameState = new GameState(newPlayers);
     }
