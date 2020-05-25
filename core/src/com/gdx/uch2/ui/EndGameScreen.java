@@ -110,27 +110,12 @@ public class EndGameScreen implements Screen {
         }
 
         //create buttons
-        TextButton createButton = new TextButton("Continue", skin);
         TextButton mainMenuButton = new TextButton("Main menu", skin);
 
         //add buttons to table
-        table.add(createButton).width(200).colspan(2);
-        table.row();
         table.add(mainMenuButton).width(200).colspan(2);
 
         // create button listeners
-        createButton.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                //TODO Add player nickname for waiting room
-                Screen s = new WaitingRoomMenu("nickname");
-                ScreenManager.getInstance().showScreen(s);
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
         mainMenuButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {

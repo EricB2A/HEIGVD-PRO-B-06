@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.networking.client.GameClient;
+import com.gdx.uch2.ui.uiUtil.GameParameters;
 
 public class JoinRoomMenu implements Screen {
     private Stage stage;
@@ -136,7 +137,7 @@ public class JoinRoomMenu implements Screen {
 
                 hostname = ipTF.getText();
                 new GameClient(hostname, port, nickname);
-                Screen s = new WaitingRoomMenu(nickname);
+                Screen s = new WaitingRoomMenu(new GameParameters(hostname, nickname, port));
                 ScreenManager.getInstance().showScreen(s);
             }
             @Override

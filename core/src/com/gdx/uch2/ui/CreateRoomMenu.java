@@ -1,21 +1,17 @@
 package com.gdx.uch2.ui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Select;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
-import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.server.GameServer;
-
-import javax.sound.sampled.Port;
+import com.gdx.uch2.ui.uiUtil.GameParameters;
 
 public class CreateRoomMenu implements Screen {
     private Stage stage;
@@ -89,7 +85,7 @@ public class CreateRoomMenu implements Screen {
         table.row();
 
         // Nickname
-        HorizontalGroup nicknameGroup = new HorizontalGroup();
+        final HorizontalGroup nicknameGroup = new HorizontalGroup();
         nicknameGroup.space(10);
         nicknameGroup.addActor(nicknameLabel);
         nicknameGroup.addActor(nicknameTF);
@@ -177,9 +173,9 @@ public class CreateRoomMenu implements Screen {
                 if (ErrorHandler.getInstance().isSet()) {
                     ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
                 } else {
-                    System.out.println("OCTUPLE ZOOM ");
-                    new GameClient("localhost", port, nickname);
-                    Screen s = new WaitingRoomMenu(nickname);
+                    final String hostname = "localhost";
+                    new GameClient(hostname, port, nickname);
+                    Screen s = new WaitingRoomMenu(new GameParameters(hostname, nickname, port));
                     ScreenManager.getInstance().showScreen(s);
                 }
             }
