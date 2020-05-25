@@ -19,13 +19,15 @@ public class WaitingRoomMenu implements Screen {
     private Stage stage;
     static private ArrayList<String> playersName = new ArrayList<>();
     private GameParameters params;
+    private InputListener cancelOperation;
 
-    public WaitingRoomMenu(GameParameters params){
+    public WaitingRoomMenu(GameParameters params, InputListener cancelOperation){
         // create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         playersName.add(params.nickname);
         this.params = params;
+        this.cancelOperation = cancelOperation;
     }
 
     @Override
@@ -64,10 +66,10 @@ public class WaitingRoomMenu implements Screen {
 
         table.row();
 
+        TextButton cancelButton = new TextButton("Go back", skin);
+        table.add(cancelButton).width(200).center();
 
-
-
-
+        cancelButton.addListener(cancelOperation);
     }
 
     @Override

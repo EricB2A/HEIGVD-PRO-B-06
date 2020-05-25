@@ -17,7 +17,7 @@ import java.util.List;
 
 public class GameServer implements Runnable {
     //2 premiers joueurs à se connecter.
-    private PlayerContext[] players;
+    static PlayerContext[] players;
     private String[] nicknames;
 
     //indique si la partie est pleine
@@ -29,6 +29,7 @@ public class GameServer implements Runnable {
     private int numlevel;
     private int nbPlayers;
     private int nbRounds;
+    private CentralGameManager manager;
 
     public GameServer(int port, int noLevel, int nbPlayers, int nbRounds){
         this.port = port;
@@ -53,29 +54,38 @@ public class GameServer implements Runnable {
         }
 
         int id = -1;
+        manager = new CentralGameManager(level, nbRounds);
         while (!full) {
             try {
                 Socket clientSocket = serverSocket.accept();
 
                 for (int i = 0; i < players.length; ++i) {
-                    if (players[i] != null) {
-                        players[i].out.writeMessage(MessageType.Ping);
-                        System.out.println(i + " : " + players[i].in.getType());
-                        if (players[i].in.e != null) {
-                            if (id < 0) {
-                                id = i;
-                            } else {
-                                players[i] = null;
-                            }
-                        }
-                    } else if (id < 0) {
+//                    if (players[i] != null) {
+//                        players[i].out.writeMessage(MessageType.Ping);
+//                        System.out.println(i + " : " + players[i].in.getType());
+//                        if (players[i].in.e != null) {
+//                            if (id < 0) {
+//                                id = i;
+//                            } else {
+//                                players[i] = null;
+//                            }
+//                        }
+//                    } else if (id < 0) {
+//                        id = i;
+//                    }
+
+                    if (players[i] == null) {
                         id = i;
+                        break;
                     }
                 }
 
                 PlayerContext ctx = new PlayerContext(id, clientSocket);
                 players[id] = ctx;
                 nicknames[id] = ctx.in.readString();
+
+                Thread t = new Thread(new PlayerHandler(manager, ctx));
+                t.start();
 
                 if(id == nbPlayers - 1){
                     full = true;
@@ -97,12 +107,7 @@ public class GameServer implements Runnable {
         gameStarted = true;
         System.out.println(players.length + " joueurs connectés. Lancer la partie.");
 
-        CentralGameManager manager = new CentralGameManager(players, level, nbRounds);
-
-        for (PlayerContext player : players) {
-            Thread t = new Thread(new PlayerHandler(manager, player));
-            t.start();
-        }
+        manager.init(players);
 
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
         for(PlayerContext ctx : players){
