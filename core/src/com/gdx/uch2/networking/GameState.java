@@ -42,7 +42,8 @@ public class GameState {
     }
 
     public void setPlayerState(PlayerState p) {
-        playersStates.put(p.getPlayerID(), p);
+        if (p != null)
+            playersStates.put(p.getPlayerID(), p);
     }
 
     public void removePlayer(int id) {
