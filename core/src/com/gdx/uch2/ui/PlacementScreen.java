@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -30,6 +32,9 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private Stage stage;
     private Block.Type blockType;
     private Label message;
+    private Label[] choicesLabel;
+    private final Label.LabelStyle defaultStyle = new Label.LabelStyle(new BitmapFont(), null);
+    private final Label.LabelStyle selectStyle = new Label.LabelStyle(new BitmapFont(), Color.CHARTREUSE);
 
     private int width, height;
 
@@ -43,6 +48,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         world.resetPlayer();
         stage = new Stage(new ScreenViewport());
         renderer = new WorldRenderer(world, stage.getBatch(), false);
+        blockType = Block.Type.BOX;
         Gdx.input.setInputProcessor(this);
 
         Table table = new Table();
@@ -50,16 +56,20 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         stage.addActor(table);
 
         message = new Label("...", new Label.LabelStyle(new BitmapFont(), null));
+        choicesLabel = new Label[] {
+            new Label("Key [1] : Pick a box", selectStyle),
+            new Label("Key [2] : Pick a lethal trap", defaultStyle)
+        };
 
-        table.add(message).colspan(2).center();
+        table.add(message).center().padBottom(40);
         table.row();
-        table.add(new Label("TOOLBOX", new Label.LabelStyle(new BitmapFont(), null))).colspan(2).center();
+        table.add(new Label("TOOLBOX", new Label.LabelStyle(new BitmapFont(), null))).center().padBottom(20);
         table.row();
-        table.add(new Label("Key [1] : Choose a box", new Label.LabelStyle(new BitmapFont(), null))).colspan(2).center();
-        table.row();
-        table.add(new Label("Key [2] : Choose a block", new Label.LabelStyle(new BitmapFont(), null))).colspan(2).center();
-        table.row();
-        table.add(new Label("Key [3] : Choose a lethal trap", new Label.LabelStyle(new BitmapFont(), null))).colspan(2).center();
+
+        for (Label l : choicesLabel) {
+            table.add(l).colspan(2).left();
+            table.row();
+        }
     }
 
     @Override
@@ -81,9 +91,9 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         renderer.renderBackground();
 
         if(ClientPlayerStateTickManager.getInstance().getCanPlace()) {
-            message.setText("Place a item on the map");
+            message.setText("Place an item on the map\n\n\n");
         } else {
-            message.setText("Waiting for the other players placing their items");
+            message.setText("Waiting for the other players placing their items\n\n\n");
         }
 
         stage.draw();
@@ -110,19 +120,41 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        int select = -1;
         switch(keycode){
             case Input.Keys.NUM_1:
-            case Input.Keys.NUMPAD_1: blockType = Block.Type.BOX; break;
+            case Input.Keys.NUMPAD_1:
+                blockType = Block.Type.BOX;
+                select = 0;
+                break;
+//            case Input.Keys.NUM_2:
+//            case Input.Keys.NUMPAD_2:
+//                blockType = Block.Type.BLOCK;
+//                select = 1;
+//                break;
             case Input.Keys.NUM_2:
-            case Input.Keys.NUMPAD_2: blockType = Block.Type.BLOCK; break;
-            case Input.Keys.NUM_3:
-            case Input.Keys.NUMPAD_3: blockType = Block.Type.LETHAL; break;
-            case Input.Keys.NUM_4:
-            case Input.Keys.NUMPAD_4: blockType = Block.Type.G_DOWN; break;
-            case Input.Keys.NUM_5:
-            case Input.Keys.NUMPAD_5: blockType = Block.Type.G_UP; break;
-            default: blockType = Block.Type.BOX; break;
+            case Input.Keys.NUMPAD_2:
+                blockType = Block.Type.LETHAL;
+                select = 1;
+                break;
+//            case Input.Keys.NUM_4:
+//            case Input.Keys.NUMPAD_4: blockType = Block.Type.G_DOWN; break;
+//            case Input.Keys.NUM_5:
+//            case Input.Keys.NUMPAD_5: blockType = Block.Type.G_UP; break;
+            default:
+                break;
         }
+
+        if (select != -1) {
+            for (int i = 0; i < choicesLabel.length; ++i) {
+                if (select == i) {
+                    choicesLabel[i].setStyle(selectStyle);
+                } else {
+                    choicesLabel[i].setStyle(defaultStyle);
+                }
+            }
+        }
+
         return true;
     }
 
