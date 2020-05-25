@@ -19,7 +19,7 @@ public class SendPlayerState extends TimerTask {
 
     @Override
     public void run() {
-        ctx.out.writeMessage(ClientPlayerStateTickManager.getInstance().getCurrentState());
+        ctx.out.writeMessage(MessageSender.getInstance().getCurrentState());
 
         if (ctx.out.e != null) {
             timer.cancel();

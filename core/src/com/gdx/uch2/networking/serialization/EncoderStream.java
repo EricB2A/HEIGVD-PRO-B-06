@@ -9,21 +9,36 @@ import com.gdx.uch2.networking.PlayerState;
 import java.io.*;
 import java.util.concurrent.Semaphore;
 
+/**
+ * OutputStream encodant les bytes écrits en fonction de l'onjet passé en paramètre
+ */
 public class EncoderStream extends FilterOutputStream {
     private Semaphore mutex;
     private DataOutputStream stream;
     public IOException e = null;
 
+    /**
+     * Constructeur prenant un OutputStream en paramètre
+     * @param stream Outputstream sur lequel ajouter l'EncoderStream
+     */
     public EncoderStream(OutputStream stream) {
         super(new DataOutputStream( new BufferedOutputStream(stream)));
         this.mutex = new Semaphore(1);
         this.stream = (DataOutputStream) out;
     }
 
+    /**
+     * Ecrit un type de message
+     * @param messageType le type de message à écrire
+     */
     public void writeMessage(MessageType messageType) {
         writeMessage(messageType.ordinal());
     }
 
+    /**
+     * Ecrit un entier
+     * @param i l'entier à écrire
+     */
     public void writeMessage(int i) {
         try {
             mutex.acquire();
@@ -41,6 +56,10 @@ public class EncoderStream extends FilterOutputStream {
         }
     }
 
+    /**
+     * Ecrit une String
+     * @param s la String à écrire
+     */
     public void writeMessage(String s) {
         try {
             mutex.acquire();
@@ -58,7 +77,10 @@ public class EncoderStream extends FilterOutputStream {
         }
     }
 
-
+    /**
+     * Ecrit un tableau de scores
+     * @param scores le tableau de scores
+     */
     public void writeMessage(int[] scores){
         try {
             mutex.acquire();
@@ -79,6 +101,10 @@ public class EncoderStream extends FilterOutputStream {
         }
     }
 
+    /**
+     * Ecrit un playerState
+     * @param playerState le PlayerState à écrire
+     */
     public void writeMessage(PlayerState playerState){
         try {
             mutex.acquire();
@@ -111,6 +137,10 @@ public class EncoderStream extends FilterOutputStream {
         }
     }
 
+    /**
+     * Ecrit un GameState
+     * @param gameState le GameState à écrire
+     */
     public void writeMessage(GameState gameState){
         try {
             mutex.acquire();
@@ -134,6 +164,10 @@ public class EncoderStream extends FilterOutputStream {
         }
     }
 
+    /**
+     * Ecrit un ObjectPlacement
+     * @param objectPlacement l'ObjectPlacement à écrire
+     */
     public void writeMessage(ObjectPlacement objectPlacement){
         try {
             mutex.acquire();
@@ -162,6 +196,9 @@ public class EncoderStream extends FilterOutputStream {
         }
     }
 
+    /**
+     * Ferme le stream
+     */
     public void close(){
         try {
             stream.close();
@@ -170,6 +207,9 @@ public class EncoderStream extends FilterOutputStream {
         }
     }
 
+    /**
+     * Flush les données dans le stream
+     */
     public void flush(){
         try {
             stream.flush();

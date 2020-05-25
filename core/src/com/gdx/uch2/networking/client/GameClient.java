@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+/**
+ * Client du jeu
+ */
 public class GameClient {
     private final int port;
     private final String hostname;
@@ -20,6 +23,12 @@ public class GameClient {
     public static PlayerContext context = null;
     public static Thread thread = null;
 
+    /**
+     * Constructeur publique
+     * @param hostname hostname du serveur de la partie à rejoindre
+     * @param port port sur lequel communique le serveur de la partie à rejoindre
+     * @param nickname nom du joueur
+     */
     public GameClient(String hostname, int port, String nickname){
         this.port = port;
         this.hostname = hostname;
@@ -97,8 +106,12 @@ public class GameClient {
             thread = null;
         }
 
+        /**
+         * Traite un message reçu de type GameStart
+         * @param ctx le contexte du joueur
+         */
         private void processGameStart(PlayerContext ctx) {
-            ClientPlayerStateTickManager.getInstance().setPlayerID(ctx.getId());
+            MessageSender.getInstance().setPlayerID(ctx.getId());
             OnlinePlayerManager.getInstance().init(ctx.getId(), nickname);
             World.currentWorld = new World(ctx.in.readInt());
             int nbPlayers = ctx.in.readInt();
@@ -113,12 +126,16 @@ public class GameClient {
             startSending(ctx);
         }
 
+        /**
+         * Initialise le MessageSender et commence l'envoi régulier de PlayerStates
+         * @param ctx
+         */
         private void startSending(PlayerContext ctx) {
             Vector2 pos = World.currentWorld.getLevel().getSpanPosition();
-            ClientPlayerStateTickManager.getInstance().setContext(ctx);
-            ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(ctx.getId(),
+            MessageSender.getInstance().setContext(ctx);
+            MessageSender.getInstance().setCurrentState(new PlayerState(ctx.getId(),
                     Player.State.IDLE, pos.x, pos.y, 0));
-            ClientPlayerStateTickManager.getInstance().start(0, Constants.TICK_DURATION);
+            MessageSender.getInstance().start(0, Constants.TICK_DURATION);
         }
     }
 }

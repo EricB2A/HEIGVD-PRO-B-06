@@ -7,8 +7,6 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -20,8 +18,7 @@ import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.client.ErrorHandler;
-import com.gdx.uch2.networking.client.ClientPlayerStateTickManager;
-import com.gdx.uch2.networking.client.GameClient;
+import com.gdx.uch2.networking.client.MessageSender;
 import com.gdx.uch2.networking.client.GameClientHandler;
 import com.gdx.uch2.view.WorldRenderer;
 
@@ -90,7 +87,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
         renderer.renderBackground();
 
-        if(ClientPlayerStateTickManager.getInstance().getCanPlace()) {
+        if(MessageSender.getInstance().getCanPlace()) {
             message.setText("Place an item on the map\n\n\n");
         } else {
             message.setText("Waiting for the other players placing their items\n\n\n");
@@ -170,7 +167,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if(ClientPlayerStateTickManager.getInstance().getCanPlace()){
+        if(MessageSender.getInstance().getCanPlace()){
             if (button == Input.Buttons.LEFT) {
                 Vector2 pos = new Vector2(x,height - y);
                 renderer.scale(pos);
@@ -188,7 +185,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                         case G_UP: block = new Trap(new Vector2(x, y), blockType); break;
                         default: block = new Block(new Vector2(x, y), Block.Type.BOX); break;
                     }
-                    ClientPlayerStateTickManager.getInstance().sendBlockPlacement(block);
+                    MessageSender.getInstance().sendBlockPlacement(block);
                 }
             }
         }
