@@ -6,7 +6,6 @@ public enum MessageType {
     GameStart,
     AckGameStart,
     BlockPlaced,
-    AckBlockPlaced,
     PlayerStateUpdate,
     ReachedEnd,
     Death,
@@ -15,7 +14,6 @@ public enum MessageType {
     StartEditingPhase,
     EndGame,
     Score
-
     ;
 
 }

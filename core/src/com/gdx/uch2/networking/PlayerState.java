@@ -10,7 +10,6 @@ public class PlayerState {
     private float posX;
     private float posY;
     private long time;
-    static private Kryo kryo;
 
 
     public PlayerState(int playerID, Player.State state,  float posX, float posY, long time) {

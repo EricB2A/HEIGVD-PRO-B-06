@@ -9,15 +9,12 @@ import java.util.TreeMap;
 
 public class GameState {
     private Map<Integer,PlayerState> playersStates;
-    static private Kryo kryo;
 
-    public GameState(){
-    }
 
     public GameState(PlayerState[] playerStates){
         playersStates = new TreeMap<>();
-        for(int i = 0; i < playerStates.length; ++i){
-            this.playersStates.put(playerStates[i].getPlayerID(), playerStates[i]); //TODO clone playerStates[i]
+        for (PlayerState playerState : playerStates) {
+            this.playersStates.put(playerState.getPlayerID(), playerState);
         }
     }
 
@@ -26,10 +23,6 @@ public class GameState {
         return "GameState{" +
                 "playersStates=" + playersStates +
                 '}';
-    }
-
-    public static Kryo getKryo(){
-        return GameState.kryo;
     }
 
     public float getPosX(int playerID) {
