@@ -10,11 +10,13 @@ import java.util.concurrent.Semaphore;
 
 import static io.netty.buffer.Unpooled.buffer;
 
+/**
+ * Classe métier gérant les
+ */
 public class CentralGameManager {
 
     private PlayerContext[] players;
     private int[] finished; // 0 = pas arrivé, 1 = arrivé, 2 = premier arrivé.
-    private boolean[] recievedBlockPlacement;
     private boolean[] dead;
     private GamePhase currentPhase;
     private Level map;
@@ -38,10 +40,11 @@ public class CentralGameManager {
         this.players = players;
         finished = new int[players.length];
         Arrays.fill(finished, 0);
-        recievedBlockPlacement = new boolean[players.length];
         dead = new boolean[players.length];
         scoring = new int[players.length];
         Arrays.fill(scoring, 0);
+        firstArrived = true;
+
     }
 
 

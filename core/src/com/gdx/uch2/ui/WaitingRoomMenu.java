@@ -57,7 +57,7 @@ public class WaitingRoomMenu implements Screen {
         infosGroup.addActor(portLabel);
         infosGroup.addActor(nicknamelabel);
 
-        infosGroup.setBounds(50, stage.getHeight() - 70, 70, 50);
+        infosGroup.setBounds(80, stage.getHeight() - 70, 70, 50);
         stage.addActor(infosGroup);
 
         Label titleLabel = new Label("Waiting for players", skin);
