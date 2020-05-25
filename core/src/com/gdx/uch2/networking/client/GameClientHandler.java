@@ -101,9 +101,7 @@ public class GameClientHandler {
             System.out.println("CLI: placement du bloc reçu");
         }
 
-        if(op.getPlayerID() == ctx.getId()){
-            MessageSender.getInstance().setCanPlace(true);
-        }else if(op.getPlayerID() == -1){
+        if(op.getPlayerID() == -1){
             startMovementPhase();
         }
     }
@@ -116,7 +114,7 @@ public class GameClientHandler {
 
     private void startEditingPhase(){
         currentPhase = GamePhase.Editing;
-        MessageSender.getInstance().setCanPlace(false);
+        MessageSender.getInstance().setCanPlace(true);
         Vector2 pos = World.currentWorld.getLevel().getSpanPosition();
         MessageSender.getInstance().setContext(ctx);
         MessageSender.getInstance().setCurrentState(new PlayerState(ctx.getId(),
