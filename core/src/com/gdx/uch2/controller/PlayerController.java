@@ -1,6 +1,5 @@
 package com.gdx.uch2.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,13 +10,11 @@ import com.badlogic.gdx.utils.Pool;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.Player.State;
-import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.PlayerState;
-import com.gdx.uch2.networking.client.ClientPlayerStateTickManager;
+import com.gdx.uch2.networking.client.MessageSender;
 
-import com.gdx.uch2.effects.Effect;
 import com.gdx.uch2.networking.client.GameClientHandler;
 
 public class PlayerController {
@@ -168,8 +165,8 @@ public class PlayerController {
             finish();
         }
 
-        ClientPlayerStateTickManager.getInstance().setCurrentState(
-                new PlayerState(ClientPlayerStateTickManager.getInstance().getPlayerID(),
+        MessageSender.getInstance().setCurrentState(
+                new PlayerState(MessageSender.getInstance().getPlayerID(),
                         player.isDead() ? State.DEAD : player.getState(),
                         player.getPosition().x, player.getPosition().y, System.nanoTime()));
     }
@@ -178,9 +175,9 @@ public class PlayerController {
     private void finish() {
         if(!finished){
             if (player.isDead()) {
-                ClientPlayerStateTickManager.getInstance().sendDeath();
+                MessageSender.getInstance().sendDeath();
             } else {
-                ClientPlayerStateTickManager.getInstance().sendFinish();
+                MessageSender.getInstance().sendFinish();
             }
             finished = true;
             player.setState(State.IDLE);

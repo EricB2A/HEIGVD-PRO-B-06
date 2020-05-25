@@ -12,19 +12,29 @@ import com.gdx.uch2.networking.PlayerState;
 
 import java.io.*;
 
+/**
+ * InputStream décodant les bytes lus en fonction de la méthode utilisée
+ */
 public class DecoderStream extends FilterInputStream {
 
     private final DataInputStream stream;
     public IOException e = null;
 
 
+    /**
+     * Constructeur prenant un Inputstream en paramètre
+     * @param stream Inputstream sur lequel ajouter le DecoderStream
+     */
     public DecoderStream(InputStream stream) {
         super(new DataInputStream(new BufferedInputStream(stream)));
         this.stream = (DataInputStream) in;
     }
 
+    /**
+     * Lit un type de message. Ne lit pas la suite du stream.
+     * @return le type de message lu
+     */
     public MessageType getType() {
-
         MessageType m = null;
         try {
             m = MessageType.values()[stream.readInt()];
@@ -36,6 +46,10 @@ public class DecoderStream extends FilterInputStream {
         return m;
     }
 
+    /**
+     * Lit un PlayerState
+     * @return le PlayerState lu
+     */
     public PlayerState readPlayerState() {
         int id;
         Player.State state;
@@ -57,6 +71,10 @@ public class DecoderStream extends FilterInputStream {
         return new PlayerState(id, state, x, y, time);
     }
 
+    /**
+     * Lit un GameState
+     * @return le GameState lu
+     */
     public GameState readGameState() {
         int size;
         try {
@@ -76,6 +94,10 @@ public class DecoderStream extends FilterInputStream {
         return new GameState(players);
     }
 
+    /**
+     * Lit un tableau de scores
+     * @return le tableau de scores lu
+     */
     public int[] readScore(){
         int size;
         try{
@@ -94,6 +116,10 @@ public class DecoderStream extends FilterInputStream {
         }
     }
 
+    /**
+     * Lit un ObjectPlacement
+     * @return l'ObjectPlacement lu
+     */
     public ObjectPlacement readObjectPlacement() {
         int id;
         Block.Type type = null;
@@ -128,6 +154,10 @@ public class DecoderStream extends FilterInputStream {
         }
     }
 
+    /**
+     * Lit un entier sur 32 bits
+     * @return l'entier lu
+     */
     public int readInt() {
         int i;
         try {
@@ -141,6 +171,10 @@ public class DecoderStream extends FilterInputStream {
         return i;
     }
 
+    /**
+     * Lit une String
+     * @return la String lue
+     */
     public String readString() {
         String s = null;
         try {
@@ -153,6 +187,9 @@ public class DecoderStream extends FilterInputStream {
         return s;
     }
 
+    /**
+     * Ferme le stream
+     */
     public void close() {
         try {
             stream.close();

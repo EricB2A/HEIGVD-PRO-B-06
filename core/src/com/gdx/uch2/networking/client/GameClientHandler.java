@@ -6,6 +6,9 @@ import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.*;
 
+/**
+ * Classe Traitant les informations reçues du serveur
+ */
 public class GameClientHandler {
 
     private int playerID = -1;
@@ -14,6 +17,10 @@ public class GameClientHandler {
     static private boolean roundOver;
     private PlayerContext ctx;
 
+    /**
+     * Constructeur
+     * @param ctx Contexte du joueur
+     */
     public GameClientHandler(PlayerContext ctx) {
         this.ctx = ctx;
         this.playerID = ctx.getId();
@@ -21,39 +28,61 @@ public class GameClientHandler {
         isOver = false;
     }
 
+    /**
+     * Lit et traite un message en fonction du type du message
+     * @param type le type du message
+     */
     public void readMessage(MessageType type) {
-            if(type == MessageType.GameStateUpdate){
+
+        switch(type){
+            case GameStateUpdate:
                 processGameStateUpdate();
-            }
-            else if(type == MessageType.BlockPlaced) {
+                break;
+            case BlockPlaced:
                 processBlockPlacement();
-            }
-            else if(type == MessageType.StartMovementPhase) {
+                break;
+            case StartMovementPhase:
                 startMovementPhase();
-            }
-            else if (type == MessageType.EndGame) {
+                break;
+            case EndGame:
                 isOver = true;
-            }else if(type == MessageType.Score){
+                break;
+            case Score:
                 processScoreUpdate();
-            }
-            else {
+                break;
+            default:
                 System.out.println("CLI: Message non traitable par le client : " + type);
-            }
+                break;
+        }
+
     }
 
+    /**
+     * Indique si la partie est terminée
+     * @return true si la partie est terminée, false sinon
+     */
     public static boolean isOver() {
         return isOver;
     }
 
+    /**
+     * Indique si le round est terminé
+     * @return true si le round est terminé, false sinon
+     */
     public static boolean isRoundOver() {
         return roundOver;
     }
 
+    /**
+     * Traite un message de type GameStateUpdate
+     */
     private void processGameStateUpdate(){
         OnlinePlayerManager.getInstance().update(ctx.in.readGameState());
-//        System.out.println("CLI: Gamestate reçu par le client :" + objects.get(0).toString());
     }
 
+    /**
+     * Traite un message de type Score
+     */
     private void processScoreUpdate(){
         OnlinePlayerManager.getInstance().setScores(ctx.in.readScore());
         System.out.println("CLI: Received les scores mec.");
@@ -75,7 +104,7 @@ public class GameClientHandler {
         }
 
         if(op.getPlayerID() == playerID){
-            ClientPlayerStateTickManager.getInstance().setCanPlace(true);
+            MessageSender.getInstance().setCanPlace(true);
         }else if(op.getPlayerID() == -1){
             startMovementPhase();
         }
@@ -89,10 +118,10 @@ public class GameClientHandler {
 
     private void startEditingPhase(){
         currentPhase = GamePhase.Editing;
-        ClientPlayerStateTickManager.getInstance().setCanPlace(false);
+        MessageSender.getInstance().setCanPlace(false);
         Vector2 pos = World.currentWorld.getLevel().getSpanPosition();
-        ClientPlayerStateTickManager.getInstance().setContext(ctx);
-        ClientPlayerStateTickManager.getInstance().setCurrentState(new PlayerState(ctx.getId(),
+        MessageSender.getInstance().setContext(ctx);
+        MessageSender.getInstance().setCurrentState(new PlayerState(ctx.getId(),
                 Player.State.IDLE, pos.x, pos.y, 0));
         System.out.println("CLI: START EDITING PHASE");
     }
