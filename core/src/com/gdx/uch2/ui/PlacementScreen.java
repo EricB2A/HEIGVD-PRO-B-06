@@ -78,7 +78,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             ScreenManager.getInstance().showScreen(new GameScreen(world));
             return;
         } else if (GameClientHandler.isOver()) {
-            ScreenManager.getInstance().showScreen(new EndGameScreen(null));
+            ScreenManager.getInstance().showScreen(new EndGameScreen());
             return;
         }
 
