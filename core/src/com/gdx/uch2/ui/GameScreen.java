@@ -4,10 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.controller.PlayerController;
-import com.gdx.uch2.entities.OnlinePlayerManager;
-import com.gdx.uch2.entities.World;
+import com.gdx.uch2.entities.*;
 import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.GameClientHandler;
 import com.gdx.uch2.view.WorldRenderer;
@@ -17,18 +21,33 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
     private World world;
     private WorldRenderer renderer;
     private PlayerController controller;
+    private Stage stage;
+    private Label[] nicknamesLabel;
+    private float ppuX, ppuY;
 
     private int width, height;
 
     public GameScreen(World world) {
         this.world = world;
-        renderer = new WorldRenderer(world, false);
+        stage = new Stage(new ScreenViewport());
+        renderer = new WorldRenderer(world, stage.getBatch(), false);
         controller = new PlayerController(world);
+        nicknamesLabel = new Label[OnlinePlayerManager.getInstance().getNicknames().length];
+        ppuX = stage.getWidth() / world.getLevel().getWidth();
+        ppuY = stage.getHeight() / world.getLevel().getHeight();
 //        OnlinePlayerManager.getInstance().resetPlayers();
+
     }
 
     @Override
     public void show() {
+        for(int i = 0; i < nicknamesLabel.length; ++i) {
+            if (i != OnlinePlayerManager.getInstance().getPlayerId()) {
+                nicknamesLabel[i] = new Label(OnlinePlayerManager.getInstance().getNicknames()[i],
+                        new Label.LabelStyle(new BitmapFont(), null));
+                stage.addActor(nicknamesLabel[i]);
+            }
+        }
         Gdx.input.setInputProcessor(this);
     }
 
@@ -51,6 +70,17 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
         controller.update(delta);
         OnlinePlayerManager.getInstance().updatePlayers(delta);
         renderer.render();
+
+        for (int i = 0; i < nicknamesLabel.length; ++i) {
+            if (i != OnlinePlayerManager.getInstance().getPlayerId()) {
+                OnlinePlayer p = OnlinePlayerManager.getInstance().getPlayer(i);
+                nicknamesLabel[i].setPosition((p.getPosition().x + Player.OFFSET.x + Player.HITBOX_WIDTH / 2f ) * ppuX - nicknamesLabel[i].getWidth() / 2,
+                        (p.getPosition().y + Player.HITBOX_HEIGHT + Player.OFFSET.y + 0.2f) * ppuY);
+                nicknamesLabel[i].setAlignment(Align.center);
+            }
+        }
+
+        stage.draw();
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.uch2.entities.*;
 import com.gdx.uch2.entities.Player.State;
@@ -60,7 +61,7 @@ public class WorldRenderer {
     private Animation opponentIdleRightAnimation;
     private Animation opponentIdleLeftAnimation;
 
-    private SpriteBatch spriteBatch;
+    private Batch spriteBatch;
     private boolean debug = false;
     private int width;
     private int height;
@@ -81,7 +82,7 @@ public class WorldRenderer {
         this.debug = debug;
     }
 
-    public WorldRenderer(World world, boolean debug) {
+    public WorldRenderer(World world, Batch batch, boolean debug) {
         this.world = world;
         camera_width = world.getLevel().getWidth();
         camera_height = world.getLevel().getHeight();
@@ -90,7 +91,7 @@ public class WorldRenderer {
 		this.cam.position.set(camera_width / 2f, camera_height / 2f, 0);
         this.cam.update();
         this.debug = debug;
-        spriteBatch = new SpriteBatch();
+        spriteBatch = batch;
         loadTextures();
     }
 

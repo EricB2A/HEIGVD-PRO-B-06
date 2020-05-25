@@ -177,7 +177,6 @@ public class CreateRoomMenu implements Screen {
                 if (ErrorHandler.getInstance().isSet()) {
                     ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
                 } else {
-                    System.out.println("OCTUPLE ZOOM ");
                     new GameClient("localhost", port, nickname);
                     Screen s = new WaitingRoomMenu(nickname);
                     ScreenManager.getInstance().showScreen(s);

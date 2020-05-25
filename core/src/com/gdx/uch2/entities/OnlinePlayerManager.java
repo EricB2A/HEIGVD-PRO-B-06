@@ -68,4 +68,11 @@ public class OnlinePlayerManager {
         this.nickname = nickname;
     }
 
+    public OnlinePlayer getPlayer(int i) {
+        return players.get(i);
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
 }

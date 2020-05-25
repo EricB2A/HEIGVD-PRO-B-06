@@ -150,9 +150,9 @@ public class CentralGameManager {
 
 
         if(allFinished){
-            computePoints();
             resetPlayersPositions();
             if (++round < nbRounds) {
+                computePoints();
                 startEditingPhase();
             } else {
                 endGame();
@@ -162,6 +162,7 @@ public class CentralGameManager {
     }
 
     private void endGame() {
+        computePoints();
         for (PlayerContext p : players) {
             if (!p.getSocket().isClosed()) {
                 p.out.writeMessage(MessageType.EndGame);

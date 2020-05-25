@@ -46,6 +46,8 @@ public class PlayerHandler implements Runnable {
             }
         }
 
+        System.out.printf("KJHSKJHFSDKFDSF");
+
         if (!manager.isOver()) {
             manager.disconnectedClient(context);
         }
