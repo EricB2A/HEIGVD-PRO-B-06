@@ -19,15 +19,21 @@ import com.gdx.uch2.networking.client.MessageSender;
 
 import com.gdx.uch2.networking.client.GameClientHandler;
 
+/**
+ * Classe permettant de contrôler les mouvements et actions d'un joueur
+ */
 public class PlayerController {
 
+    /**
+     * Touches sur lesquelles l'utilisateur pour contrôler le joueur
+     */
     enum Keys {
-        LEFT, RIGHT, JUMP, FIRE
+        LEFT, RIGHT, JUMP
     }
 
     private static final long LONG_JUMP_PRESS 	= 220;
     private static final float ACCELERATION 	= 20;
-    public  static final float GRAVITY 			= -36f;
+    private static final float GRAVITY 			= -36f;
     private static final float MAX_JUMP_SPEED	= 10f;
     private static final float DAMP 			= 0.8f;
     private static final float MAX_VEL 			= 5.6f;
@@ -52,8 +58,6 @@ public class PlayerController {
     private Sound deathSound = Gdx.audio.newSound(Gdx.files.internal("sound/death.mp3"));
     private Sound finishSound = Gdx.audio.newSound(Gdx.files.internal("sound/finish.mp3"));
 
-    // This is the rectangle pool used in collision detection
-    // Good to avoid instantiation each frame
     private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
         @Override
         protected Rectangle newObject() {
@@ -63,56 +67,78 @@ public class PlayerController {
 
     private Map<PlayerController.Keys, Boolean> keys = new HashMap<>();
 
-    // Blocks that Player can collide with any given frame
     private Array<Block> collidable = new Array<>();
 
+    /**
+     * Constructeur
+     * @param world Monde dans lequel évolue le joueur
+     */
     public PlayerController(World world) {
         this.world = world;
         this.player = world.getPlayer();
         keys.put(Keys.LEFT, false);
         keys.put(Keys.RIGHT, false);
         keys.put(Keys.JUMP, false);
-        keys.put(Keys.FIRE, false);
     }
 
     // ** Key presses and touches **************** //
 
+    /**
+     * Indique que le joueur appuie sur la touche pour aller à gauche
+     */
     public void leftPressed() {
         keys.get(keys.put(Keys.LEFT, true));
     }
 
+    /**
+     * Indique que le joueur appuie sur la touche pour aller à droite
+     */
     public void rightPressed() {
         keys.get(keys.put(Keys.RIGHT, true));
     }
 
+    /**
+     * Indique que le joueur appuie sur la touche pour sauter
+     */
     public void jumpPressed() {
         jumpingPressed = true;
         keys.get(keys.put(Keys.JUMP, true));
     }
 
-    public void firePressed() {
-        keys.get(keys.put(Keys.FIRE, false));
-    }
-
+    /**
+     * Indique que le joueur relâche la touche pour aller à gauche
+     */
     public void leftReleased() {
         keys.get(keys.put(Keys.LEFT, false));
     }
 
+    /**
+     * Indique que le joueur relâche la touche pour aller à droite
+     */
     public void rightReleased() {
         keys.get(keys.put(Keys.RIGHT, false));
     }
 
+    /**
+     * Indique que le joueur relâche la touche pour sauter
+     */
     public void jumpReleased() {
         keys.get(keys.put(Keys.JUMP, false));
         jumpingActive = false;
     }
 
+    /**
+     * Indique que le joueur appuie sur la touche pour abandonner le round
+     */
     public void giveUp() {
         if (!finished)
             player.kill();
     }
 
-    /** The main update method **/
+    /**
+     * Méthode d'update principale, gère tous les déplacements/actions du personnage selon les inputs de l'utilisateur
+     * @param delta temps écoulé depuis le dernier appel à cette méthode
+     */
     public void update(float delta) {
         State bak = player.getState();
         if (!finished && !player.isDead()) {
@@ -195,7 +221,7 @@ public class PlayerController {
         }
     }
 
-    /** Collision checking **/
+    //vérification des collisions
     private void checkCollisionWithBlocks(float delta) {
         // scale velocity to frame units
         player.getVelocity().scl(delta);
@@ -329,11 +355,6 @@ public class PlayerController {
         // reset the collision box's position on Y
         playerRect.y = player.getBounds().y;
 
-        // update Player's position
-
-        // player.getPosition().add(player.getVelocity());
-        // player.getBounds().x = player.getPosition().x;
-        // player.getBounds().y = player.getPosition().y;
 
         player.translate(player.getVelocity());
 
@@ -342,7 +363,7 @@ public class PlayerController {
 
     }
 
-    /** populate the collidable array with the blocks found in the enclosing coordinates **/
+
     private void populateCollidableBlocks(int startX, int startY, int endX, int endY) {
         collidable.clear();
         for (int x = startX; x <= endX; x++) {
@@ -354,7 +375,7 @@ public class PlayerController {
         }
     }
 
-    /** Change Player's state and parameters based on input controls **/
+
     private boolean processInput() {
         if(GameClientHandler.currentPhase == GamePhase.Moving){
             if (keys.get(Keys.JUMP)) {
@@ -426,13 +447,7 @@ public class PlayerController {
                 player.getAcceleration().x = tmp;
             }
         }
-
-
         return false;
-    }
-
-    public boolean isDone() {
-        return finished;
     }
 
 }
