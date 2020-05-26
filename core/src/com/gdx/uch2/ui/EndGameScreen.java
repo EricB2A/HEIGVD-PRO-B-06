@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.OnlinePlayerManager;
@@ -83,27 +84,29 @@ public class EndGameScreen implements Screen {
         }
 
         // Create Text
-        Label titleLabel;
-        Label gagnant = null;
+        Label titleLabel = new Label("The game is over !", skin);
+        Label winnerLabel;
         // Égalité!
         if(scores[0] == scores[1]){
-            titleLabel = new Label("Equality !", skin); // Ou "Draw".
+            winnerLabel = new Label("Draw !", skin);
         }else{
-            titleLabel = new Label("End de partie !", skin);
-            gagnant = new Label("Le winner est : " + nicknames[0], skin);
-            gagnant.setFontScale(2);
+            winnerLabel = new Label("The winner is : " + nicknames[0], skin);
         }
+        winnerLabel.setFontScale(2);
         titleLabel.setFontScale(2);
        /* final Label nicknameLabel = new Label("Nickname", skin);
         nicknameLabel.setFontScale(1);*/
         Label score = new Label("Score", skin);
-        score.setFontScale(1);
+        score.setFontScale(1.5f);
 
         // Title
-        HorizontalGroup titleGroup = new HorizontalGroup();
-        titleGroup.space(10);
+        VerticalGroup titleGroup = new VerticalGroup();
+        titleGroup.space(30);
         titleGroup.addActor(titleLabel);
-        //titleGroup.addActor(chickenImg);
+
+        titleGroup.addActor(winnerLabel);
+        //titleGroup.padBottom(40);
+        //titleGroup.pad(40);
         table.add(titleGroup).colspan(2).center();
         table.row();
 
@@ -112,9 +115,8 @@ public class EndGameScreen implements Screen {
         HorizontalGroup infoGroup = new HorizontalGroup();
         infoGroup.space(30);
 //        infoGroup.addActor(nicknameLabel);
-        if(gagnant != null){
-            infoGroup.addActor(gagnant);
-        }
+        //infoGroup.addActor(winnerLabel);
+
         table.add(infoGroup).colspan(2).uniform();
         infoGroup.space(30);
         table.row();
