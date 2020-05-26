@@ -205,6 +205,10 @@ public class CentralGameManager {
         }
 
         isOver = true;
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ignored) {
+        }
         GameServer.closeConnection();
     }
 
