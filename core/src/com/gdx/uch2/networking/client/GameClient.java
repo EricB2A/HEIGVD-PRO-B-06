@@ -5,7 +5,7 @@ import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.messages.MessageType;
-import com.gdx.uch2.networking.messages.PlayerContext;
+import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.messages.PlayerState;
 import com.gdx.uch2.util.Constants;
 

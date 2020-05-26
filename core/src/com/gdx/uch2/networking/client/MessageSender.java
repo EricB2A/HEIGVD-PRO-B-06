@@ -3,7 +3,7 @@ package com.gdx.uch2.networking.client;
 import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.networking.messages.MessageType;
 import com.gdx.uch2.networking.messages.ObjectPlacement;
-import com.gdx.uch2.networking.messages.PlayerContext;
+import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.messages.PlayerState;
 
 import java.util.Timer;

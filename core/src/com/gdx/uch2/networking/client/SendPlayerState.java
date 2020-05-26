@@ -1,6 +1,6 @@
 package com.gdx.uch2.networking.client;
 
-import com.gdx.uch2.networking.messages.PlayerContext;
+import com.gdx.uch2.networking.PlayerContext;
 
 import java.util.Timer;
 import java.util.TimerTask;

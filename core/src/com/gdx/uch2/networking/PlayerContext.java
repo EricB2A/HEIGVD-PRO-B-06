@@ -1,4 +1,4 @@
-package com.gdx.uch2.networking.messages;
+package com.gdx.uch2.networking;
 
 import com.gdx.uch2.networking.serialization.DecoderStream;
 import com.gdx.uch2.networking.serialization.EncoderStream;

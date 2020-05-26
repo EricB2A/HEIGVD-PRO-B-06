@@ -1,15 +1,23 @@
 package com.gdx.uch2.networking.server;
 
 import com.gdx.uch2.networking.messages.MessageType;
-import com.gdx.uch2.networking.messages.PlayerContext;
+import com.gdx.uch2.networking.PlayerContext;
 
 import java.io.IOException;
 
+/**
+ * Classe représentant la connexion du serveur avec un client en particulier
+ */
 public class PlayerHandler implements Runnable {
 
     private CentralGameManager manager;
     private PlayerContext context;
 
+    /**
+     * Constructeur
+     * @param manager Gestionnaire de la partie
+     * @param context Contexte de la connexion
+     */
     public PlayerHandler(CentralGameManager manager, PlayerContext context) {
         this.manager = manager;
         this.context = context;

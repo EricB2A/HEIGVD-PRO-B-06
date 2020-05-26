@@ -3,7 +3,7 @@ package com.gdx.uch2.networking.server;
 import com.gdx.uch2.controller.LevelLoader;
 import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.messages.MessageType;
-import com.gdx.uch2.networking.messages.PlayerContext;
+import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.util.Constants;
@@ -13,11 +13,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
 
+/**
+ * Serveur de jeu
+ */
 public class GameServer implements Runnable {
-    //2 premiers joueurs à se connecter.
-    static PlayerContext[] players;
-    private String[] nicknames;
 
+    /**
+     * Joueurs membres de la partie
+     */
+    static PlayerContext[] players;
+
+    private String[] nicknames;
     //indique si la partie est pleine
     private boolean full = false;
     private boolean gameStarted = false;
@@ -30,6 +36,13 @@ public class GameServer implements Runnable {
     private CentralGameManager manager;
     private static ServerSocket serverSocket;
 
+    /**
+     * Constructeur
+     * @param port port sur lequel écoute le serveur
+     * @param noLevel numéro du niveau sur lequel se joue la partie
+     * @param nbPlayers nombre de joueurs à atteindre pour que la partie commence
+     * @param nbRounds nombre de rounds que durera la partie
+     */
     public GameServer(int port, int noLevel, int nbPlayers, int nbRounds){
         this.port = port;
         this.numlevel = noLevel;
@@ -116,6 +129,9 @@ public class GameServer implements Runnable {
         ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
     }
 
+    /**
+     * Termine les connexions de tous les joueurs
+     */
     public static void closeConnection() {
         GameClient.closeConnection();
         try {
@@ -139,16 +155,9 @@ public class GameServer implements Runnable {
                     }
                 }
             }
-        } catch (IOException e) {
-//            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-        int port = 12345;
-        int level = 1;
-
-        new GameServer(port, level,2 ,10).run();
-    }
 
 }

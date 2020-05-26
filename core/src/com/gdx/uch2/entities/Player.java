@@ -109,6 +109,10 @@ public class Player {
         this.state = newState;
     }
 
+    /**
+     *
+     * @return le temps écoulé depuis la création du joueur
+     */
     public float getStateTime() {
         return stateTime;
     }
