@@ -1,11 +1,10 @@
 package com.gdx.uch2.networking.server;
 
 import com.gdx.uch2.entities.Player;
-import com.gdx.uch2.networking.GameState;
-import com.gdx.uch2.networking.PlayerContext;
-import com.gdx.uch2.networking.PlayerState;
+import com.gdx.uch2.networking.messages.GameState;
+import com.gdx.uch2.networking.messages.PlayerContext;
+import com.gdx.uch2.networking.messages.PlayerState;
 
-import java.util.List;
 import java.util.Timer;
 
 public class ServerGameStateTickManager {
