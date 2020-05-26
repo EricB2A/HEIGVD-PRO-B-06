@@ -107,8 +107,9 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         for (int i = 0; i < nicknamesLabel.length; ++i) {
             if (i != OnlinePlayerManager.getInstance().getPlayerId()) {
                 Block b = OnlinePlayerManager.getInstance().getPlayer(i).getPlacementBlock();
-                if ((b != null && world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] == null)
-                 || b.getType() == Block.Type.ANTIBLOCK) {
+                if (b != null && ((world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] == null && b.getType() != Block.Type.ANTIBLOCK)
+                        || (world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] != null
+                        && world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y].getType() != Block.Type.PROTECTED_AREA))) {
                     renderer.renderBlock(b.getType(), b.getPosition());
 
                     Vector2 pos = new Vector2(b.getPosition());
@@ -128,7 +129,9 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         if(MessageSender.getInstance().getCanPlace()) {
             message.setText("Place an item on the map\n\n\n");
             if (mousePosition != null
-                    && world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y] == null) {
+                    && ((world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y] == null && blockType != Block.Type.ANTIBLOCK)
+                    || (world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y] != null
+                    && world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y].getType() != Block.Type.PROTECTED_AREA))) {
                 renderer.renderBlock(blockType, mousePosition);
             }
         } else {
