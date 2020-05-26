@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.entities.Block;
+import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.networking.messages.MessageType;
 import com.gdx.uch2.networking.messages.ObjectPlacement;
 import com.gdx.uch2.networking.messages.PlayerContext;
@@ -107,9 +108,12 @@ public class MessageSender {
      */
     public void sendBlockPlacement(final Block block){
         setCanPlace(false);
-
         System.out.println("CLI: Sending block placement as player #" + playerID);
         ctx.out.writeMessage(new ObjectPlacement(playerID, block));
+    }
+
+    public void sendBlockMovement(final Block block) {
+        ctx.out.writeMessage(new ObjectPlacement(playerID, block), false);
     }
 
 

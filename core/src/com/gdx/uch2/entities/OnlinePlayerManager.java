@@ -62,6 +62,16 @@ public class OnlinePlayerManager {
         }
     }
 
+    public void resetPlacementBlocks() {
+        for (OnlinePlayer p : getPlayers()) {
+            p.setPlacementBlock(null);
+        }
+    }
+
+    public void setBlockPosition(int id, Block b) {
+        players.get(id).setPlacementBlock(b);
+    }
+
     public void init(int playerId, String nickname) {
         players.clear();
         this.playerId = playerId;

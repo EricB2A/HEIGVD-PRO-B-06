@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.client;
 
+import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.messages.PlayerContext;
 
 import java.util.Timer;
@@ -19,7 +20,9 @@ public class SendPlayerState extends TimerTask {
 
     @Override
     public void run() {
-        ctx.out.writeMessage(MessageSender.getInstance().getCurrentState());
+        if (GameClientHandler.currentPhase == GamePhase.Moving) {
+            ctx.out.writeMessage(MessageSender.getInstance().getCurrentState());
+        }
 
         if (ctx.out.e != null) {
             System.out.println("CLI: Fermeture du worker");

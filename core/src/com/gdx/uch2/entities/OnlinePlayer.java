@@ -15,6 +15,7 @@ public class OnlinePlayer {
     private String nickname;
     private Player.State state;
     float localTime = 0;
+    private Block placementBlock;
 
 
     private OnlinePlayer(PlayerState initialState) {
@@ -92,5 +93,13 @@ public class OnlinePlayer {
 
     public float getLocalTime() {
         return localTime;
+    }
+
+    public void setPlacementBlock(Block placementBlock) {
+        this.placementBlock = placementBlock;
+    }
+
+    public Block getPlacementBlock() {
+        return placementBlock;
     }
 }

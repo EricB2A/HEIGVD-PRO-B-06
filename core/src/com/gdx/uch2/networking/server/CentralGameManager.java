@@ -54,6 +54,9 @@ public class CentralGameManager {
         if(type == MessageType.PlayerStateUpdate) {
             processPlayerState(context);
         }
+        else if (type == MessageType.BlockPosition) {
+            processBlockPosition(context);
+        }
         else if(type == MessageType.BlockPlaced){
             processObjectPlacement(context);
         }
@@ -215,6 +218,16 @@ public class CentralGameManager {
 
             System.out.println("SRV: broadcasted new block, next player to place is #");
 
+        }
+    }
+
+    private void processBlockPosition(PlayerContext ctx) {
+        ObjectPlacement op = ctx.in.readObjectPlacement();
+
+        for (PlayerContext c : players) {
+            if (c.getId() != ctx.getId()) {
+                c.out.writeMessage(op, false);
+            }
         }
     }
 

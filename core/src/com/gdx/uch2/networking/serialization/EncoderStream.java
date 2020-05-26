@@ -169,11 +169,24 @@ public class EncoderStream extends FilterOutputStream {
      * @param objectPlacement l'ObjectPlacement à écrire
      */
     public void writeMessage(ObjectPlacement objectPlacement){
+        writeMessage(objectPlacement, true);
+    }
+
+    /**
+     * Ecrit un ObjectPlacement
+     * @param objectPlacement l'ObjectPlacement à écrire
+     * @param finalPosition Indique se la position du bloc est susceptible d'être modifiée
+     */
+    public void writeMessage(ObjectPlacement objectPlacement, boolean finalPosition) {
         try {
             mutex.acquire();
             try {
                 // BlockPlaced.
-                stream.writeInt(MessageType.BlockPlaced.ordinal());
+                if (finalPosition) {
+                    stream.writeInt(MessageType.BlockPlaced.ordinal());
+                } else {
+                    stream.writeInt(MessageType.BlockPosition.ordinal());
+                }
                 stream.writeInt(objectPlacement.getPlayerID());
                 // Bloc.
                 Block b = objectPlacement.getBlock();
