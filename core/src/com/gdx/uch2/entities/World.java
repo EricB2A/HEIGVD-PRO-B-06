@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.uch2.controller.LevelLoader;
+import com.gdx.uch2.networking.client.MessageSender;
+import com.gdx.uch2.networking.messages.PlayerState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,5 +144,8 @@ public class World {
      */
     public void resetPlayer() {
         player = new Player(new Vector2(level.getSpawnPosition()));
+        MessageSender.getInstance().setCurrentState(
+                new PlayerState(OnlinePlayerManager.getInstance().getPlayerId(),
+                        Player.State.IDLE, player.getPosition().x, player.getPosition().y,0));
     }
 }
