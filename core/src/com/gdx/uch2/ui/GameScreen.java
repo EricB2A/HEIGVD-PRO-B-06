@@ -123,7 +123,6 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
         if(keycode == Keys.ESCAPE) {
             GameServer.closeConnection();
             ScreenManager.getInstance().showScreen(new MainMenu());
-            ErrorHandler.getInstance().reset();
         }
 
         return true;

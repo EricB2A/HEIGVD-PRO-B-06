@@ -40,6 +40,7 @@ public class GameClient {
     private class GameClientWorker implements Runnable {
         private Socket socket;
         private PlayerContext context;
+        private boolean closeRequested;
 
         @Override
         public void run() {
@@ -84,7 +85,8 @@ public class GameClient {
                     }
                 }
             } catch (IOException e) {
-                ErrorHandler.getInstance().setError(e.toString());
+                if (!closeRequested)
+                    ErrorHandler.getInstance().setError(e.toString());
             }
             finally {
                 System.out.println("CLI: Fermeture de la connexion");
@@ -144,6 +146,7 @@ public class GameClient {
      * Envoie un message au serveur pour terminer la connexion
      */
     public static void closeConnection() {
+        worker.closeRequested = true;
         worker.context.out.writeMessage(MessageType.CloseConnection);
     }
 }
