@@ -108,7 +108,8 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             if (i != OnlinePlayerManager.getInstance().getPlayerId()) {
                 Block b = OnlinePlayerManager.getInstance().getPlayer(i).getPlacementBlock();
                 if (b != null && ((world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] == null && b.getType() != Block.Type.ANTIBLOCK)
-                        || (world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] != null
+                        || (b.getType() == Block.Type.ANTIBLOCK
+                        && world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] != null
                         && world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y].getType() != Block.Type.PROTECTED_AREA))) {
                     renderer.renderBlock(b.getType(), b.getPosition());
 
@@ -225,7 +226,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 Block[][] blocks = world.getLevel().getBlocks();
                 Block b = getBlock(x, y);
                 System.out.println("B.type = " + b.getType().name());
-                if (blocks[x][y] == null || (b.getType() == Block.Type.ANTIBLOCK && blocks[x][y].getType() != Block.Type.PROTECTED_AREA)) {
+                if ((blocks[x][y] == null && b.getType() != Block.Type.ANTIBLOCK) || (b.getType() == Block.Type.ANTIBLOCK && blocks[x][y] != null && blocks[x][y].getType() != Block.Type.PROTECTED_AREA)) {
                     System.out.println("yay");
                     MessageSender.getInstance().sendBlockPlacement(getBlock(x, y));
                 }

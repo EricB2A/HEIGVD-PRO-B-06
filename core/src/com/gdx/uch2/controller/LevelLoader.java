@@ -66,7 +66,7 @@ public class LevelLoader {
                     level.setSpawnPosition(new Vector2(col, iRow));
                     blocks[col][iRow] = new ProtectedArea(new Vector2(col, iRow));
                 } else if (pixel == FINISH_POS) {
-                    level.setFinishPosition(new Vector2(col, iRow));
+                    level.addFinishPosition(new Vector2(col, iRow));
                     blocks[col][iRow] = new ProtectedArea(new Vector2(col, iRow));
                 } else if (pixel == PROTECTED) {
                     blocks[col][iRow] = new ProtectedArea(new Vector2(col, iRow));
