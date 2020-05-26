@@ -9,6 +9,7 @@ public class ObjectPlacement {
     private int playerID;
     private Block block;
 
+
     /**
      * Constructeur
      * @param playerID Si le message est envoyé d'un client vers le serveur, playerID signifie l'ID du joueur plaçant le block.
