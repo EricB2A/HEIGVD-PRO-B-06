@@ -108,7 +108,8 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             if (i != OnlinePlayerManager.getInstance().getPlayerId()) {
                 Block b = OnlinePlayerManager.getInstance().getPlayer(i).getPlacementBlock();
                 if (b != null && ((world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] == null && b.getType() != Block.Type.ANTIBLOCK)
-                        || (world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] != null
+                        || (b.getType() == Block.Type.ANTIBLOCK
+                        && world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] != null
                         && world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y].getType() != Block.Type.PROTECTED_AREA))) {
                     renderer.renderBlock(b.getType(), b.getPosition());
 
