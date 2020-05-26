@@ -203,10 +203,9 @@ public class WorldRenderer {
     /**
      * Render les objets
      */
-    public void render() {
+    public void renderPlayers() {
         spriteBatch.setProjectionMatrix(cam.combined);
         spriteBatch.begin();
-        drawBlocks();
         drawOnlinePlayers();
         drawPlayer();
         spriteBatch.end();

@@ -72,7 +72,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
 
         controller.update(delta);
         OnlinePlayerManager.getInstance().updatePlayers(delta);
-        renderer.render();
+        renderer.renderBackground();
 
         for (int i = 0; i < nicknamesLabel.length; ++i) {
             if (i != OnlinePlayerManager.getInstance().getPlayerId()) {
@@ -84,6 +84,10 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
         }
 
         stage.draw();
+
+        renderer.renderPlayers();
+
+
     }
 
     @Override
