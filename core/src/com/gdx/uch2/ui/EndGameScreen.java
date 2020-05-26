@@ -69,28 +69,29 @@ public class EndGameScreen implements Screen {
         Label[] nickNamePlayers = new Label[scores.length];
         Label[] scorePlayers = new Label[scores.length];
 
-        int winnerScore = 0;
-        int winnerID = -1;
         for(int i = 0; i < scores.length; ++i){
             nickNamePlayers[i] = new Label(nicknames[i], skin);
             nickNamePlayers[i].setWidth(100);
             scorePlayers[i] = new Label(Integer.toString(scores[i]), skin);
             scorePlayers[i].setWidth(100);
-            if(scores[i] > winnerScore){
-                winnerScore = scores[i];
-                winnerID = i;
-            }
         }
 
         // Create Text
-        Label titleLabel = new Label("End de partie ! ", skin);
+        Label titleLabel;
+        Label gagnant = null;
+        // Égalité!
+        if(scores[0] == scores[1]){
+            titleLabel = new Label("Equality !", skin); // Ou "Draw".
+        }else{
+            titleLabel = new Label("End de partie !", skin);
+            gagnant = new Label("Le winner est : " + nicknames[0], skin);
+            gagnant.setFontScale(2);
+        }
         titleLabel.setFontScale(2);
        /* final Label nicknameLabel = new Label("Nickname", skin);
         nicknameLabel.setFontScale(1);*/
-        Label gagnant = new Label("Le winner est : Player " + winnerID, skin);
         Label score = new Label("Score", skin);
         score.setFontScale(1);
-        gagnant.setFontScale(2);
 
         // Title
         HorizontalGroup titleGroup = new HorizontalGroup();
@@ -105,7 +106,9 @@ public class EndGameScreen implements Screen {
         HorizontalGroup infoGroup = new HorizontalGroup();
         infoGroup.space(30);
 //        infoGroup.addActor(nicknameLabel);
-        infoGroup.addActor(gagnant);
+        if(gagnant != null){
+            infoGroup.addActor(gagnant);
+        }
         table.add(infoGroup).colspan(2).uniform();
         infoGroup.space(30);
         table.row();
