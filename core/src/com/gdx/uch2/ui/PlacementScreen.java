@@ -35,6 +35,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private Label[] choicesLabel;
     private final Label.LabelStyle defaultStyle = new Label.LabelStyle(new BitmapFont(), null);
     private final Label.LabelStyle selectStyle = new Label.LabelStyle(new BitmapFont(), Color.CHARTREUSE);
+    private Vector2 mousePosition;
 
     private int width, height;
 
@@ -50,6 +51,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         world.resetPlayer();
         stage = new Stage(new ScreenViewport());
         renderer = new WorldRenderer(world, stage.getBatch(), false);
+        mousePosition = null;
         blockType = Block.Type.BOX;
         Gdx.input.setInputProcessor(this);
 
@@ -94,6 +96,10 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
         if(MessageSender.getInstance().getCanPlace()) {
             message.setText("Place an item on the map\n\n\n");
+            if (mousePosition != null
+                    && world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y] == null) {
+                renderer.renderBlock(blockType, mousePosition);
+            }
         } else {
             message.setText("Waiting for the other players placing their items\n\n\n");
         }
@@ -201,7 +207,14 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+        Vector2 pos = new Vector2(screenX,height - screenY);
+        renderer.scale(pos);
+        pos.x = (float) Math.floor(pos.x);
+        pos.y = (float) Math.floor(pos.y);
+
+        if (pos.x >= 0 && pos.y >= 0 && pos.x < world.getLevel().getWidth() && pos.y < world.getLevel().getHeight())
+            mousePosition = pos;
+        return true;
     }
 
     @Override
