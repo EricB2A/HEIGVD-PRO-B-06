@@ -25,7 +25,7 @@ public class Constants {
     /**
      * Durée en millisecondes séparant les envois de GameStates et des PlayerStates
      */
-    public static final int TICK_DURATION = 50;
+    public static final int TICK_DURATION = 125;
 
     /**
      * Vitesse de la boucle de jeu principale
