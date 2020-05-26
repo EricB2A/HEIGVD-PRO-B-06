@@ -8,6 +8,9 @@ import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.entities.ProtectedArea;
 import com.gdx.uch2.entities.Trap;
 
+/**
+ * Classe permettant de convertir une image en niveau
+ */
 public class LevelLoader {
 
     private static final String LEVEL_PREFIX    = "levels/level-";
@@ -22,6 +25,11 @@ public class LevelLoader {
     private static final int    FINISH_POS      = 0xff0000; // red
     private static final int    PROTECTED       = 0xff00ff; // ugly pink
 
+    /**
+     * Constructeur
+     * @param number numéro du niveau à générer
+     * @return le niveau généré
+     */
     public static Level loadLevel(int number) {
         Level level = new Level();
 

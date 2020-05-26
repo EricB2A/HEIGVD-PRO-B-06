@@ -1,6 +1,5 @@
 package com.gdx.uch2.networking.messages;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.gdx.uch2.entities.Block;
 
 /**

@@ -29,6 +29,7 @@ public class WaitingRoomMenu implements Screen {
      * @param cancelOperation opération à effectuer si le bouton de retour est cliqué
      */
     public WaitingRoomMenu(GameParameters params, InputListener cancelOperation){
+        GameClientHandler.reset();
         // create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -84,6 +85,7 @@ public class WaitingRoomMenu implements Screen {
             ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
             return;
         } else if (GameClientHandler.isOver()) {
+            System.out.println("coucou");
             ScreenManager.getInstance().showScreen(new EndGameScreen());
             return;
         }
