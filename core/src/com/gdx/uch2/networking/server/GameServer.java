@@ -113,11 +113,14 @@ public class GameServer implements Runnable {
             ctx.out.writeMessage(ctx.getId());
             ctx.out.writeMessage(numlevel);
             ctx.out.writeMessage(players.length - 1);
+            ctx.out.writeMessage(nbRounds);
 
             for (PlayerContext oppCtx : players) {
                 if (oppCtx.getId() != ctx.getId()) {
                     ctx.out.writeMessage(oppCtx.getId());
+
                     ctx.out.writeMessage(nicknames[oppCtx.getId()]);
+
                 }
             }
 
