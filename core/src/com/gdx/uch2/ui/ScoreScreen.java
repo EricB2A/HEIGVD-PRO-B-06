@@ -13,10 +13,15 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 
-
+/**
+ * Ecran d'affichage des scores intermédiaires
+ */
 public class ScoreScreen implements Screen {
     private Stage stage;
 
+    /**
+     * Constructeur
+     */
     public ScoreScreen(){
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);

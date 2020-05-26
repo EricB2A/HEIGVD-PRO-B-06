@@ -15,10 +15,17 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.networking.client.ErrorHandler;
 
+/**
+ * Ecran d'erreur
+ */
 public class ErrorScreen extends ScreenAdapter {
     private Stage stage;
     private String error;
 
+    /**
+     * Constructeur
+     * @param error le message d'erreur
+     */
     public ErrorScreen(String error) {
         stage = new Stage(new ScreenViewport());
         this.error = error;

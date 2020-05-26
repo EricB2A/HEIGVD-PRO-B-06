@@ -23,10 +23,12 @@ import com.gdx.uch2.networking.client.GameClientHandler;
 import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.view.WorldRenderer;
 
+/**
+ * Ecan de phase de placement
+ */
 public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private World world;
     private WorldRenderer renderer;
-    private String text;
     private Stage stage;
     private Block.Type blockType;
     private Label message;
@@ -36,13 +38,15 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
     private int width, height;
 
+    /**
+     * Constructeur
+     */
     public PlacementScreen() {
         world = World.currentWorld;
     }
 
     @Override
     public void show() {
-        text = "Place a block";
         world.resetPlayer();
         stage = new Stage(new ScreenViewport());
         renderer = new WorldRenderer(world, stage.getBatch(), false);
@@ -125,20 +129,12 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 blockType = Block.Type.BOX;
                 select = 0;
                 break;
-//            case Input.Keys.NUM_2:
-//            case Input.Keys.NUMPAD_2:
-//                blockType = Block.Type.BLOCK;
-//                select = 1;
-//                break;
+
             case Input.Keys.NUM_2:
             case Input.Keys.NUMPAD_2:
                 blockType = Block.Type.LETHAL;
                 select = 1;
                 break;
-//            case Input.Keys.NUM_4:
-//            case Input.Keys.NUMPAD_4: blockType = Block.Type.G_DOWN; break;
-//            case Input.Keys.NUM_5:
-//            case Input.Keys.NUMPAD_5: blockType = Block.Type.G_UP; break;
             case Input.Keys.ESCAPE:
                 GameServer.closeConnection();
                 ScreenManager.getInstance().showScreen(new MainMenu());

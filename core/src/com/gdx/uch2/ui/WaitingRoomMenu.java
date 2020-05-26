@@ -15,17 +15,23 @@ import com.gdx.uch2.ui.uiUtil.GameParameters;
 
 import java.util.ArrayList;
 
+/**
+ * Ecran de salle d'attente
+ */
 public class WaitingRoomMenu implements Screen {
     private Stage stage;
-    static private ArrayList<String> playersName = new ArrayList<>();
     private GameParameters params;
     private InputListener cancelOperation;
 
+    /**
+     * Constructeur
+     * @param params paramètres de la partie à afficher
+     * @param cancelOperation opération à effectuer si le bouton de retour est cliqué
+     */
     public WaitingRoomMenu(GameParameters params, InputListener cancelOperation){
         // create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        playersName.add(params.nickname);
         this.params = params;
         this.cancelOperation = cancelOperation;
     }
