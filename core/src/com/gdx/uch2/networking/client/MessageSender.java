@@ -88,7 +88,6 @@ public class MessageSender {
      * Envoie un message au serveur indiquant que le joueur est arrivé à la fin du niveau
      */
     public void sendFinish(){
-        System.out.println("CLI: Envoi ReachEnd");
         ctx.out.writeMessage(MessageType.ReachedEnd);
     }
 

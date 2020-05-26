@@ -22,7 +22,7 @@ import com.gdx.uch2.networking.client.GameClientHandler;
 public class PlayerController {
 
     enum Keys {
-        LEFT, RIGHT, JUMP, FIRE;
+        LEFT, RIGHT, JUMP, FIRE
     }
 
     private static final long LONG_JUMP_PRESS 	= 220;
@@ -61,10 +61,10 @@ public class PlayerController {
         }
     };
 
-    private Map<Keys, Boolean> keys = new HashMap<PlayerController.Keys, Boolean>();
+    private Map<PlayerController.Keys, Boolean> keys = new HashMap<>();
 
     // Blocks that Player can collide with any given frame
-    private Array<Block> collidable = new Array<Block>();
+    private Array<Block> collidable = new Array<>();
 
     public PlayerController(World world) {
         this.world = world;
@@ -352,7 +352,7 @@ public class PlayerController {
         if(GameClientHandler.currentPhase == GamePhase.Moving){
             if (keys.get(Keys.JUMP)) {
                 if (jumpingPressed && (!player.getState().equals(State.JUMPING))) {
-                    jumpingSound.play(0.7f);
+                    jumpingSound.play(0.4f);
                     jumpingActive = true;
                     jumpingPressed = false;
                     jumpPressedTime = System.currentTimeMillis();
