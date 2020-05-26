@@ -51,7 +51,7 @@ public class World {
     public World(int noLevel) {
         createWorld(noLevel);
         sound = Gdx.audio.newSound(Gdx.files.internal("sound/main_theme.mp3"));
-        sound.loop(0.2f);
+        //sound.loop(0.2f);
     }
 
     /**
@@ -141,6 +141,7 @@ public class World {
      */
     public void removeBlock(int x, int y){
         level.getBlocks()[x][y] = null;
+        System.out.println("suppression du bloc");
     }
 
     private void createWorld(int noLevel) {
