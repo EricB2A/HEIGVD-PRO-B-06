@@ -133,7 +133,7 @@ public class WorldRenderer {
         spawnTexture = blocksAtlas.findRegion("signRight");
         finishTexture = blocksAtlas.findRegion("signExit");
         protectedArea = blocksAtlas.findRegion("castleCenter");
-        bomb = blocksAtlas.findRegion("bomb");
+        bomb = blocksAtlas.findRegion("antiblock");
 
         Array<TextureAtlas.AtlasRegion> idleRightFrames = new Array<TextureAtlas.AtlasRegion>();
         Array<TextureAtlas.AtlasRegion> idleLeftFrames = new Array<TextureAtlas.AtlasRegion>();

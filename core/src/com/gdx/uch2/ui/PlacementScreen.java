@@ -131,7 +131,8 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             message.setText("Place an item on the map\n\n\n");
             if (mousePosition != null
                     && ((world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y] == null && blockType != Block.Type.ANTIBLOCK)
-                    || (world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y] != null
+                    || (blockType == Block.Type.ANTIBLOCK
+                    && world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y] != null
                     && world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y].getType() != Block.Type.PROTECTED_AREA))) {
                 renderer.renderBlock(blockType, mousePosition);
             }
