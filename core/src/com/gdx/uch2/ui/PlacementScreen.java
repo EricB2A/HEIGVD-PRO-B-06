@@ -225,7 +225,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 Block[][] blocks = world.getLevel().getBlocks();
                 Block b = getBlock(x, y);
                 System.out.println("B.type = " + b.getType().name());
-                if (blocks[x][y] == null || (b.getType() == Block.Type.ANTIBLOCK && blocks[x][y].getType() != Block.Type.PROTECTED_AREA)) {
+                if ((blocks[x][y] == null && b.getType() != Block.Type.ANTIBLOCK) || (b.getType() == Block.Type.ANTIBLOCK && blocks[x][y] != null && blocks[x][y].getType() != Block.Type.PROTECTED_AREA)) {
                     System.out.println("yay");
                     MessageSender.getInstance().sendBlockPlacement(getBlock(x, y));
                 }
