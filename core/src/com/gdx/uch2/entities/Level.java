@@ -2,6 +2,10 @@ package com.gdx.uch2.entities;
 
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Classe représentant un niveau
  */
@@ -11,7 +15,7 @@ public class Level {
     private int height;
     private Block[][] blocks;
     private Vector2 spawnPosition;
-    private Vector2 finishPosition;
+    private List<Vector2> finishPositions = new LinkedList<>();
 
     /**
      * Constructeur sans arguments
@@ -93,25 +97,28 @@ public class Level {
 
     /**
      *
-     * @return La position de l'arrivée
+     * @return Les positions des arrivées
      */
-    public Vector2 getFinishPosition() {
-        return finishPosition;
+    public List<Vector2> getFinishPositions() {
+        return finishPositions;
     }
 
     /**
-     *
-     * @return Le block d'arrivée
+     * @return Les blocks d'arrivée
      */
-    public Block getFinishBlock() {
-        return new Block(finishPosition);
+    public Block[] getFinishBlocks() {
+        Block[] ret = new Block[finishPositions.size()];
+        for(int i = 0; i < finishPositions.size(); ++i){
+            ret[i] = new Block(finishPositions.get(i));
+        }
+        return ret;
     }
 
     /**
-     * Donne une nouvelle valeur à la position du block d'arrivée
-     * @param finishPosition la nouvelle position du block d'arrivée
+     * Ajoute une position d'arrivée
+     * @param newFinishPosition la position du nouveau block d'arrivée
      */
-    public void setFinishPosition(Vector2 finishPosition) {
-        this.finishPosition = finishPosition;
+    public void addFinishPosition(Vector2 newFinishPosition) {
+        finishPositions.add(newFinishPosition);
     }
 }

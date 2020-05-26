@@ -206,9 +206,13 @@ public class PlayerController {
         playerRect.set(player.getBounds().x, player.getBounds().y, player.getBounds().width, player.getBounds().height);
 
         // Check victory
-        if (playerRect.overlaps(world.getLevel().getFinishBlock().getBounds())) {
-            finish();
+        for(Block finishblock : world.getLevel().getFinishBlocks()){
+            if (playerRect.overlaps(finishblock.getBounds())) {
+                finish();
+            }
         }
+
+
 
         boolean fakeVeloctiy = false;
         if (player.getState() == State.SLIDING && player.getVelocity().x == 0) {

@@ -279,7 +279,11 @@ public class WorldRenderer {
         }
 
         spriteBatch.draw(spawnTexture, world.getLevel().getSpawnPosition().x, world.getLevel().getSpawnPosition().y, Block.SIZE, Block.SIZE);
-        spriteBatch.draw(finishTexture, world.getLevel().getFinishPosition().x, world.getLevel().getFinishPosition().y, Block.SIZE, Block.SIZE);
+
+        for(Vector2 finishPos : world.getLevel().getFinishPositions()){
+            spriteBatch.draw(finishTexture, finishPos.x, finishPos.y, Block.SIZE, Block.SIZE);
+        }
+
 
     }
 
