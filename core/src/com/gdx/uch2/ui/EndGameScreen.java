@@ -46,11 +46,26 @@ public class EndGameScreen implements Screen {
         chickenImg.setHeight(200);
          */
 
+        //Pick scores and nicknames
         int[] scores = getScore();
         String[] nicknames = OnlinePlayerManager.getInstance().getNicknames();
 
-        //TODO Change text with nickname and points of players
-        // Create TextField
+        //reverse bubble sort to have desc order to show
+        for(int i = 0; i < scores.length -1; ++i){
+            for(int j = 0; j < scores.length -i - 1; ++j){
+                if(scores[j] < scores[j + 1]){
+                    int tempInt = scores[j];
+                    String tempString = nicknames[j];
+
+                    scores[j] = scores[j+1];
+                    nicknames[j] = nicknames[j+1];
+
+                    scores[j+1] = tempInt;
+                    nicknames[j+1] = tempString;
+                }
+            }
+        }
+
         Label[] nickNamePlayers = new Label[scores.length];
         Label[] scorePlayers = new Label[scores.length];
 
