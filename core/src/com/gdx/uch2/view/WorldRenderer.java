@@ -198,6 +198,27 @@ public class WorldRenderer {
         spriteBatch.end();
     }
 
+    public void renderBlock(Block.Type block, Vector2 pos) {
+        spriteBatch.setProjectionMatrix(cam.combined);
+        spriteBatch.begin();
+        drawBlock(block, pos);
+        spriteBatch.end();
+    }
+
+    private void drawBlock(Block.Type block, Vector2 pos) {
+        TextureRegion texture;
+        switch (block){
+            case BOX: texture = boxTexture; break;
+            case BLOCK: texture = blockTexture; break;
+            case LETHAL: texture = lethalBlockTexture; break;
+            case G_UP: texture = gUpTexture; break;
+            case G_DOWN: texture = gDownTexture; break;
+            case PROTECTED_AREA: texture = protectedArea; break;
+            default: texture = boxTexture; break;
+        }
+        spriteBatch.draw(texture, pos.x, pos.y, Block.SIZE, Block.SIZE);
+    }
+
     // Scaling pixel -> level unit
     public void scale(Vector2 v) {
         v.x = v.x / ppuX;
@@ -208,17 +229,7 @@ public class WorldRenderer {
     private void drawBlocks() {
 
         for (Block block : world.getDrawableBlocks((int) camera_width, (int) camera_height)) {
-            TextureRegion texture;
-            switch (block.getType()){
-                case BOX: texture = boxTexture; break;
-                case BLOCK: texture = blockTexture; break;
-                case LETHAL: texture = lethalBlockTexture; break;
-                case G_UP: texture = gUpTexture; break;
-                case G_DOWN: texture = gDownTexture; break;
-                case PROTECTED_AREA: texture = protectedArea; break;
-                default: texture = boxTexture; break;
-            }
-            spriteBatch.draw(texture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
+            drawBlock(block.getType(), block.getPosition());
         }
 
         spriteBatch.draw(spawnTexture, world.getLevel().getSpanPosition().x, world.getLevel().getSpanPosition().y, Block.SIZE, Block.SIZE);
