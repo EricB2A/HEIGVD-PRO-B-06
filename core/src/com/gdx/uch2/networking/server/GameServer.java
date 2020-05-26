@@ -6,6 +6,7 @@ import com.gdx.uch2.networking.GameState;
 import com.gdx.uch2.networking.MessageType;
 import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.client.ErrorHandler;
+import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.util.Constants;
 
 import java.io.IOException;
@@ -129,26 +130,30 @@ public class GameServer implements Runnable {
         }
 
         //Démarre les ticks de serveur
-        ServerGameStateTickManager.getInstance().setPlayers(players);
+        ServerGameStateTickManager.getInstance().setPlayers(Arrays.copyOf(players, players.length));
         ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
     }
 
     public static void closeConnection() {
+        GameClient.closeConnection();
         try {
-            serverSocket.close();
+            System.out.println("SRV: Fermeture du serveur");
+            if (serverSocket != null) {
+                serverSocket.close();
 
-            for (PlayerContext ctx : players) {
-                if (ctx != null) {
-                    if (ctx.in != null) {
-                        ctx.in.close();
-                    }
+                for (PlayerContext ctx : players) {
+                    if (ctx != null) {
+                        if (ctx.in != null) {
+                            ctx.in.close();
+                        }
 
-                    if (ctx.out != null) {
-                        ctx.out.close();
-                    }
+                        if (ctx.out != null) {
+                            ctx.out.close();
+                        }
 
-                    if (ctx.getSocket() != null) {
-                        ctx.getSocket().close();
+                        if (ctx.getSocket() != null) {
+                            ctx.getSocket().close();
+                        }
                     }
                 }
             }

@@ -20,6 +20,7 @@ import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.MessageSender;
 import com.gdx.uch2.networking.client.GameClientHandler;
+import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.view.WorldRenderer;
 
 public class PlacementScreen extends ScreenAdapter implements InputProcessor {
@@ -138,6 +139,10 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 //            case Input.Keys.NUMPAD_4: blockType = Block.Type.G_DOWN; break;
 //            case Input.Keys.NUM_5:
 //            case Input.Keys.NUMPAD_5: blockType = Block.Type.G_UP; break;
+            case Input.Keys.ESCAPE:
+                GameServer.closeConnection();
+                ScreenManager.getInstance().showScreen(new MainMenu());
+                return true;
             default:
                 break;
         }

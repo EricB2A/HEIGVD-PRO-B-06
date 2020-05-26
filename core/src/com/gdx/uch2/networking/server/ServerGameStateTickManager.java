@@ -48,7 +48,7 @@ public class ServerGameStateTickManager {
         initGameState(players.length, 10, 10); //TODO initialiser la partie selon des paramètres moins arbitraires
 
         this.timer = new Timer();
-        timer.schedule(new SendUpdate(players), delay, tickDuration);
+        timer.schedule(new SendUpdate(timer, players), delay, tickDuration);
     }
 
     public GameState getGameState(){

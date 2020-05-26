@@ -28,20 +28,20 @@ public class PlayerHandler implements Runnable {
             }else {
                 GameServer.players[context.getId()] = null;
                 context.out.writeMessage(MessageType.CloseConnection);
-                System.out.println("SRV: connexion fermée pour le joueur #" + context.getId());
                 break;
             }
 
         }
 
-        clean();
-
         if (!manager.isOver()) {
             manager.disconnectedClient();
         }
+
+        clean();
     }
 
     private void clean() {
+        System.out.println("SRV: connexion fermée pour le joueur #" + context.getId());
         if (context.in != null) {
             context.in.close();
         }

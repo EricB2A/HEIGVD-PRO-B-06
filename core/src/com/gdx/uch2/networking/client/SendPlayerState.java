@@ -22,6 +22,7 @@ public class SendPlayerState extends TimerTask {
         ctx.out.writeMessage(MessageSender.getInstance().getCurrentState());
 
         if (ctx.out.e != null) {
+            System.out.println("CLI: Fermeture du worker");
             timer.cancel();
             timer.purge();
         }

@@ -1,7 +1,6 @@
 package com.gdx.uch2.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
@@ -14,8 +13,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 
-
-import java.util.ArrayList;
 
 public class ScoreScreen implements Screen {
     private Stage stage;
@@ -53,18 +50,34 @@ public class ScoreScreen implements Screen {
         Label score = new Label("Score", skin);
         score.setFontScale(1);
 
+        //Pick scores and nicknames
         int[] scores = getScore();
         String[] nicknames = OnlinePlayerManager.getInstance().getNicknames();
-        //TODO Change text with nickname and points of players
-        // Create TextField
+
+        //reverse bubble sort to have desc order to show
+        for(int i = 0; i < scores.length -1; ++i){
+            for(int j = 0; j < scores.length -i - 1; ++j){
+                if(scores[j] < scores[j + 1]){
+                    int tempInt = scores[j];
+                    String tempString = nicknames[j];
+
+                    scores[j] = scores[j+1];
+                    nicknames[j] = nicknames[j+1];
+
+                    scores[j+1] = tempInt;
+                    nicknames[j+1] = tempString;
+                }
+            }
+        }
+
         Label[] nickNamePlayers = new Label[scores.length];
         Label[] scorePlayers = new Label[scores.length];
 
         for(int i = 0; i < scores.length; ++i){
-            nickNamePlayers[i] = new Label(nicknames[i], skin);
-            nickNamePlayers[i].setWidth(100);
             scorePlayers[i] = new Label(Integer.toString(scores[i]), skin);
             scorePlayers[i].setWidth(100);
+            nickNamePlayers[i] = new Label(nicknames[i], skin);
+            nickNamePlayers[i].setWidth(100);
         }
 
         // Title
@@ -92,7 +105,6 @@ public class ScoreScreen implements Screen {
             table.add(playerGroup).colspan(2).uniform();
             table.row();
         }
-
 
         //create buttons
         TextButton continueButton = new TextButton("Continue", skin);

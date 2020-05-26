@@ -13,7 +13,9 @@ import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.controller.PlayerController;
 import com.gdx.uch2.entities.*;
 import com.gdx.uch2.networking.client.ErrorHandler;
+import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.client.GameClientHandler;
+import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.view.WorldRenderer;
 import com.badlogic.gdx.Input.Keys;
 
@@ -118,6 +120,12 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
             controller.jumpReleased();
         if (keycode == Keys.K)
             controller.giveUp();
+        if(keycode == Keys.ESCAPE) {
+            GameServer.closeConnection();
+            ScreenManager.getInstance().showScreen(new MainMenu());
+            ErrorHandler.getInstance().reset();
+        }
+
         return true;
     }
 

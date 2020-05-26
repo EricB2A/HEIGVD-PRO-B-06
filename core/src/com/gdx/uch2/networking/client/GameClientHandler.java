@@ -11,11 +11,10 @@ import com.gdx.uch2.networking.*;
  */
 public class GameClientHandler {
 
-    private int playerID = -1;
     static public GamePhase currentPhase; //TODO quand même c'est un peu abusé là
     static private boolean isOver;
     static private boolean roundOver;
-    private PlayerContext ctx;
+    private final PlayerContext ctx;
 
     /**
      * Constructeur
@@ -23,7 +22,6 @@ public class GameClientHandler {
      */
     public GameClientHandler(PlayerContext ctx) {
         this.ctx = ctx;
-        this.playerID = ctx.getId();
         currentPhase = null;
         isOver = false;
     }
@@ -100,9 +98,7 @@ public class GameClientHandler {
             System.out.println("CLI: placement du bloc reçu");
         }
 
-        if(op.getPlayerID() == playerID){
-            MessageSender.getInstance().setCanPlace(true);
-        }else if(op.getPlayerID() == -1){
+        if(op.getPlayerID() == -1){
             startMovementPhase();
         }
     }
@@ -115,7 +111,7 @@ public class GameClientHandler {
 
     private void startEditingPhase(){
         currentPhase = GamePhase.Editing;
-        MessageSender.getInstance().setCanPlace(false);
+        MessageSender.getInstance().setCanPlace(true);
         Vector2 pos = World.currentWorld.getLevel().getSpanPosition();
         MessageSender.getInstance().setContext(ctx);
         MessageSender.getInstance().setCurrentState(new PlayerState(ctx.getId(),

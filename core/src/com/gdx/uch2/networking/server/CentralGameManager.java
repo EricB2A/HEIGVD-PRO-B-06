@@ -18,6 +18,7 @@ public class CentralGameManager {
     private PlayerContext[] players;
     private int[] finished; // 0 = pas arrivé, 1 = arrivé, 2 = premier arrivé.
     private boolean[] dead;
+    private boolean[] hasPlaced;
     private GamePhase currentPhase;
     private Level map;
     private int nbPlayersReady = 0;
@@ -43,6 +44,7 @@ public class CentralGameManager {
         dead = new boolean[players.length];
         scoring = new int[players.length];
         Arrays.fill(scoring, 0);
+        hasPlaced = new boolean[players.length];
         firstArrived = true;
 
     }
@@ -83,6 +85,7 @@ public class CentralGameManager {
         currentPhase = GamePhase.Moving;
         Arrays.fill(finished, 0);
         Arrays.fill(dead, false);
+        Arrays.fill(hasPlaced, false);
         firstArrived = true;
 
         /*
@@ -158,6 +161,10 @@ public class CentralGameManager {
 
 
         if(allFinished){
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+            }
             resetPlayersPositions();
             if (++round < nbRounds) {
                 computePoints();
@@ -178,6 +185,7 @@ public class CentralGameManager {
         }
 
         isOver = true;
+        GameServer.closeConnection();
     }
 
     private void processAckGameStart(PlayerContext ctx){
@@ -199,20 +207,21 @@ public class CentralGameManager {
             ObjectPlacement op = ctx.in.readObjectPlacement();
             System.out.println("SRV: Placement de block reçu par le joueur #" + op.getPlayerID());
 
-            int newID = -1;
-            int i = op.getPlayerID();
-            while(newID < 0 && i < players.length - 1) {
-                if (!players[++i].getSocket().isClosed()) {
-                    newID = i;
-                }
+            hasPlaced[op.getPlayerID()] = true;
+
+            boolean acc = true;
+            for (int i = 0; i < hasPlaced.length; ++i) {
+                acc = acc && hasPlaced[i];
             }
 
-            if (newID < 0) {
+            if (acc) {
                 startMovementPhase();
+                sendBlockToAllPlayers(new ObjectPlacement(-1, op.getBlock()));
+            } else {
+                sendBlockToAllPlayers(new ObjectPlacement(0, op.getBlock()));
             }
 
-            sendBlockToAllPlayers(new ObjectPlacement(newID, op.getBlock()));
-            System.out.println("SRV: broadcasted new block, next player to place is #" + newID);
+            System.out.println("SRV: broadcasted new block, next player to place is #");
 
         }
     }

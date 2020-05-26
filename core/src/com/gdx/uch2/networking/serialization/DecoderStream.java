@@ -193,9 +193,7 @@ public class DecoderStream extends FilterInputStream {
     public void close() {
         try {
             stream.close();
-            this.e = null;
         } catch (IOException e) {
-            this.e = e;
         }
     }
 }

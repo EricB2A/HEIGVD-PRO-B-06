@@ -52,6 +52,7 @@ public class GameClient {
                 socket.connect(new InetSocketAddress(hostname, port), 2000);
 
                 context = new PlayerContext(socket);
+                GameClientHandler handler = new GameClientHandler(context);
                 context.out.writeMessage(nickname);
 
                 type = context.in.getType();
@@ -67,8 +68,6 @@ public class GameClient {
                 int id = context.in.readInt();
                 context.setId(id);
                 processGameStart(context);
-
-                GameClientHandler handler = new GameClientHandler(context);
 
                 while (type != MessageType.EndGame) {
 
@@ -88,6 +87,7 @@ public class GameClient {
                 ErrorHandler.getInstance().setError(e.toString());
             }
             finally {
+                System.out.println("CLI: Fermeture de la connexion");
                 if (socket != null) {
                     if (context != null) {
                         if (context.in != null) {
@@ -140,6 +140,9 @@ public class GameClient {
         }
     }
 
+    /**
+     * Envoie un message au serveur pour terminer la connexion
+     */
     public static void closeConnection() {
         worker.context.out.writeMessage(MessageType.CloseConnection);
     }
