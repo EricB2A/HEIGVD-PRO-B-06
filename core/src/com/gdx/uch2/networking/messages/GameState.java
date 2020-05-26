@@ -1,16 +1,21 @@
-package com.gdx.uch2.networking;
+package com.gdx.uch2.networking.messages;
 
 import com.badlogic.gdx.math.Vector2;
-import com.esotericsoftware.kryo.Kryo;
-import com.gdx.uch2.networking.server.ServerGameStateTickManager;
 
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Classe contenant un PlayerState pour chaque joueur de la partie
+ */
 public class GameState {
     private Map<Integer,PlayerState> playersStates;
 
 
+    /**
+     * Constructeur prenant un tableau de PlayerStates en paramètre
+     * @param playerStates les PlayerStates à encapsuler dans le GameState
+     */
     public GameState(PlayerState[] playerStates){
         playersStates = new TreeMap<>();
         for (PlayerState playerState : playerStates) {
@@ -25,31 +30,19 @@ public class GameState {
                 '}';
     }
 
-    public float getPosX(int playerID) {
-        return playersStates.get(playerID).getPosX();
-    }
-
-    public void setPosX(float posX, int playerID) {
-        playersStates.get(playerID).setPosX(posX);
-    }
-
-    public float getPosY(int playerID) {
-        return playersStates.get(playerID).getPosY();
-    }
-
-    public void setPosY(float posY, int playerID) {
-        playersStates.get(playerID).setPosY(posY);
-    }
-
+    /**
+     * Ajoute un PlayerState au GameState
+     * @param p le PlayerState à ajouter
+     */
     public void setPlayerState(PlayerState p) {
         if (p != null)
             playersStates.put(p.getPlayerID(), p);
     }
 
-    public void removePlayer(int id) {
-        playersStates.remove(id);
-    }
-
+    /**
+     * Modifie la position de tous les PlayerStates
+     * @param pos la position à donner à tous les PlayerStates
+     */
     public void setPositions(Vector2 pos) {
         for (PlayerState state : playersStates.values()) {
             state.setPosX(pos.x);
@@ -57,6 +50,9 @@ public class GameState {
         }
     }
 
+    /**
+     * @return une Map contenant les PlayerStates mappés avec leurs IDs respectifs
+     */
     public Map<Integer, PlayerState> getPlayerStates() {
         return playersStates;
     }

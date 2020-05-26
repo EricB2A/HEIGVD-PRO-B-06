@@ -1,7 +1,7 @@
 package com.gdx.uch2.entities;
 
-import com.gdx.uch2.networking.GameState;
-import com.gdx.uch2.networking.PlayerState;
+import com.gdx.uch2.networking.messages.GameState;
+import com.gdx.uch2.networking.messages.PlayerState;
 
 import java.util.*;
 

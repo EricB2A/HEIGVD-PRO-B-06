@@ -1,7 +1,10 @@
 package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.entities.Block;
-import com.gdx.uch2.networking.*;
+import com.gdx.uch2.networking.messages.MessageType;
+import com.gdx.uch2.networking.messages.ObjectPlacement;
+import com.gdx.uch2.networking.messages.PlayerContext;
+import com.gdx.uch2.networking.messages.PlayerState;
 
 import java.util.Timer;
 
@@ -88,7 +91,6 @@ public class MessageSender {
      * Envoie un message au serveur indiquant que le joueur est arrivé à la fin du niveau
      */
     public void sendFinish(){
-        System.out.println("CLI: Envoi ReachEnd");
         ctx.out.writeMessage(MessageType.ReachedEnd);
     }
 
