@@ -119,6 +119,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
         if (keycode == Keys.K)
             controller.giveUp();
         if(keycode == Keys.ESCAPE) {
+            World.currentWorld.stopMusic();
             GameServer.closeConnection();
             ScreenManager.getInstance().showScreen(new MainMenu());
         }

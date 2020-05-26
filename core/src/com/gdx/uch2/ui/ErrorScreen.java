@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
+import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.client.ErrorHandler;
 
 /**
@@ -36,6 +37,10 @@ public class ErrorScreen extends ScreenAdapter {
     @Override
     public void show() {
         // Create a table that fills the screen. Everything else will go inside this table.
+        if(World.currentWorld != null){
+            World.currentWorld.stopMusic();
+        }
+
         Table table = new Table();
         table.setFillParent(true);
 

@@ -11,53 +11,87 @@ import com.gdx.uch2.controller.LevelLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe représentant un monde/niveau dans lequel évoluent les personnages
+ */
 public class World {
 
     /**
-     * The collision boxes
+     * Blocks du niveau
      **/
-    Array<Rectangle> collisionRects = new Array<Rectangle>();
+    Array<Rectangle> collisionRects = new Array<>();
 //    /** The blocks making up the world **/
-//    Array<Block> blocks = new Array<Block>();
 
     /**
-     * Our player controlled hero
+     * Personnage jouable
      **/
     Player player;
 
+    /**
+     * Musique d'ambiance
+     */
     Sound sound;
+
+    /**
+     * Niveau utilisé pour créer le monde
+     */
     Level level;
 
+    /**
+     * Monde unique actuellement utilisé
+     */
     public static World currentWorld;
 
-
+    /**
+     * Constructeur à partir d'un numéro de niveau
+     * @param noLevel numéro du niveau à utiliser pour ce monde
+     */
     public World(int noLevel) {
         createWorld(noLevel);
-        sound = Gdx.audio.newSound(Gdx.files.internal("sound/main_theme2.mp3"));
+        sound = Gdx.audio.newSound(Gdx.files.internal("sound/main_theme.mp3"));
         sound.loop(0.2f);
     }
 
+    /**
+     * Arrête la musique
+     */
     public void stopMusic(){
         sound.stop();
     }
 
     // Getters -----------
+
+    /**
+     *
+     * @return le personnage jouable
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     *
+     * @return le niveau sur lequel est basé le monde
+     */
     public Level getLevel() {
         return level;
     }
 
+    /**
+     *
+     * @return les blocks du monde
+     */
     public Array<Rectangle> getCollisionRects() {
         return collisionRects;
     }
     // --------------------
 
     /**
-     * Return only the blocks that need to be drawn
-     **/
+     * Retourne uniquement les blocks qui doivent être dessinés
+     * @param width largeur
+     * @param height hauteur
+     * @return les blocks qui doivent être dessinés
+     */
     public List<Block> getDrawableBlocks(int width, int height) {
         int x = (int) player.getBounds().x - width;
         int y = (int) player.getBounds().y - height;
@@ -90,7 +124,10 @@ public class World {
     }
 
 
-
+    /**
+     * Place un block dans le monde
+     * @param b le block à placer
+     */
     public void placeBlock(Block b){
         level.getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] = b;
     }
@@ -100,7 +137,10 @@ public class World {
         resetPlayer();
     }
 
+    /**
+     * Recrée un nouveau personnage jouable au début du niveau
+     */
     public void resetPlayer() {
-        player = new Player(new Vector2(level.getSpanPosition()));
+        player = new Player(new Vector2(level.getSpawnPosition()));
     }
 }

@@ -203,7 +203,7 @@ public class PlayerController {
         playerRect.set(player.getBounds().x, player.getBounds().y, player.getBounds().width, player.getBounds().height);
 
         // Check victory
-        if (playerRect.overlaps(world.getLevel().getFinishBlocks().getBounds())) {
+        if (playerRect.overlaps(world.getLevel().getFinishBlock().getBounds())) {
             finish();
         }
 

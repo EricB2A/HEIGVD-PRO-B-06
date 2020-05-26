@@ -123,7 +123,7 @@ public class CentralGameManager {
     }
 
     private void resetPlayersPositions(){
-        ServerGameStateTickManager.getInstance().getGameState().setPositions(map.getSpanPosition());
+        ServerGameStateTickManager.getInstance().getGameState().setPositions(map.getSpawnPosition());
     }
 
     private void processPlayerDeath(PlayerContext ctx) {

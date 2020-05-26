@@ -2,6 +2,9 @@ package com.gdx.uch2;
 
 import com.badlogic.gdx.Screen;
 
+/**
+ * Classe Singleton gèreant les différents écrans de jeu
+ */
 public class ScreenManager {
 
     // Singleton: unique instance
@@ -14,10 +17,12 @@ public class ScreenManager {
 
     // Singleton: private constructor
     private ScreenManager() {
-        super();
     }
 
-    // Singleton: retrieve instance
+    /**
+     * Obtient l'instance unique du singleton
+     * @return l'instance unique du singleton
+     */
     public static ScreenManager getInstance() {
         if (instance == null) {
             instance = new ScreenManager();
@@ -26,11 +31,19 @@ public class ScreenManager {
     }
 
     // Initialization with the game class
+
+    /**
+     * Initialisation prenant la classe du jeu en paramètre
+     * @param game le jeu à afficher
+     */
     public void initialize(UltimateChickenHorse2 game) {
         this.game = game;
     }
 
-    // Show in the game the screen which enum type is received
+    /**
+     * Affiche l'écran passé en paramètre
+     * @param screen écran à afficher
+     */
     public void showScreen(Screen screen) {
 
         // Get current screen to dispose it
@@ -45,10 +58,18 @@ public class ScreenManager {
         }
     }
 
+    /**
+     * Donne une valeur à l'écran de placement sauvegardé dans la classe
+     * @param placementScreen la nouvelle valeur de l'écran de placement
+     */
     public void setPlacementScreen(Screen placementScreen) {
         this.placementScreen = placementScreen;
     }
 
+    /**
+     * Obtient l'écran de placement sauvegardé dans la classe
+     * @return l'écran de placement sauvegardé dans la classe
+     */
     public Screen getPlacementScreen() {
         return placementScreen;
     }
