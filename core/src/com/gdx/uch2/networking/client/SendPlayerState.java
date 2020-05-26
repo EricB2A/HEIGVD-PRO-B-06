@@ -5,8 +5,6 @@ import com.gdx.uch2.networking.PlayerContext;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static io.netty.buffer.Unpooled.buffer;
-
 public class SendPlayerState extends TimerTask {
 
     private PlayerContext ctx;

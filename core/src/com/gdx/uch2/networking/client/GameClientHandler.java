@@ -41,6 +41,9 @@ public class GameClientHandler {
             case BlockPlaced:
                 processBlockPlacement();
                 break;
+            case BlockPosition:
+                processBlockPosition();
+                break;
             case EndGame:
                 isOver = true;
                 break;
@@ -101,8 +104,14 @@ public class GameClientHandler {
         }
 
         if(op.getPlayerID() == -1){
+            OnlinePlayerManager.getInstance().resetPlacementBlocks();
             startMovementPhase();
         }
+    }
+
+    private void processBlockPosition() {
+       ObjectPlacement op = ctx.in.readObjectPlacement();
+       OnlinePlayerManager.getInstance().setBlockPosition(op.getPlayerID(), op.getBlock());
     }
 
 

@@ -8,8 +8,6 @@ import com.gdx.uch2.networking.PlayerContext;
 
 import java.util.Arrays;
 
-import static io.netty.buffer.Unpooled.buffer;
-
 /**
  * Classe métier gérant le déroulement du jeu des clients en lisant et envoyant des messages
  */
@@ -69,6 +67,9 @@ public class CentralGameManager {
             case PlayerStateUpdate:
                 processPlayerState(context);
                 break;
+            case BlockPosition:
+                processBlockPosition(context);
+                break;
             case BlockPlaced:
                 processObjectPlacement(context);
                 break;
@@ -85,7 +86,6 @@ public class CentralGameManager {
                 System.out.println("SRV: Type de messages inconnu : " + type);
                 break;
         }
-
     }
 
     /**
@@ -177,18 +177,22 @@ public class CentralGameManager {
 
 
         if(allFinished){
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-            }
-            resetPlayersPositions();
-            if (++round < nbRounds) {
-                computePoints();
-                startEditingPhase();
-            } else {
-                endGame();
-            }
-
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException ignored) {
+                    }
+                    resetPlayersPositions();
+                    if (++round < nbRounds) {
+                        computePoints();
+                        startEditingPhase();
+                    } else {
+                        endGame();
+                    }
+                }
+            }).start();
         }
     }
 
@@ -239,6 +243,16 @@ public class CentralGameManager {
 
             System.out.println("SRV: broadcasted new block, next player to place is #");
 
+        }
+    }
+
+    private void processBlockPosition(PlayerContext ctx) {
+        ObjectPlacement op = ctx.in.readObjectPlacement();
+
+        for (PlayerContext c : players) {
+            if (c.getId() != ctx.getId()) {
+                c.out.writeMessage(op, false);
+            }
         }
     }
 

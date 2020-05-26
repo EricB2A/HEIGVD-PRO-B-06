@@ -18,20 +18,17 @@ public class OnlinePlayer {
     private String nickname;
     private Player.State state;
     private float localTime = 0;
+    private Block placementBlock;
+    private final PlayerState initialState;
+
 
     /**
      * Constructeur à partir d'un playerState
      * @param initialState état initial du nouveau joueur
      */
     private OnlinePlayer(PlayerState initialState) {
-        from  = new Vector2(initialState.getPosX(), initialState.getPosY());
-        position = new Vector2(initialState.getPosX(), initialState.getPosY());
-        to = new Vector2(initialState.getPosX(), initialState.getPosY());
-        begin = initialState.getTime();
-        end = begin;
-        stateTime = 0;
-        facingLeft = false;
-        falling = false;
+        this.initialState = initialState;
+        reset();
     }
 
     /**
@@ -139,5 +136,31 @@ public class OnlinePlayer {
      */
     public float getLocalTime() {
         return localTime;
+    }
+
+    /**
+     * Fixe l'emplacement où le joueur distant positionne son bloc dans la phase de placement
+     * @param placementBlock Un bloc
+     */
+    public void setPlacementBlock(Block placementBlock) {
+        this.placementBlock = placementBlock;
+    }
+
+    /**
+     * @return L'emplacement actuel du bloc du joueur distant dans la phase de placement
+     */
+    public Block getPlacementBlock() {
+        return placementBlock;
+    }
+
+    private void reset() {
+        from  = new Vector2(initialState.getPosX(), initialState.getPosY());
+        position = new Vector2(initialState.getPosX(), initialState.getPosY());
+        to = new Vector2(initialState.getPosX(), initialState.getPosY());
+        begin = 0;
+        end = begin;
+        stateTime = 0;
+        facingLeft = false;
+        falling = false;
     }
 }

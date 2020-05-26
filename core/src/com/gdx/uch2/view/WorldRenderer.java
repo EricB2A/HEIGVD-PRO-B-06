@@ -262,6 +262,11 @@ public class WorldRenderer {
         v.y = v.y / ppuY;
     }
 
+    public void unscale(Vector2 v) {
+        v.x = v.x * ppuX;
+        v.y = v.y * ppuY;
+    }
+
 
     private void drawBlocks() {
 

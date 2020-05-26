@@ -11,11 +11,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
-import com.gdx.uch2.entities.Block;
-import com.gdx.uch2.entities.Trap;
-import com.gdx.uch2.entities.World;
+import com.gdx.uch2.entities.*;
 import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.MessageSender;
@@ -36,6 +35,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private final Label.LabelStyle defaultStyle = new Label.LabelStyle(new BitmapFont(), null);
     private final Label.LabelStyle selectStyle = new Label.LabelStyle(new BitmapFont(), Color.CHARTREUSE);
     private Vector2 mousePosition;
+    private Label[] nicknamesLabel;
 
     private int width, height;
 
@@ -52,6 +52,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         stage = new Stage(new ScreenViewport());
         renderer = new WorldRenderer(world, stage.getBatch(), false);
         mousePosition = null;
+        nicknamesLabel = new Label[OnlinePlayerManager.getInstance().getNicknames().length];
         blockType = Block.Type.BOX;
         Gdx.input.setInputProcessor(this);
 
@@ -74,6 +75,14 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             table.add(l).colspan(2).left();
             table.row();
         }
+
+        for(int i = 0; i < nicknamesLabel.length; ++i) {
+            if (i != OnlinePlayerManager.getInstance().getPlayerId()) {
+                nicknamesLabel[i] = new Label(OnlinePlayerManager.getInstance().getNicknames()[i],
+                        new Label.LabelStyle(new BitmapFont(), null));
+                stage.addActor(nicknamesLabel[i]);
+            }
+        }
     }
 
     @Override
@@ -93,6 +102,26 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.renderBackground();
+
+        for (int i = 0; i < nicknamesLabel.length; ++i) {
+            if (i != OnlinePlayerManager.getInstance().getPlayerId()) {
+                Block b = OnlinePlayerManager.getInstance().getPlayer(i).getPlacementBlock();
+                if (b != null && world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] == null) {
+                    renderer.renderBlock(b.getType(), b.getPosition());
+
+                    Vector2 pos = new Vector2(b.getPosition());
+                    pos.x += 0.5;
+                    pos.y += 1.2;
+                    renderer.unscale(pos);
+                    nicknamesLabel[i].setVisible(true);
+                    nicknamesLabel[i].setPosition(pos.x - nicknamesLabel[i].getWidth() / 2, pos.y);
+                    nicknamesLabel[i].setAlignment(Align.center);
+                } else {
+                    nicknamesLabel[i].setVisible(false);
+                }
+            }
+
+        }
 
         if(MessageSender.getInstance().getCanPlace()) {
             message.setText("Place an item on the map\n\n\n");
@@ -183,22 +212,26 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 y = (int) pos.y;
                 Block[][] blocks = world.getLevel().getBlocks();
                 if (blocks[x][y] == null) {
-                    Block block;
-                    if(x >= 0 && y >= 0 && blockType == null) blockType = Block.Type.BOX; // TODO GUILLAUME
-                    switch (blockType){
-                        case BOX:
-                        case BLOCK: block = new Block(new Vector2(x, y), blockType); break;
-                        case LETHAL:
-                        case G_DOWN:
-                        case G_UP: block = new Trap(new Vector2(x, y), blockType); break;
-                        default: block = new Block(new Vector2(x, y), Block.Type.BOX); break;
-                    }
-                    MessageSender.getInstance().sendBlockPlacement(block);
+                    MessageSender.getInstance().sendBlockPlacement(getBlock(x, y));
                 }
             }
         }
 
         return true;
+    }
+
+    private Block getBlock(float x, float y) {
+        Block block;
+        if(blockType == null) blockType = Block.Type.BOX; // TODO GUILLAUME
+        switch (blockType){
+            case BOX:
+            case BLOCK: block = new Block(new Vector2(x, y), blockType); break;
+            case LETHAL:
+            case G_DOWN:
+            case G_UP: block = new Trap(new Vector2(x, y), blockType); break;
+            default: block = new Block(new Vector2(x, y), Block.Type.BOX); break;
+        }
+        return block;
     }
 
     @Override
@@ -213,8 +246,12 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         pos.x = (float) Math.floor(pos.x);
         pos.y = (float) Math.floor(pos.y);
 
-        if (pos.x >= 0 && pos.y >= 0 && pos.x < world.getLevel().getWidth() && pos.y < world.getLevel().getHeight())
+        if (pos.x >= 0 && pos.y >= 0 && pos.x < world.getLevel().getWidth() && pos.y < world.getLevel().getHeight()) {
+            if (mousePosition != null && MessageSender.getInstance().getCanPlace() && (mousePosition.x != pos.x || mousePosition.y != pos.y)) {
+                MessageSender.getInstance().sendBlockMovement(getBlock(pos.x, pos.y));
+            }
             mousePosition = pos;
+        }
         return true;
     }
 

@@ -2,7 +2,6 @@ package com.gdx.uch2.networking.server;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Player;
-import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.messages.GameState;
 import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.messages.PlayerState;
@@ -54,9 +53,11 @@ public class ServerGameStateTickManager {
      * Crée le timer et envoie régulièrement un nouveau gameState à tous les joueurs.
      * @param delay délai après lequel l'envoi commencera
      * @param tickDuration durée entre 2 envois
+     * @param initPos position initiale
      */
-    public void start(int delay, int tickDuration){
-        initGameState(players.length, 10, 10);
+    public void start(int delay, int tickDuration, Vector2 initPos){
+        initGameState(players.length, initPos.x, initPos.y);
+
         this.timer = new Timer();
         timer.schedule(new SendUpdate(timer, players), delay, tickDuration);
     }

@@ -100,6 +100,24 @@ public class OnlinePlayerManager {
     }
 
     /**
+     * Les blocs en cours de placement par les joueurs distants sont réinitialisés
+     */
+    public void resetPlacementBlocks() {
+        for (OnlinePlayer p : getPlayers()) {
+            p.setPlacementBlock(null);
+        }
+    }
+
+    /**
+     * Un joueur a effectué une modification sur un bloc en cours de placement est modifié
+     * @param id Joueur modifiant le bloc
+     * @param b Nouveau bloc
+     */
+    public void setBlockPosition(int id, Block b) {
+        players.get(id).setPlacementBlock(b);
+    }
+
+    /**
      * Initialise / réinitialise l'objet
      * @param playerId ID du joueur local
      * @param nickname pseudonyme du joueur local

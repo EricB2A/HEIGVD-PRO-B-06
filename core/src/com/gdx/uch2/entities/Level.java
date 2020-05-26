@@ -86,7 +86,6 @@ public class Level {
 
     /**
      * Donne une nouvelle valeur à la position d'apparition des joueurs
-     * @param spawnPosition le nouvelle position d'apparition
      */
     public void setSpawnPosition(Vector2 spawnPosition) {
         this.spawnPosition = spawnPosition;
