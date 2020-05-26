@@ -114,6 +114,7 @@ public class WorldRenderer {
 //        this.cam.position.set(world.getPlayer().getPosition().x, world.getPlayer().getPosition().y, 0);
 		this.cam.position.set(camera_width / 2f, camera_height / 2f, 0);
         this.cam.update();
+
         this.debug = debug;
         spriteBatch = batch;
         loadTextures();
@@ -274,8 +275,11 @@ public class WorldRenderer {
 
     private void drawBlocks() {
 
-        for (Block block : world.getDrawableBlocks((int) camera_width, (int) camera_height)) {
-            drawBlock(block.getType(), block.getPosition());
+        for(Block[] blockArray : World.currentWorld.getLevel().getBlocks()){
+            for(Block block : blockArray){
+                if(block != null)
+                    drawBlock(block.getType(), block.getPosition());
+            }
         }
 
         spriteBatch.draw(spawnTexture, world.getLevel().getSpawnPosition().x, world.getLevel().getSpawnPosition().y, Block.SIZE, Block.SIZE);
