@@ -18,18 +18,28 @@ import com.gdx.uch2.entities.OnlinePlayerManager;
  */
 public class ScoreScreen implements Screen {
     private Stage stage;
+    private int nRound;
 
     /**
      * Constructeur
      */
-    public ScoreScreen(){
+    public ScoreScreen(int nRound){
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+        this.nRound = nRound;
     }
 
+    /**
+     * @return Score courant.
+     */
     private int[] getScore(){
        return OnlinePlayerManager.getInstance().getScores();
     }
+
+    /**
+     * @return nombre de round max de la partie.
+     */
+    private int getNbRound() { return OnlinePlayerManager.getInstance().getNbRound(); }
 
     @Override
     public void show() {
@@ -48,7 +58,7 @@ public class ScoreScreen implements Screen {
         chickenImg.setHeight(200);
 
         // Create Text
-        Label titleLabel = new Label("Ultimate Chicken Horse 2 \n\n End Level ! Results", skin);
+        Label titleLabel = new Label("Tour "+nRound+"/"+getNbRound(), skin);
         titleLabel.setFontScale(2);
         final Label nicknameLabel = new Label("Nickname", skin);
         nicknameLabel.setFontScale(1);
@@ -88,9 +98,15 @@ public class ScoreScreen implements Screen {
         // Title
         HorizontalGroup titleGroup = new HorizontalGroup();
         titleGroup.space(10);
-        titleGroup.addActor(titleLabel);
         titleGroup.addActor(chickenImg);
         table.add(titleGroup).colspan(2).center();
+        table.row();
+
+        // Rounds
+        HorizontalGroup roundGroup = new HorizontalGroup();
+        roundGroup.space(10);
+        roundGroup.addActor(titleLabel);
+        table.add(roundGroup).colspan(2).center();
         table.row();
 
         //Infos

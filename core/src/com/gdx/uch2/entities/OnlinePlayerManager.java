@@ -15,6 +15,7 @@ public class OnlinePlayerManager {
     private Map<Integer, OnlinePlayer> players;
     private int playerId;
     private int[] scores;
+    private int nbRound;
     private String nickname;
 
     private OnlinePlayerManager() {
@@ -42,6 +43,20 @@ public class OnlinePlayerManager {
      */
     public int[] getScores() { return scores; }
 
+    /**
+     * @return le nombre max de rounds de la partie.
+     */
+    public int getNbRound() {
+        return nbRound;
+    }
+
+    /**
+     * Modifie la valeur du nombre max de rounds de la partie
+     * @param nbRound nombre de rounds max.
+     */
+    public void setNbRound(int nbRound) {
+        this.nbRound = nbRound;
+    }
 
     /**
      * Initialise un nouveau joueur distant

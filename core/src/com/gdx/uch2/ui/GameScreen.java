@@ -64,7 +64,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
             ScreenManager.getInstance().showScreen(new EndGameScreen());
             return;
         } else if (GameClientHandler.isRoundOver()) {
-            ScreenManager.getInstance().showScreen(new ScoreScreen());
+            ScreenManager.getInstance().showScreen(new ScoreScreen(GameClientHandler.getnRound()));
             return;
         }
 

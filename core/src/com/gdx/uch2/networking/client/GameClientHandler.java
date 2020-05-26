@@ -17,6 +17,7 @@ public class GameClientHandler {
     static public GamePhase currentPhase; //TODO quand même c'est un peu abusé là
     static private boolean isOver;
     static private boolean roundOver;
+    static private int nRound;
     private final PlayerContext ctx;
 
     /**
@@ -66,12 +67,18 @@ public class GameClientHandler {
     }
 
     /**
+     * @return le numéro de round depuis le début de la partie;
+     */
+    public static int getnRound() { return nRound; }
+
+    /**
      * Réinitialise les champs static
      */
     public static void reset() {
         currentPhase = null;
         isOver = false;
         roundOver = false;
+        nRound = 0;
     }
 
     /**
@@ -133,6 +140,7 @@ public class GameClientHandler {
 
     private void startMovementPhase(){
         currentPhase = GamePhase.Moving;
+        ++nRound;
         System.out.println("CLI: START MOVEMENT PHASE");
     }
 

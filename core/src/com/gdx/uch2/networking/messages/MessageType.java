@@ -14,5 +14,5 @@ public enum MessageType {
     EndGame,
     Score,
     CloseConnection,
-    BlockPosition
+    BlockPosition;
 }
