@@ -120,51 +120,54 @@ public class PlayerController {
             processInput();
         }
 
-        // Fix resume mess after long inactivity
-        delta = Math.min(delta, 0.025f);
+        if (player.getPosition().y < -3) {
+            player.kill();
+        } else {
+            // Fix resume mess after long inactivity
+            delta = Math.min(delta, 0.025f);
 
-        // Setting initial vertical acceleration
-        player.getAcceleration().y = GRAVITY;
+            // Setting initial vertical acceleration
+            player.getAcceleration().y = GRAVITY;
 
-        // Need to update player here to apply effects before other operations
-        player.update(delta);
+            // Need to update player here to apply effects before other operations
+            player.update(delta);
 
-        if (player.getState() == State.SLIDING && player.getVelocity().y < 0) {
-            player.getAcceleration().y += SLIDING_FRICTION;
-        }
+            if (player.getState() == State.SLIDING && player.getVelocity().y < 0) {
+                player.getAcceleration().y += SLIDING_FRICTION;
+            }
 
-        // Convert acceleration to frame time
-        player.getAcceleration().scl(delta);
+            // Convert acceleration to frame time
+            player.getAcceleration().scl(delta);
 
-        // apply acceleration to change velocity
-        player.getVelocity().add(player.getAcceleration().x, player.getAcceleration().y);
+            // apply acceleration to change velocity
+            player.getVelocity().add(player.getAcceleration().x, player.getAcceleration().y);
 
-        // checking collisions with the surrounding blocks depending on Player's velocity
-        checkCollisionWithBlocks(delta);
+            // checking collisions with the surrounding blocks depending on Player's velocity
+            checkCollisionWithBlocks(delta);
 
-        // If Player is grounded then reset the state to IDLE
-        if (grounded && (player.getState().equals(State.JUMPING) || player.getState() == State.SLIDING)) {
-            player.setState(State.IDLE);
-        }
+            // If Player is grounded then reset the state to IDLE
+            if (grounded && (player.getState().equals(State.JUMPING) || player.getState() == State.SLIDING)) {
+                player.setState(State.IDLE);
+            }
 
-        // apply damping to halt Player nicely
-        if (player.getState() == State.IDLE || finished) {
-            player.getVelocity().x *= DAMP;
-        }
+            // apply damping to halt Player nicely
+            if (player.getState() == State.IDLE || finished) {
+                player.getVelocity().x *= DAMP;
+            }
 
-        // ensure terminal velocity is not exceeded
-        if (player.getVelocity().x > MAX_VEL) {
-            player.getVelocity().x = MAX_VEL;
-        }
-        if (player.getVelocity().x < -MAX_VEL) {
-            player.getVelocity().x = -MAX_VEL;
-        }
+            // ensure terminal velocity is not exceeded
+            if (player.getVelocity().x > MAX_VEL) {
+                player.getVelocity().x = MAX_VEL;
+            }
+            if (player.getVelocity().x < -MAX_VEL) {
+                player.getVelocity().x = -MAX_VEL;
+            }
 
-        if (player.getState() == State.SLIDING && player.getVelocity().y < MAX_SLIDING_VEL) {
-            player.getVelocity().y = MAX_SLIDING_VEL;
-        }
-        else if (player.getVelocity().y < MAX_FALL_VEL) {
-            player.getVelocity().y = MAX_FALL_VEL;
+            if (player.getState() == State.SLIDING && player.getVelocity().y < MAX_SLIDING_VEL) {
+                player.getVelocity().y = MAX_SLIDING_VEL;
+            } else if (player.getVelocity().y < MAX_FALL_VEL) {
+                player.getVelocity().y = MAX_FALL_VEL;
+            }
         }
 
         if (player.isDead()) {
