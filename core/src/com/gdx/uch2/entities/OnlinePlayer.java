@@ -1,10 +1,7 @@
 package com.gdx.uch2.entities;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gdx.uch2.networking.PlayerState;
-
-import java.util.LinkedList;
-import java.util.Queue;
+import com.gdx.uch2.networking.messages.PlayerState;
 
 public class OnlinePlayer {
     private Vector2 from;

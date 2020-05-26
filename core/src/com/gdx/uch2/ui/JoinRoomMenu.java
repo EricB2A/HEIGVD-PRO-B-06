@@ -11,12 +11,18 @@ import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.ui.uiUtil.GameParameters;
 
+/**
+ * Ecran de connexion à une partie
+ */
 public class JoinRoomMenu implements Screen {
     private Stage stage;
     private static String hostname = "localhost";
     private static String nickname = "Player";
     private static int port = 12345;
 
+    /**
+     * Constructeur
+     */
     public JoinRoomMenu(){
         // create stage and set it as input processor
         stage = new Stage(new ScreenViewport());

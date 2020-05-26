@@ -23,29 +23,35 @@ import com.gdx.uch2.networking.client.GameClientHandler;
 import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.view.WorldRenderer;
 
+/**
+ * Ecan de phase de placement
+ */
 public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private World world;
     private WorldRenderer renderer;
-    private String text;
     private Stage stage;
     private Block.Type blockType;
     private Label message;
     private Label[] choicesLabel;
     private final Label.LabelStyle defaultStyle = new Label.LabelStyle(new BitmapFont(), null);
     private final Label.LabelStyle selectStyle = new Label.LabelStyle(new BitmapFont(), Color.CHARTREUSE);
+    private Vector2 mousePosition;
 
     private int width, height;
 
+    /**
+     * Constructeur
+     */
     public PlacementScreen() {
         world = World.currentWorld;
     }
 
     @Override
     public void show() {
-        text = "Place a block";
         world.resetPlayer();
         stage = new Stage(new ScreenViewport());
         renderer = new WorldRenderer(world, stage.getBatch(), false);
+        mousePosition = null;
         blockType = Block.Type.BOX;
         Gdx.input.setInputProcessor(this);
 
@@ -90,6 +96,10 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
         if(MessageSender.getInstance().getCanPlace()) {
             message.setText("Place an item on the map\n\n\n");
+            if (mousePosition != null
+                    && world.getLevel().getBlocks()[(int) mousePosition.x][(int) mousePosition.y] == null) {
+                renderer.renderBlock(blockType, mousePosition);
+            }
         } else {
             message.setText("Waiting for the other players placing their items\n\n\n");
         }
@@ -125,20 +135,12 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 blockType = Block.Type.BOX;
                 select = 0;
                 break;
-//            case Input.Keys.NUM_2:
-//            case Input.Keys.NUMPAD_2:
-//                blockType = Block.Type.BLOCK;
-//                select = 1;
-//                break;
+
             case Input.Keys.NUM_2:
             case Input.Keys.NUMPAD_2:
                 blockType = Block.Type.LETHAL;
                 select = 1;
                 break;
-//            case Input.Keys.NUM_4:
-//            case Input.Keys.NUMPAD_4: blockType = Block.Type.G_DOWN; break;
-//            case Input.Keys.NUM_5:
-//            case Input.Keys.NUMPAD_5: blockType = Block.Type.G_UP; break;
             case Input.Keys.ESCAPE:
                 GameServer.closeConnection();
                 ScreenManager.getInstance().showScreen(new MainMenu());
@@ -205,7 +207,14 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+        Vector2 pos = new Vector2(screenX,height - screenY);
+        renderer.scale(pos);
+        pos.x = (float) Math.floor(pos.x);
+        pos.y = (float) Math.floor(pos.y);
+
+        if (pos.x >= 0 && pos.y >= 0 && pos.x < world.getLevel().getWidth() && pos.y < world.getLevel().getHeight())
+            mousePosition = pos;
+        return true;
     }
 
     @Override

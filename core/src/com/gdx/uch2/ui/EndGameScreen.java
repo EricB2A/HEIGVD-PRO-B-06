@@ -16,9 +16,15 @@ import com.gdx.uch2.entities.World;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Ecran de fin de partie
+ */
 public class EndGameScreen implements Screen {
     private Stage stage;
 
+    /**
+     * Constructeur
+     */
     public EndGameScreen(){
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);

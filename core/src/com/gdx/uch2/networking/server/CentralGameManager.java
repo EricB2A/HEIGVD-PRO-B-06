@@ -1,12 +1,12 @@
 package com.gdx.uch2.networking.server;
 
-import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Level;
-import com.gdx.uch2.networking.*;
+import com.gdx.uch2.networking.GamePhase;
+import com.gdx.uch2.networking.messages.MessageType;
+import com.gdx.uch2.networking.messages.ObjectPlacement;
+import com.gdx.uch2.networking.messages.PlayerContext;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.Semaphore;
 
 import static io.netty.buffer.Unpooled.buffer;
 
@@ -87,14 +87,6 @@ public class CentralGameManager {
         Arrays.fill(dead, false);
         Arrays.fill(hasPlaced, false);
         firstArrived = true;
-
-        /*
-        //Sends a message to all clients announcing the movement phase starts
-        ByteBuf out = Unpooled.buffer(128);
-        out.writeChar(MessageType.StartMovementPhase.getChar());
-        broadcast(out);
-
-         */
     }
 
     private void startEditingPhase(){

@@ -4,7 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.World;
-import com.gdx.uch2.networking.*;
+import com.gdx.uch2.networking.GamePhase;
+import com.gdx.uch2.networking.messages.*;
 
 /**
  * Classe Traitant les informations reçues du serveur

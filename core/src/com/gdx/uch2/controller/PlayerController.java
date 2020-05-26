@@ -14,7 +14,7 @@ import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.Player.State;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.GamePhase;
-import com.gdx.uch2.networking.PlayerState;
+import com.gdx.uch2.networking.messages.PlayerState;
 import com.gdx.uch2.networking.client.MessageSender;
 
 import com.gdx.uch2.networking.client.GameClientHandler;

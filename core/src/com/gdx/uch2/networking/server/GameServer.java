@@ -2,9 +2,8 @@ package com.gdx.uch2.networking.server;
 
 import com.gdx.uch2.controller.LevelLoader;
 import com.gdx.uch2.entities.Level;
-import com.gdx.uch2.networking.GameState;
-import com.gdx.uch2.networking.MessageType;
-import com.gdx.uch2.networking.PlayerContext;
+import com.gdx.uch2.networking.messages.MessageType;
+import com.gdx.uch2.networking.messages.PlayerContext;
 import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.util.Constants;
@@ -12,10 +11,7 @@ import com.gdx.uch2.util.Constants;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class GameServer implements Runnable {
     //2 premiers joueurs à se connecter.

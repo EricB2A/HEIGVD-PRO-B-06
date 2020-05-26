@@ -5,10 +5,10 @@ import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.ProtectedArea;
 import com.gdx.uch2.entities.Trap;
-import com.gdx.uch2.networking.GameState;
-import com.gdx.uch2.networking.MessageType;
-import com.gdx.uch2.networking.ObjectPlacement;
-import com.gdx.uch2.networking.PlayerState;
+import com.gdx.uch2.networking.messages.GameState;
+import com.gdx.uch2.networking.messages.MessageType;
+import com.gdx.uch2.networking.messages.ObjectPlacement;
+import com.gdx.uch2.networking.messages.PlayerState;
 
 import java.io.*;
 

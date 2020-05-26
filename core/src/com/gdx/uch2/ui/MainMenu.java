@@ -10,9 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 
+/**
+ * Ecran de menu principal
+ */
 public class MainMenu implements Screen {
     private Stage stage;
 
+    /**
+     * Constructeur
+     */
     public MainMenu() {
         /// create stage and set it as input processor
         stage = new Stage(new ScreenViewport());

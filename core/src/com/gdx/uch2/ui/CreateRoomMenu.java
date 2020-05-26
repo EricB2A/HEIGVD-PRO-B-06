@@ -13,6 +13,9 @@ import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.ui.uiUtil.GameParameters;
 
+/**
+ * Ecran de création de partie
+ */
 public class CreateRoomMenu implements Screen {
     private Stage stage;
     private static String nickname = "Player";
@@ -21,6 +24,9 @@ public class CreateRoomMenu implements Screen {
     private static int players = 2;
     private static int nbRounds = 10;
 
+    /**
+     * Constructeur
+     */
     public CreateRoomMenu(){
         // create stage and set it as input processor
         stage = new Stage(new ScreenViewport());
@@ -69,7 +75,7 @@ public class CreateRoomMenu implements Screen {
         portTF.setMaxLength(5);
         nbRoundsTF.setMaxLength(2);
         nbRoundsTF.setTextFieldFilter(digitsFilter);
-        final SelectBox<Integer> levelSB = new SelectBox<Integer>(skin);
+        final SelectBox<Integer> levelSB = new SelectBox<>(skin);
         levelSB.setItems(1,2,3);
         levelSB.setSelected(level);
         final SelectBox<Integer> playersSB = new SelectBox<>(skin);

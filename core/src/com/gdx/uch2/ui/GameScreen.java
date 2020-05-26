@@ -19,26 +19,27 @@ import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.view.WorldRenderer;
 import com.badlogic.gdx.Input.Keys;
 
+/**
+ * Ecran de jeu de phase de mouvement
+ */
 public class GameScreen extends ScreenAdapter implements InputProcessor {
-    private World world;
     private WorldRenderer renderer;
     private PlayerController controller;
     private Stage stage;
     private Label[] nicknamesLabel;
     private float ppuX, ppuY;
 
-    private int width, height;
-
+    /**
+     * Constructuer
+     * @param world World sur lequel est basé l'écran
+     */
     public GameScreen(World world) {
-        this.world = world;
         stage = new Stage(new ScreenViewport());
         renderer = new WorldRenderer(world, stage.getBatch(), false);
         controller = new PlayerController(world);
         nicknamesLabel = new Label[OnlinePlayerManager.getInstance().getNicknames().length];
         ppuX = stage.getWidth() / world.getLevel().getWidth();
         ppuY = stage.getHeight() / world.getLevel().getHeight();
-//        OnlinePlayerManager.getInstance().resetPlayers();
-
     }
 
     @Override
@@ -88,13 +89,10 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
     @Override
     public void resize(int width, int height) {
         renderer.setSize(width, height);
-        this.width = width;
-        this.height = height;
     }
 
     @Override
     public void dispose() {
-
     }
 
     // * InputProcessor methods ***************************//
