@@ -58,20 +58,6 @@ public class GameServer implements Runnable {
                 Socket clientSocket = serverSocket.accept();
 
                 for (int i = 0; i < players.length; ++i) {
-//                    if (players[i] != null) {
-//                        players[i].out.writeMessage(MessageType.Ping);
-//                        System.out.println(i + " : " + players[i].in.getType());
-//                        if (players[i].in.e != null) {
-//                            if (id < 0) {
-//                                id = i;
-//                            } else {
-//                                players[i] = null;
-//                            }
-//                        }
-//                    } else if (id < 0) {
-//                        id = i;
-//                    }
-
                     if (players[i] == null) {
                         id = i;
                         break;

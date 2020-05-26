@@ -8,8 +8,6 @@ import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.entities.ProtectedArea;
 import com.gdx.uch2.entities.Trap;
 
-import java.util.Arrays;
-
 public class LevelLoader {
 
     private static final String LEVEL_PREFIX    = "levels/level-";
@@ -57,7 +55,7 @@ public class LevelLoader {
                 } else if (pixel == LETHAL) {
                     blocks[col][iRow] = new Trap(new Vector2(col, iRow), Block.Type.LETHAL);
                 } else if (pixel == START_POS) {
-                    level.setSpanPosition(new Vector2(col, iRow));
+                    level.setSpawnPosition(new Vector2(col, iRow));
                     blocks[col][iRow] = new ProtectedArea(new Vector2(col, iRow));
                 } else if (pixel == FINISH_POS) {
                     level.setFinishPosition(new Vector2(col, iRow));

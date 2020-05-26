@@ -8,12 +8,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.uch2.entities.*;
 import com.gdx.uch2.entities.Player.State;
 import com.gdx.uch2.util.Constants;
 
+/**
+ * Gère l'affichage des différents éléments présents dans un World
+ */
 public class WorldRenderer {
 
     private final float camera_width;
@@ -68,6 +70,11 @@ public class WorldRenderer {
     private float ppuX;	// pixels per unit on the X axis
     private float ppuY;	// pixels per unit on the Y axis
 
+    /**
+     * Donne une taille au renderer
+     * @param w largeur
+     * @param h hauteur
+     */
     public void setSize (int w, int h) {
         this.width = w;
         this.height = h;
@@ -75,13 +82,28 @@ public class WorldRenderer {
         ppuX = width / camera_width;
         ppuY = height / camera_height;
     }
+
+    /**
+     * @return True si on est en mode debug, false sinon
+     */
     public boolean isDebug() {
         return debug;
     }
+
+    /**
+     * Indique si on veut passer en mode debug
+     * @param debug True, si on veut passer en debug, false sinon
+     */
     public void setDebug(boolean debug) {
         this.debug = debug;
     }
 
+    /**
+     * Constructeur
+     * @param world le monde à afficher
+     * @param batch le Batch à utiliser
+     * @param debug Si on veut lancer en mode debug ou pas
+     */
     public WorldRenderer(World world, Batch batch, boolean debug) {
         this.world = world;
         camera_width = world.getLevel().getWidth();
@@ -178,6 +200,9 @@ public class WorldRenderer {
     }
 
 
+    /**
+     * Render les objets
+     */
     public void renderPlayers() {
         spriteBatch.setProjectionMatrix(cam.combined);
         spriteBatch.begin();
@@ -190,6 +215,9 @@ public class WorldRenderer {
         }
     }
 
+    /**
+     * Render l'image de fond
+     */
     public void renderBackground() {
         spriteBatch.setProjectionMatrix(cam.combined);
         spriteBatch.begin();
@@ -197,6 +225,11 @@ public class WorldRenderer {
         spriteBatch.end();
     }
 
+    /**
+     * Render un block
+     * @param block le block à render
+     * @param pos la position du block
+     */
     public void renderBlock(Block.Type block, Vector2 pos) {
         spriteBatch.setProjectionMatrix(cam.combined);
         spriteBatch.begin();
@@ -219,6 +252,11 @@ public class WorldRenderer {
     }
 
     // Scaling pixel -> level unit
+
+    /**
+     * Echelonne un vecteur
+     * @param v le vecteur à échelonner
+     */
     public void scale(Vector2 v) {
         v.x = v.x / ppuX;
         v.y = v.y / ppuY;
@@ -231,7 +269,7 @@ public class WorldRenderer {
             drawBlock(block.getType(), block.getPosition());
         }
 
-        spriteBatch.draw(spawnTexture, world.getLevel().getSpanPosition().x, world.getLevel().getSpanPosition().y, Block.SIZE, Block.SIZE);
+        spriteBatch.draw(spawnTexture, world.getLevel().getSpawnPosition().x, world.getLevel().getSpawnPosition().y, Block.SIZE, Block.SIZE);
         spriteBatch.draw(finishTexture, world.getLevel().getFinishPosition().x, world.getLevel().getFinishPosition().y, Block.SIZE, Block.SIZE);
 
     }

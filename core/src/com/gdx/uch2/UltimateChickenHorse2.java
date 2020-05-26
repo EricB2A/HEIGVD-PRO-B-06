@@ -6,7 +6,14 @@ import com.gdx.uch2.ui.MainMenu;
 
 import java.io.IOException;
 
+/**
+ * Classe principale du jeu, génère l'écran de menu principal
+ */
 public class UltimateChickenHorse2 extends Game {
+
+	/**
+	 * Constructeur sans arguments
+	 */
 	public UltimateChickenHorse2(){
 
 	}

@@ -142,6 +142,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 select = 1;
                 break;
             case Input.Keys.ESCAPE:
+                World.currentWorld.stopMusic();
                 GameServer.closeConnection();
                 ScreenManager.getInstance().showScreen(new MainMenu());
                 return true;
