@@ -146,6 +146,7 @@ public class GameClient {
      * Envoie un message au serveur pour terminer la connexion
      */
     public static void closeConnection() {
+        GameClientHandler.reset();
         worker.closeRequested = true;
         worker.context.out.writeMessage(MessageType.CloseConnection);
     }

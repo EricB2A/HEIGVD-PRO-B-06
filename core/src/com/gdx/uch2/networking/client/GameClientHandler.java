@@ -24,8 +24,7 @@ public class GameClientHandler {
      */
     public GameClientHandler(PlayerContext ctx) {
         this.ctx = ctx;
-        currentPhase = null;
-        isOver = false;
+        reset();
     }
 
     /**
@@ -63,6 +62,15 @@ public class GameClientHandler {
      */
     public static boolean isOver() {
         return isOver;
+    }
+
+    /**
+     * Réinitialise les champs static
+     */
+    public static void reset() {
+        currentPhase = null;
+        isOver = false;
+        roundOver = false;
     }
 
     /**
