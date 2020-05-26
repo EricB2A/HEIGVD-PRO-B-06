@@ -127,7 +127,7 @@ public class GameServer implements Runnable {
 
         //Démarre les ticks de serveur
         ServerGameStateTickManager.getInstance().setPlayers(Arrays.copyOf(players, players.length));
-        ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION);
+        ServerGameStateTickManager.getInstance().start(1000, Constants.TICK_DURATION, level.getSpawnPosition());
     }
 
     public static void closeConnection() {

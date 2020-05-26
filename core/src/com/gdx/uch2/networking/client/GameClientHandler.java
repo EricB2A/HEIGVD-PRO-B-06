@@ -122,7 +122,7 @@ public class GameClientHandler {
     private void startEditingPhase(){
         currentPhase = GamePhase.Editing;
         MessageSender.getInstance().setCanPlace(true);
-        Vector2 pos = World.currentWorld.getLevel().getSpanPosition();
+        Vector2 pos = World.currentWorld.getLevel().getSpawnPosition();
         MessageSender.getInstance().setContext(ctx);
         MessageSender.getInstance().setCurrentState(new PlayerState(ctx.getId(),
                 Player.State.IDLE, pos.x, pos.y, 0));

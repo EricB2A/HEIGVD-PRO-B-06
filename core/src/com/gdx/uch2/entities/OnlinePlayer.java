@@ -16,17 +16,12 @@ public class OnlinePlayer {
     private Player.State state;
     float localTime = 0;
     private Block placementBlock;
+    private final PlayerState initialState;
 
 
     private OnlinePlayer(PlayerState initialState) {
-        from  = new Vector2(initialState.getPosX(), initialState.getPosY());
-        position = new Vector2(initialState.getPosX(), initialState.getPosY());
-        to = new Vector2(initialState.getPosX(), initialState.getPosY());
-        begin = initialState.getTime();
-        end = begin;
-        stateTime = 0;
-        facingLeft = false;
-        falling = false;
+        this.initialState = initialState;
+        reset();
     }
 
     public OnlinePlayer(int playerId, String nickname) {
@@ -36,6 +31,17 @@ public class OnlinePlayer {
 
     public String getNickname() {
         return nickname;
+    }
+
+    private void reset() {
+        from  = new Vector2(initialState.getPosX(), initialState.getPosY());
+        position = new Vector2(initialState.getPosX(), initialState.getPosY());
+        to = new Vector2(initialState.getPosX(), initialState.getPosY());
+        begin = 0;
+        end = begin;
+        stateTime = 0;
+        facingLeft = false;
+        falling = false;
     }
 
     public void addUpdate(PlayerState update) {

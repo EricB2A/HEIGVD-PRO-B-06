@@ -1,5 +1,6 @@
 package com.gdx.uch2.networking.server;
 
+import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.networking.messages.GameState;
 import com.gdx.uch2.networking.messages.PlayerContext;
@@ -43,8 +44,8 @@ public class ServerGameStateTickManager {
     }
 
     //Crée le timer et envoie régulièrement un nouveau gameState à tous les channels dans players.
-    public void start(int delay, int tickDuration){
-        initGameState(players.length, 10, 10); //TODO initialiser la partie selon des paramètres moins arbitraires
+    public void start(int delay, int tickDuration, Vector2 initPos){
+        initGameState(players.length, initPos.x, initPos.y);
 
         this.timer = new Timer();
         timer.schedule(new SendUpdate(timer, players), delay, tickDuration);
@@ -54,7 +55,7 @@ public class ServerGameStateTickManager {
         return gameState;
     }
 
-    private void initGameState(int nbPlayers, int posX, int posY){
+    private void initGameState(int nbPlayers, float posX, float posY){
         PlayerState[] newPlayers = new PlayerState[nbPlayers];
 
         for(int i = 0; i < nbPlayers; ++i){

@@ -250,7 +250,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         pos.y = (float) Math.floor(pos.y);
 
         if (pos.x >= 0 && pos.y >= 0 && pos.x < world.getLevel().getWidth() && pos.y < world.getLevel().getHeight()) {
-            if (mousePosition != null && (mousePosition.x != pos.x || mousePosition.y != pos.y)) {
+            if (mousePosition != null && MessageSender.getInstance().getCanPlace() && (mousePosition.x != pos.x || mousePosition.y != pos.y)) {
                 MessageSender.getInstance().sendBlockMovement(getBlock(pos.x, pos.y));
             }
             mousePosition = pos;

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.gdx.uch2.entities.*;
 import com.gdx.uch2.entities.Player.State;
@@ -237,7 +236,7 @@ public class WorldRenderer {
             drawBlock(block.getType(), block.getPosition());
         }
 
-        spriteBatch.draw(spawnTexture, world.getLevel().getSpanPosition().x, world.getLevel().getSpanPosition().y, Block.SIZE, Block.SIZE);
+        spriteBatch.draw(spawnTexture, world.getLevel().getSpawnPosition().x, world.getLevel().getSpawnPosition().y, Block.SIZE, Block.SIZE);
         spriteBatch.draw(finishTexture, world.getLevel().getFinishPosition().x, world.getLevel().getFinishPosition().y, Block.SIZE, Block.SIZE);
 
     }

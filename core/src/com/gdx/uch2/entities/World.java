@@ -101,6 +101,6 @@ public class World {
     }
 
     public void resetPlayer() {
-        player = new Player(new Vector2(level.getSpanPosition()));
+        player = new Player(new Vector2(level.getSpawnPosition()));
     }
 }

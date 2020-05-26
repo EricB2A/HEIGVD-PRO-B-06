@@ -20,9 +20,7 @@ public class SendPlayerState extends TimerTask {
 
     @Override
     public void run() {
-        if (GameClientHandler.currentPhase == GamePhase.Moving) {
-            ctx.out.writeMessage(MessageSender.getInstance().getCurrentState());
-        }
+        ctx.out.writeMessage(MessageSender.getInstance().getCurrentState());
 
         if (ctx.out.e != null) {
             System.out.println("CLI: Fermeture du worker");

@@ -7,7 +7,7 @@ public class Level {
     private int width;
     private int height;
     private Block[][] blocks;
-    private Vector2 spanPosition;
+    private Vector2 spawnPosition;
     private Vector2 finishPosition;
 
     public int getWidth() {
@@ -40,12 +40,12 @@ public class Level {
         return blocks[x][y];
     }
 
-    public Vector2 getSpanPosition() {
-        return spanPosition;
+    public Vector2 getSpawnPosition() {
+        return spawnPosition;
     }
 
-    public void setSpanPosition(Vector2 spanPosition) {
-        this.spanPosition = spanPosition;
+    public void setSpawnPosition(Vector2 spawnPosition) {
+        this.spawnPosition = spawnPosition;
     }
 
     public Vector2 getFinishPosition() {

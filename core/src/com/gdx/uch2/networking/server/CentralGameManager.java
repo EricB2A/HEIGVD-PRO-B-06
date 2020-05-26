@@ -126,7 +126,7 @@ public class CentralGameManager {
     }
 
     private void resetPlayersPositions(){
-        ServerGameStateTickManager.getInstance().getGameState().setPositions(map.getSpanPosition());
+        ServerGameStateTickManager.getInstance().getGameState().setPositions(map.getSpawnPosition());
     }
 
     private void processPlayerDeath(PlayerContext ctx) {
@@ -156,18 +156,22 @@ public class CentralGameManager {
 
 
         if(allFinished){
-            try {
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-            }
-            resetPlayersPositions();
-            if (++round < nbRounds) {
-                computePoints();
-                startEditingPhase();
-            } else {
-                endGame();
-            }
-
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException ignored) {
+                    }
+                    resetPlayersPositions();
+                    if (++round < nbRounds) {
+                        computePoints();
+                        startEditingPhase();
+                    } else {
+                        endGame();
+                    }
+                }
+            }).start();
         }
     }
 
