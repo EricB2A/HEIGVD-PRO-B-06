@@ -11,7 +11,7 @@ import java.util.Arrays;
 import static io.netty.buffer.Unpooled.buffer;
 
 /**
- * Classe métier gérant les
+ * Classe métier gérant le déroulement du jeu des clients en lisant et envoyant des messages
  */
 public class CentralGameManager {
 
@@ -29,14 +29,22 @@ public class CentralGameManager {
     private int[] scoring;
     private boolean firstArrived;
 
+    /**
+     * Constructeur
+     * @param map niveau dans lequel se joue la partie
+     * @param nbRounds nombre de rounds que durera la partie
+     */
     public CentralGameManager(Level map, int nbRounds){
         this.map = map;
         this.nbRounds = nbRounds;
         firstArrived = true;
-        //startEditingPhase();
 
     }
 
+    /**
+     * Initialise la partie
+     * @param players
+     */
     public void init(PlayerContext[] players) {
         this.players = players;
         finished = new int[players.length];
@@ -50,33 +58,49 @@ public class CentralGameManager {
     }
 
 
+    /**
+     * Lit, interprète et traite les messages reçus
+     * @param type type du message
+     * @param context Contexte du client duquel provient le message
+     */
     public void readMessage(MessageType type, PlayerContext context) {
-        if(type == MessageType.PlayerStateUpdate) {
-            processPlayerState(context);
+
+        switch(type){
+            case PlayerStateUpdate:
+                processPlayerState(context);
+                break;
+            case BlockPlaced:
+                processObjectPlacement(context);
+                break;
+            case ReachedEnd:
+                processPlayerReachedEnd(context);
+                break;
+            case Death:
+                processPlayerDeath(context);
+                break;
+            case AckGameStart:
+                processAckGameStart(context);
+                break;
+            default:
+                System.out.println("SRV: Type de messages inconnu : " + type);
+                break;
         }
-        else if(type == MessageType.BlockPlaced){
-            processObjectPlacement(context);
-        }
-        else if(type == MessageType.ReachedEnd){
-            processPlayerReachedEnd(context);
-        }
-        else if (type == MessageType.Death) {
-            processPlayerDeath(context);
-        }
-        else if(type == MessageType.AckGameStart){
-            processAckGameStart(context);
-        }
-        else{
-            System.out.println("SRV: Type de messages inconnu : " + type);
-        }
+
     }
 
+    /**
+     * Informe qu'un client a été déconnecté de la partie. Termine la partie instantanément.
+     */
     public void disconnectedClient() {
         if (players != null) {
             endGame();
         }
     }
 
+    /**
+     *
+     * @return True si la partie est terminée, false sinon
+     */
     public boolean isOver() {
         return isOver;
     }
