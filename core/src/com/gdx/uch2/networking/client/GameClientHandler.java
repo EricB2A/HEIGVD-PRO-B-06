@@ -1,6 +1,7 @@
 package com.gdx.uch2.networking.client;
 
 import com.badlogic.gdx.math.Vector2;
+import com.gdx.uch2.entities.Block;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.World;
@@ -107,8 +108,15 @@ public class GameClientHandler {
             startEditingPhase();
         }else{
             roundOver = false;
-            World.currentWorld.placeBlock(op.getBlock());
-            System.out.println("CLI: placement du bloc reçu");
+            Block newBlock = op.getBlock();
+            if(newBlock.getType() == Block.Type.ANTIBLOCK){
+                World.currentWorld.removeBlock((int)newBlock.getPosition().x, (int)newBlock.getPosition().y);
+                System.out.println("CLI: placement d'antiblock reçu");
+            }else{
+                World.currentWorld.placeBlock(newBlock);
+                System.out.println("CLI: placement du bloc classique reçu");
+            }
+
         }
 
         if(op.getPlayerID() == -1){

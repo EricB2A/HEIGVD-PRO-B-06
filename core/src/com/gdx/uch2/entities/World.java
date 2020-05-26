@@ -134,6 +134,15 @@ public class World {
         level.getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] = b;
     }
 
+    /**
+     * Supprime un block du niveau aux coordonnées données
+     * @param x coordonnée x
+     * @param y coordonnée y
+     */
+    public void removeBlock(int x, int y){
+        level.getBlocks()[x][y] = null;
+    }
+
     private void createWorld(int noLevel) {
         level = LevelLoader.loadLevel(noLevel);
         resetPlayer();

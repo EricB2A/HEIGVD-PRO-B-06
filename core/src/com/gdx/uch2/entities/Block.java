@@ -17,7 +17,7 @@ public class Block {
      * Différents types de blocks
      */
     public enum Type {
-        BLOCK, BOX, LETHAL, G_UP, G_DOWN, PROTECTED_AREA
+        BLOCK, BOX, LETHAL, G_UP, G_DOWN, PROTECTED_AREA, ANTIBLOCK
     }
 
     private Vector2 	position;
