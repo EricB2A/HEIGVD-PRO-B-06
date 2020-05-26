@@ -37,6 +37,8 @@ public class WorldRenderer {
     private TextureRegion spawnTexture;
     private TextureRegion finishTexture;
     private TextureRegion protectedArea;
+    private TextureRegion bomb;
+
     private TextureRegion playerFrame;
     private TextureRegion playerJumpLeft;
     private TextureRegion playerFallLeft;
@@ -130,6 +132,7 @@ public class WorldRenderer {
         spawnTexture = blocksAtlas.findRegion("signRight");
         finishTexture = blocksAtlas.findRegion("signExit");
         protectedArea = blocksAtlas.findRegion("castleCenter");
+        bomb = blocksAtlas.findRegion("bomb");
 
         Array<TextureAtlas.AtlasRegion> idleRightFrames = new Array<TextureAtlas.AtlasRegion>();
         Array<TextureAtlas.AtlasRegion> idleLeftFrames = new Array<TextureAtlas.AtlasRegion>();
@@ -246,6 +249,7 @@ public class WorldRenderer {
             case G_UP: texture = gUpTexture; break;
             case G_DOWN: texture = gDownTexture; break;
             case PROTECTED_AREA: texture = protectedArea; break;
+            case ANTIBLOCK: texture = bomb; break;
             default: texture = boxTexture; break;
         }
         spriteBatch.draw(texture, pos.x, pos.y, Block.SIZE, Block.SIZE);

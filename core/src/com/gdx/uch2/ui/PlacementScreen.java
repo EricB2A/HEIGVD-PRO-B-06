@@ -63,7 +63,8 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         message = new Label("...", new Label.LabelStyle(new BitmapFont(), null));
         choicesLabel = new Label[] {
             new Label("Key [1] : Pick a box", selectStyle),
-            new Label("Key [2] : Pick a lethal trap", defaultStyle)
+            new Label("Key [2] : Pick a lethal trap", defaultStyle),
+            new Label("Key [3] : Erase a block", defaultStyle)
         };
 
         table.add(message).center().padBottom(40);
@@ -106,7 +107,8 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         for (int i = 0; i < nicknamesLabel.length; ++i) {
             if (i != OnlinePlayerManager.getInstance().getPlayerId()) {
                 Block b = OnlinePlayerManager.getInstance().getPlayer(i).getPlacementBlock();
-                if (b != null && world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] == null) {
+                if ((b != null && world.getLevel().getBlocks()[(int) b.getPosition().x][(int) b.getPosition().y] == null)
+                 || b.getType() == Block.Type.ANTIBLOCK) {
                     renderer.renderBlock(b.getType(), b.getPosition());
 
                     Vector2 pos = new Vector2(b.getPosition());
