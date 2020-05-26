@@ -41,9 +41,6 @@ public class GameClientHandler {
             case BlockPlaced:
                 processBlockPlacement();
                 break;
-            case StartMovementPhase:
-                startMovementPhase();
-                break;
             case EndGame:
                 isOver = true;
                 break;

@@ -9,12 +9,8 @@ public enum MessageType {
     PlayerStateUpdate,
     ReachedEnd,
     Death,
-    CanPlace,
-    StartMovementPhase,
-    StartEditingPhase,
     EndGame,
     Score,
     CloseConnection
     ;
-
 }
