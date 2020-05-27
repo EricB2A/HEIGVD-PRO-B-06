@@ -6,6 +6,8 @@ joueurs prennent possession d'un avatar et ont pour but de marquer des points en
 Pour ce faire, les joueurs pourront placer des plateformes ainsi que les pièges sur le chemin de l'arrivée, ajoutant 
 ainsi des difficultés pour leurs adversaires mais pour eux aussi. 
 
+Ce projet est réalisé dans le cadre du cours de PRO de notre 4ème semestre au sein de la HEIG-VD.
+
 ## Équipe de développement :fire:
 **GROUPE B-06**  
 
@@ -20,8 +22,8 @@ ainsi des difficultés pour leurs adversaires mais pour eux aussi.
 
 ## Lancer le jeu :video_game:
 Le rendu du projet est présent dans [notre release](https://github.com/EricBroutba/HEIGVD-PRO-B-06/releases/tag/alpha). Vous y trouverez :   
-- Un [exécutable ````jar````](https://github.com/EricBroutba/HEIGVD-PRO-B-06/releases/tag/alpha/desktop-1.0.jar).
-- Le [code source](https://github.com/EricBroutba/HEIGVD-PRO-B-06/archive/alpha.zip) du projet.
+- Un exécutable ````jar````.
+- Le code source du projet.
 
 Le prérequis pour ce faire est d'avoir `Java 8` ou ultérieure. Si vous désirez mettre en place un environnement de
 développement identique au notre, une marche à suivre est présent dans le document [d'instructions d'installations](https://docs.google.com/document/d/1lDGj_fB3kaPjQyGL-rL9du5zacyATebGS8-maAK1BFE/edit?usp=sharing).
