@@ -8,11 +8,12 @@ public enum MessageType {
     GameStart,
     AckGameStart,
     BlockPlaced,
+    BlockPosition,
     PlayerStateUpdate,
     ReachedEnd,
     Death,
     EndGame,
     Score,
-    CloseConnection,
-    BlockPosition;
+    CloseConnection
+    ;
 }
