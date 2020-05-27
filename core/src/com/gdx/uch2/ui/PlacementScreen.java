@@ -188,7 +188,6 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             case Input.Keys.NUMPAD_3:
                 blockType = Block.Type.ANTIBLOCK;
                 select = 2;
-                System.out.println("3 pressé");
                 break;
 
             case Input.Keys.NUM_4:
@@ -245,9 +244,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 y = (int) pos.y;
                 Block[][] blocks = world.getLevel().getBlocks();
                 Block b = getBlock(x, y);
-                System.out.println("B.type = " + b.getType().name());
                 if ((blocks[x][y] == null && b.getType() != Block.Type.ANTIBLOCK) || (b.getType() == Block.Type.ANTIBLOCK && blocks[x][y] != null && blocks[x][y].getType() != Block.Type.PROTECTED_AREA)) {
-                    System.out.println("yay");
                     MessageSender.getInstance().sendBlockPlacement(getBlock(x, y));
                 }
             }

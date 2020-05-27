@@ -44,7 +44,6 @@ public class MessageSender {
      */
     public void setCanPlace(boolean canPlace) {
         this.canPlace = canPlace;
-        System.out.println("CLI: set Can place = " + canPlace);
     }
 
 
@@ -107,7 +106,6 @@ public class MessageSender {
      */
     public void sendBlockPlacement(final Block block){
         setCanPlace(false);
-        System.out.println("CLI: Sending block placement as player #" + playerID);
         ctx.out.writeMessage(new ObjectPlacement(playerID, block));
     }
 

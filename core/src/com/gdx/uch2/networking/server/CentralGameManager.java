@@ -116,12 +116,10 @@ public class CentralGameManager {
     private void startEditingPhase(){
         final int STARTER_ID = 0;
 
-        System.out.println("SRV: start editing phase");
         currentPhase = GamePhase.Editing;
 
         //Send an object with Block = null to inform players that the editing phase is starting
         ObjectPlacement op = new ObjectPlacement(STARTER_ID, null);
-        System.out.println("SRV: envoie objet de placement avec block = null et ID = " + op.getPlayerID());
         sendBlockToAllPlayers(op);
     }
 
@@ -162,7 +160,6 @@ public class CentralGameManager {
             finished[ctx.getId()] = 1;
         }
         firstArrived = false;
-        System.out.println("SRV: Le joueur #" + ctx.getId() + " est arrivé à la fin!");
         checkEndRound();
     }
 
@@ -229,7 +226,6 @@ public class CentralGameManager {
         if(currentPhase == GamePhase.Editing) {
             //Reads the message
             ObjectPlacement op = ctx.in.readObjectPlacement();
-            System.out.println("SRV: Placement de block reçu par le joueur #" + op.getPlayerID());
 
             hasPlaced[op.getPlayerID()] = true;
 
@@ -244,9 +240,6 @@ public class CentralGameManager {
             } else {
                 sendBlockToAllPlayers(new ObjectPlacement(0, op.getBlock()));
             }
-
-            System.out.println("SRV: broadcasted new block, next player to place is #");
-
         }
     }
 

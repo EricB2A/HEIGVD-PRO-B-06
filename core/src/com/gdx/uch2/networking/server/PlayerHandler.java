@@ -50,7 +50,6 @@ public class PlayerHandler implements Runnable {
     }
 
     private void clean() {
-        System.out.println("SRV: connexion fermée pour le joueur #" + context.getId());
         if (context.in != null) {
             context.in.close();
         }

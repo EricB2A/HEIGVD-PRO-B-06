@@ -31,8 +31,6 @@ public class SendUpdate extends TimerTask {
             ctx.out.writeMessage(gs);
 
             if (ctx.out.e != null) {
-                System.out.println("SRV: Worker fermé");
-
                 timer.cancel();
                 timer.purge();
             }
