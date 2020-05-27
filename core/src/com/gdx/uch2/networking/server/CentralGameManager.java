@@ -2,9 +2,9 @@ package com.gdx.uch2.networking.server;
 
 import com.gdx.uch2.entities.Level;
 import com.gdx.uch2.networking.GamePhase;
+import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.messages.MessageType;
 import com.gdx.uch2.networking.messages.ObjectPlacement;
-import com.gdx.uch2.networking.PlayerContext;
 
 import java.util.Arrays;
 

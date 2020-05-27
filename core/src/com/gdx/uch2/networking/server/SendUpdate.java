@@ -1,8 +1,8 @@
 package com.gdx.uch2.networking.server;
 
 
-import com.gdx.uch2.networking.messages.GameState;
 import com.gdx.uch2.networking.PlayerContext;
+import com.gdx.uch2.networking.messages.GameState;
 
 import java.util.Timer;
 import java.util.TimerTask;

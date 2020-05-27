@@ -7,14 +7,20 @@ import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.PlayerContext;
-import com.gdx.uch2.networking.messages.*;
+import com.gdx.uch2.networking.messages.MessageType;
+import com.gdx.uch2.networking.messages.ObjectPlacement;
+import com.gdx.uch2.networking.messages.PlayerState;
 
 /**
  * Classe Traitant les informations reçues du serveur
  */
 public class GameClientHandler {
 
-    static public GamePhase currentPhase; //TODO quand même c'est un peu abusé là
+    /**
+     * Phase de jeu actuelle
+     */
+    static public GamePhase currentPhase;
+
     static private boolean isOver;
     static private boolean roundOver;
     static private int nRound;

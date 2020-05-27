@@ -2,8 +2,8 @@ package com.gdx.uch2.networking.server;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.Player;
-import com.gdx.uch2.networking.messages.GameState;
 import com.gdx.uch2.networking.PlayerContext;
+import com.gdx.uch2.networking.messages.GameState;
 import com.gdx.uch2.networking.messages.PlayerState;
 
 import java.util.Timer;

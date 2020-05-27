@@ -3,7 +3,9 @@ package com.gdx.uch2.entities;
 import com.gdx.uch2.networking.messages.GameState;
 import com.gdx.uch2.networking.messages.PlayerState;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Singleton gèrant tous les joueurs distants

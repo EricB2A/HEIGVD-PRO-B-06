@@ -4,8 +4,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.effects.Effect;
 
-import java.util.ArrayList;
-
 /**
  * Classe représentant un joueur local
  */

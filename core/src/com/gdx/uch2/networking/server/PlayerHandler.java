@@ -1,7 +1,7 @@
 package com.gdx.uch2.networking.server;
 
-import com.gdx.uch2.networking.messages.MessageType;
 import com.gdx.uch2.networking.PlayerContext;
+import com.gdx.uch2.networking.messages.MessageType;
 
 import java.io.IOException;
 
