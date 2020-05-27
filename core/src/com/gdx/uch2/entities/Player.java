@@ -25,7 +25,7 @@ public class Player {
     public static final float HITBOX_HEIGHT = 1.4f;
     public static final Vector2 OFFSET = new Vector2(0.65f, 0.25f);
 
-    private ArrayList<Effect> effects = new ArrayList<>();
+    private Effect      effect;
     private Vector2 	position = new Vector2(0f, 0f);
     private Vector2 	acceleration = new Vector2();
     private Vector2 	velocity = new Vector2();
@@ -156,9 +156,12 @@ public class Player {
      * Ajoute un effet spécial au joueur
      * @param effect effet à ajouter
      */
-    public void addEffect(Effect effect){
-        effects.add(effect);
-    }
+    public void addEffect(Effect effect){ this.effect = effect; }
+
+    /**
+     * Supprime tous les effets appliqués au joueur
+     */
+    public void removeEffects(){ effect = null; }
 
     /**
      * Indique si le joueur est affecté par l'effet donné
@@ -166,23 +169,17 @@ public class Player {
      * @return True si le joueur est affecté par l'effet donnée, false sinon
      */
     public boolean hasEffect(Effect effect){
-        for(Effect e : effects) {
-            if(e.equals(effect)){
-                return true;
-            }
+        if(this.effect != null && this.effect.equals(effect)){
+            return true;
         }
         return false;
     }
 
     /**
-     * Applique les effets actuels au joueur
+     * Applique l'effet actuel au joueur
      */
-    public void applyEffects(){
-        for(Effect effect : effects) {
-            if(effect.isFinished()){
-                effects.remove(effect);
-                break;
-            }
+    public void applyEffect(){
+        if(effect != null){
             effect.apply(this);
         }
     }
@@ -193,6 +190,6 @@ public class Player {
      */
     public void update(float delta) {
         stateTime += delta;
-        applyEffects();
+        applyEffect();
     }
 }

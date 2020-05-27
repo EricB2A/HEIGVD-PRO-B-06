@@ -88,7 +88,7 @@ public class Block {
      * Applique l'action d'un block sur le joueur qui le touche
      * @param player le joueur sur lequel appliquer l'action du block
      */
-    public void action(Player player) { }
+    public void action(Player player) { player.removeEffects(); }
 
     /**
      *
