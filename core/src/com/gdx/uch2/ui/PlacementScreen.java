@@ -64,7 +64,10 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
         choicesLabel = new Label[] {
             new Label("Key [1] : Pick a box", selectStyle),
             new Label("Key [2] : Pick a lethal trap", defaultStyle),
-            new Label("Key [3] : Erase a block", defaultStyle)
+            new Label("Key [3] : Erase a block", defaultStyle),
+            new Label("Key [4] : Low gravity block", defaultStyle),
+            new Label("Key [5] : Strong gravity block", defaultStyle)
+
         };
 
         table.add(message).center().padBottom(40);
@@ -177,11 +180,24 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 blockType = Block.Type.LETHAL;
                 select = 1;
                 break;
+
             case Input.Keys.NUM_3:
             case Input.Keys.NUMPAD_3:
                 blockType = Block.Type.ANTIBLOCK;
                 select = 2;
                 System.out.println("3 pressé");
+                break;
+
+            case Input.Keys.NUM_4:
+            case Input.Keys.NUMPAD_4:
+                blockType = Block.Type.G_DOWN;
+                select = 3;
+                break;
+
+            case Input.Keys.NUM_5:
+            case Input.Keys.NUMPAD_5:
+                blockType = Block.Type.G_UP;
+                select = 4;
                 break;
 
             case Input.Keys.ESCAPE:
@@ -239,7 +255,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
     private Block getBlock(float x, float y) {
         Block block;
-        if(blockType == null) blockType = Block.Type.BOX; // TODO GUILLAUME
+        if(blockType == null) blockType = Block.Type.BOX;
         switch (blockType){
             case BOX:
             case ANTIBLOCK:

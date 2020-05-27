@@ -10,7 +10,7 @@ public class Constants {
     /**
      * Nom de fichier du sprite du joueur principal
      */
-    public static final String PLAYER_1_ATLAS = "player.atlas";
+    public static final String PLAYER_1_ATLAS = "players/player.atlas";
 
     /**
      * Nom de fichier des sprites des divers blocks
@@ -20,7 +20,7 @@ public class Constants {
     /**
      * Nom de fichier du sprite des adversaires
      */
-    public static final String OPPONENTS_ATLAS = "opponents.atlas";
+    public static final String OPPONENTS_ATLAS = "players/opponents.atlas";
 
     /**
      * Durée en millisecondes séparant les envois de GameStates et des PlayerStates
