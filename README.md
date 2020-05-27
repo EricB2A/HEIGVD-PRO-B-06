@@ -30,7 +30,7 @@ développement identique au notre, une marche à suivre est présent dans le doc
 
 ## Documentation :books:
 - [Cahier des charges](https://docs.google.com/document/d/1o6veGK7PF89iihe4Ua9ICbhKglBB2uulHL7BfmSqSqA/edit?usp=sharing)
-- [Instructions d'installations](https://docs.google.com/document/d/1lDGj_fB3kaPjQyGL-rL9du5zacyATebGS8-maAK1BFE/edit?usp=sharing)
+- [Instructions d'installations](https://docs.google.com/document/d/1ikblPXDn73oBKSoyUCjQ5hKjfRbOcuOi2C01uVChr6M/edit?usp=sharing)
 - [Guide utlisatateur](https://docs.google.com/document/d/1duJVLT0AHxDCp-L6vYW5bwruJ4xWXmxdjw-StV0JZdg/edit?usp=sharing)
 - [Organisation du code](https://docs.google.com/document/d/15am4Rlu4XpAetpwAMjD8tWpmMuXp_YkMw9NABVTBRDg/edit?usp=sharing)
 - [Protocoles réseau](https://docs.google.com/document/d/1RpUw3n3N-ZJ8vyjo1obBwTXlXc-Oxc5XPUv_W3gkgHM/edit?usp=sharing)
