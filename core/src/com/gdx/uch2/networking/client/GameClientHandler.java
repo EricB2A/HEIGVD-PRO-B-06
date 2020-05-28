@@ -14,7 +14,7 @@ import com.gdx.uch2.networking.messages.*;
  */
 public class GameClientHandler {
 
-    static public GamePhase currentPhase; //TODO quand même c'est un peu abusé là
+    static public GamePhase currentPhase;
     static private boolean isOver;
     static private boolean roundOver;
     static private int nRound;

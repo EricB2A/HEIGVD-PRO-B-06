@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1200;
 		config.height = 675;
-//		config.fullscreen = true; // TODO : uncomment for release
+		config.fullscreen = true;
 		new LwjglApplication(new UltimateChickenHorse2(), config);
 	}
 }
