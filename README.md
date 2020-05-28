@@ -26,12 +26,12 @@ Le rendu du projet est présent dans [notre release](https://github.com/EricBrou
 - Le code source du projet.
 
 Le prérequis pour ce faire est d'avoir `Java 8` ou ultérieure. Si vous désirez mettre en place un environnement de
-développement identique au notre, une marche à suivre est présent dans le document [d'instructions d'installations](https://docs.google.com/document/d/1ikblPXDn73oBKSoyUCjQ5hKjfRbOcuOi2C01uVChr6M/edit?usp=sharing).
+développement identique au notre, une marche à suivre est présent dans le document [d'instructions d'installation](https://docs.google.com/document/d/1ikblPXDn73oBKSoyUCjQ5hKjfRbOcuOi2C01uVChr6M/edit?usp=sharing).
 
 ## Documentation :books:
 - [Cahier des charges](https://docs.google.com/document/d/1o6veGK7PF89iihe4Ua9ICbhKglBB2uulHL7BfmSqSqA/edit?usp=sharing)
-- [Instructions d'installations](https://docs.google.com/document/d/1ikblPXDn73oBKSoyUCjQ5hKjfRbOcuOi2C01uVChr6M/edit?usp=sharing)
-- [Guide utlisatateur](https://docs.google.com/document/d/1duJVLT0AHxDCp-L6vYW5bwruJ4xWXmxdjw-StV0JZdg/edit?usp=sharing)
+- [Instructions d'installation](https://docs.google.com/document/d/1ikblPXDn73oBKSoyUCjQ5hKjfRbOcuOi2C01uVChr6M/edit?usp=sharing)
+- [Guide utilisateur](https://docs.google.com/document/d/1duJVLT0AHxDCp-L6vYW5bwruJ4xWXmxdjw-StV0JZdg/edit?usp=sharing)
 - [Organisation du code](https://docs.google.com/document/d/15am4Rlu4XpAetpwAMjD8tWpmMuXp_YkMw9NABVTBRDg/edit?usp=sharing)
 - [Protocoles réseau](https://docs.google.com/document/d/1RpUw3n3N-ZJ8vyjo1obBwTXlXc-Oxc5XPUv_W3gkgHM/edit?usp=sharing)
 - [Suivi qualité](https://docs.google.com/document/d/1IkEW8_Fq0e35-_h6I5RkjClDKuAJGpwmeCXDIneJDfE/edit?usp=sharing)
