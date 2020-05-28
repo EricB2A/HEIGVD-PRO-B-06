@@ -1,10 +1,12 @@
 package com.gdx.uch2.ui;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
@@ -164,8 +166,6 @@ public class CreateRoomMenu implements Screen {
 
                 level = levelSB.getSelected();
                 players = playersSB.getSelected();
-
-                System.out.println("création de la partie");
 
                 Thread tServer = new Thread(new GameServer(port, level, players, nbRounds));
                 tServer.start();

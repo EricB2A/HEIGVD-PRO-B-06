@@ -1,10 +1,9 @@
 package com.gdx.uch2.networking.client;
 
 import com.gdx.uch2.entities.Block;
-import com.gdx.uch2.entities.OnlinePlayerManager;
+import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.messages.MessageType;
 import com.gdx.uch2.networking.messages.ObjectPlacement;
-import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.messages.PlayerState;
 
 import java.util.Timer;
@@ -45,7 +44,6 @@ public class MessageSender {
      */
     public void setCanPlace(boolean canPlace) {
         this.canPlace = canPlace;
-        System.out.println("CLI: set Can place = " + canPlace);
     }
 
 
@@ -108,7 +106,6 @@ public class MessageSender {
      */
     public void sendBlockPlacement(final Block block){
         setCanPlace(false);
-        System.out.println("CLI: Sending block placement as player #" + playerID);
         ctx.out.writeMessage(new ObjectPlacement(playerID, block));
     }
 

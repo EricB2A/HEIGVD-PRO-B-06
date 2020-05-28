@@ -1,7 +1,10 @@
 package com.gdx.uch2.entities;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gdx.uch2.effects.*;
+import com.gdx.uch2.effects.Effect;
+import com.gdx.uch2.effects.Kill;
+import com.gdx.uch2.effects.LowGravity;
+import com.gdx.uch2.effects.StrongGravity;
 
 /**
  * Classe représentant un block de type piège

@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.World;
-import com.gdx.uch2.networking.messages.MessageType;
 import com.gdx.uch2.networking.PlayerContext;
+import com.gdx.uch2.networking.messages.MessageType;
 import com.gdx.uch2.networking.messages.PlayerState;
 import com.gdx.uch2.util.Constants;
 
@@ -61,7 +61,6 @@ public class GameClient {
                 if (type == MessageType.CloseConnection) {
                     return;
                 } else if (type != MessageType.GameStart) {
-                    System.out.println("CLI: Message de départ inconnu");
                     ErrorHandler.getInstance().setError("Something went wrong.");
                     return;
                 }
@@ -89,7 +88,6 @@ public class GameClient {
                     ErrorHandler.getInstance().setError(e.toString());
             }
             finally {
-                System.out.println("CLI: Fermeture de la connexion");
                 if (socket != null) {
                     if (context != null) {
                         if (context.in != null) {
@@ -123,8 +121,6 @@ public class GameClient {
             for (int i = 0; i < nbPlayers; ++i) {
                 OnlinePlayerManager.getInstance().initPlayer(ctx.in.readInt(), ctx.in.readString());
             }
-
-            System.out.println("CLI: PlayerID = " + ctx.getId());
 
             ctx.out.writeMessage(MessageType.AckGameStart);
             startSending(ctx);

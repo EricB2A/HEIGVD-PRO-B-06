@@ -14,11 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
-import com.gdx.uch2.entities.*;
+import com.gdx.uch2.entities.Block;
+import com.gdx.uch2.entities.OnlinePlayerManager;
+import com.gdx.uch2.entities.Trap;
+import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.client.ErrorHandler;
-import com.gdx.uch2.networking.client.MessageSender;
 import com.gdx.uch2.networking.client.GameClientHandler;
+import com.gdx.uch2.networking.client.MessageSender;
 import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.view.WorldRenderer;
 
@@ -185,7 +188,6 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
             case Input.Keys.NUMPAD_3:
                 blockType = Block.Type.ANTIBLOCK;
                 select = 2;
-                System.out.println("3 pressé");
                 break;
 
             case Input.Keys.NUM_4:
@@ -242,9 +244,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
                 y = (int) pos.y;
                 Block[][] blocks = world.getLevel().getBlocks();
                 Block b = getBlock(x, y);
-                System.out.println("B.type = " + b.getType().name());
                 if ((blocks[x][y] == null && b.getType() != Block.Type.ANTIBLOCK) || (b.getType() == Block.Type.ANTIBLOCK && blocks[x][y] != null && blocks[x][y].getType() != Block.Type.PROTECTED_AREA)) {
-                    System.out.println("yay");
                     MessageSender.getInstance().sendBlockPlacement(getBlock(x, y));
                 }
             }

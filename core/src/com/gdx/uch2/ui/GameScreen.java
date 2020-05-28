@@ -1,10 +1,10 @@
 package com.gdx.uch2.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,13 +12,14 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.gdx.uch2.ScreenManager;
 import com.gdx.uch2.controller.PlayerController;
-import com.gdx.uch2.entities.*;
+import com.gdx.uch2.entities.OnlinePlayer;
+import com.gdx.uch2.entities.OnlinePlayerManager;
+import com.gdx.uch2.entities.Player;
+import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.client.ErrorHandler;
-import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.client.GameClientHandler;
 import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.view.WorldRenderer;
-import com.badlogic.gdx.Input.Keys;
 
 /**
  * Ecran de jeu de phase de mouvement

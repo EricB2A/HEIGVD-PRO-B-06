@@ -7,14 +7,20 @@ import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.PlayerContext;
-import com.gdx.uch2.networking.messages.*;
+import com.gdx.uch2.networking.messages.MessageType;
+import com.gdx.uch2.networking.messages.ObjectPlacement;
+import com.gdx.uch2.networking.messages.PlayerState;
 
 /**
  * Classe Traitant les informations reçues du serveur
  */
 public class GameClientHandler {
 
+    /**
+     * Phase de jeu actuelle
+     */
     static public GamePhase currentPhase;
+
     static private boolean isOver;
     static private boolean roundOver;
     static private int nRound;
@@ -101,14 +107,12 @@ public class GameClientHandler {
      */
     private void processScoreUpdate(){
         OnlinePlayerManager.getInstance().setScores(ctx.in.readScore());
-        System.out.println("CLI: Received les scores mec.");
     }
 
 
 
     private void processBlockPlacement(){
         ObjectPlacement op = ctx.in.readObjectPlacement();
-        System.out.println("CLI: placement de bloc recu avec " + op);
 
         if(op.getBlock() == null) {
             roundOver = true;
@@ -118,10 +122,8 @@ public class GameClientHandler {
             Block newBlock = op.getBlock();
             if(newBlock.getType() == Block.Type.ANTIBLOCK){
                 World.currentWorld.removeBlock((int)newBlock.getPosition().x, (int)newBlock.getPosition().y);
-                System.out.println("CLI: placement d'antiblock reçu");
             }else{
                 World.currentWorld.placeBlock(newBlock);
-                System.out.println("CLI: placement du bloc classique reçu");
             }
 
         }
@@ -141,7 +143,6 @@ public class GameClientHandler {
     private void startMovementPhase(){
         currentPhase = GamePhase.Moving;
         ++nRound;
-        System.out.println("CLI: START MOVEMENT PHASE");
     }
 
     private void startEditingPhase(){
@@ -151,6 +152,5 @@ public class GameClientHandler {
         MessageSender.getInstance().setContext(ctx);
         MessageSender.getInstance().setCurrentState(new PlayerState(ctx.getId(),
                 Player.State.IDLE, pos.x, pos.y, 0));
-        System.out.println("CLI: START EDITING PHASE");
     }
 }

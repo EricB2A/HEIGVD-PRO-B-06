@@ -1,8 +1,5 @@
 package com.gdx.uch2.util;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
-
 /**
  * Constantes globales
  */

@@ -6,8 +6,11 @@ joueurs prennent possession d'un avatar et ont pour but de marquer des points en
 Pour ce faire, les joueurs pourront placer des plateformes ainsi que les pièges sur le chemin de l'arrivée, ajoutant 
 ainsi des difficultés pour leurs adversaires mais pour eux aussi. 
 
-Documentation
-Équipe de développement (B-06):
+Ce projet est réalisé dans le cadre du cours de PRO de notre 4ème semestre au sein de la HEIG-VD.
+
+## Équipe de développement :fire:
+**GROUPE B-06**  
+
 | prénom nom                                     | email                          | github                                            |
 |------------------------------------------------|--------------------------------|---------------------------------------------------|
 | Eric Bousbaa (chef de projet)                  | eric.bousbaa@heig-vd.ch        | [EricBroutba](https://github.com/EricBroutba)     |
@@ -17,13 +20,17 @@ Documentation
 | Alexandre Simik                                | alexandre.simik@heig-vd.ch     | [Moromir](https://github.com/Moromir)             |
 | Christian Zaccaria                             | christian.zaccaria@heig-vd.ch  | [zaccariach](https://github.com/zaccariach)       |
 
-## Dépendances :pushpin:
+## Lancer le jeu :video_game:
+Le rendu du projet est présent dans [notre release](https://github.com/EricBroutba/HEIGVD-PRO-B-06/releases/tag/alpha). Vous y trouverez :   
+- Un exécutable ````jar````.
+- Le code source du projet.
 
-## Run :rocket:
+Le prérequis pour ce faire est d'avoir `Java 8` ou ultérieure. Si vous désirez mettre en place un environnement de
+développement identique au notre, une marche à suivre est présent dans le document [d'instructions d'installations](https://docs.google.com/document/d/1lDGj_fB3kaPjQyGL-rL9du5zacyATebGS8-maAK1BFE/edit?usp=sharing).
 
 ## Documentation :books:
 - [Cahier des charges](https://docs.google.com/document/d/1o6veGK7PF89iihe4Ua9ICbhKglBB2uulHL7BfmSqSqA/edit?usp=sharing)
-- [Instructions d'installations](https://docs.google.com/document/d/1lDGj_fB3kaPjQyGL-rL9du5zacyATebGS8-maAK1BFE/edit?usp=sharing)
+- [Instructions d'installations](https://docs.google.com/document/d/1ikblPXDn73oBKSoyUCjQ5hKjfRbOcuOi2C01uVChr6M/edit?usp=sharing)
 - [Guide utlisatateur](https://docs.google.com/document/d/1duJVLT0AHxDCp-L6vYW5bwruJ4xWXmxdjw-StV0JZdg/edit?usp=sharing)
 - [Organisation du code](https://docs.google.com/document/d/15am4Rlu4XpAetpwAMjD8tWpmMuXp_YkMw9NABVTBRDg/edit?usp=sharing)
 - [Protocoles réseau](https://docs.google.com/document/d/1RpUw3n3N-ZJ8vyjo1obBwTXlXc-Oxc5XPUv_W3gkgHM/edit?usp=sharing)

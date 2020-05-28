@@ -1,8 +1,5 @@
 package com.gdx.uch2.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
@@ -14,10 +11,12 @@ import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.Player.State;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.GamePhase;
-import com.gdx.uch2.networking.messages.PlayerState;
-import com.gdx.uch2.networking.client.MessageSender;
-
 import com.gdx.uch2.networking.client.GameClientHandler;
+import com.gdx.uch2.networking.client.MessageSender;
+import com.gdx.uch2.networking.messages.PlayerState;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe permettant de contrôler les mouvements et actions d'un joueur

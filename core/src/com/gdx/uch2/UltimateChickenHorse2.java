@@ -1,10 +1,7 @@
 package com.gdx.uch2;
 
 import com.badlogic.gdx.Game;
-import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.ui.MainMenu;
-
-import java.io.IOException;
 
 /**
  * Classe principale du jeu, génère l'écran de menu principal

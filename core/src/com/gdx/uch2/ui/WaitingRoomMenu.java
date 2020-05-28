@@ -3,7 +3,8 @@ package com.gdx.uch2.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -12,8 +13,6 @@ import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.GameClientHandler;
 import com.gdx.uch2.ui.uiUtil.GameParameters;
-
-import java.util.ArrayList;
 
 /**
  * Ecran de salle d'attente
@@ -85,7 +84,6 @@ public class WaitingRoomMenu implements Screen {
             ScreenManager.getInstance().showScreen(new ErrorScreen(ErrorHandler.getInstance().getError()));
             return;
         } else if (GameClientHandler.isOver()) {
-            System.out.println("coucou");
             ScreenManager.getInstance().showScreen(new EndGameScreen());
             return;
         }

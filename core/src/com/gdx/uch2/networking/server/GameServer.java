@@ -2,10 +2,10 @@ package com.gdx.uch2.networking.server;
 
 import com.gdx.uch2.controller.LevelLoader;
 import com.gdx.uch2.entities.Level;
-import com.gdx.uch2.networking.messages.MessageType;
 import com.gdx.uch2.networking.PlayerContext;
 import com.gdx.uch2.networking.client.ErrorHandler;
 import com.gdx.uch2.networking.client.GameClient;
+import com.gdx.uch2.networking.messages.MessageType;
 import com.gdx.uch2.util.Constants;
 
 import java.io.IOException;
@@ -55,7 +55,6 @@ public class GameServer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Start server");
 
         try {
             serverSocket = new ServerSocket(port);
@@ -102,8 +101,6 @@ public class GameServer implements Runnable {
         if(players.length > nbPlayers) throw new RuntimeException("Nombre de joueurs trop élevé");
 
         gameStarted = true;
-        System.out.println(players.length + " joueurs connectés. Lancer la partie.");
-
         manager.init(Arrays.copyOf(players, players.length));
 
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
@@ -123,8 +120,6 @@ public class GameServer implements Runnable {
 
                 }
             }
-
-            System.out.println("Message envoyé au joueur #" + ctx.getId());
         }
 
         //Démarre les ticks de serveur
@@ -138,7 +133,6 @@ public class GameServer implements Runnable {
     public static void closeConnection() {
         GameClient.closeConnection();
         try {
-            System.out.println("SRV: Fermeture du serveur");
             if (serverSocket != null) {
                 serverSocket.close();
 

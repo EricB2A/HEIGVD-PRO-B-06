@@ -141,7 +141,6 @@ public class World {
      */
     public void removeBlock(int x, int y){
         level.getBlocks()[x][y] = null;
-        System.out.println("suppression du bloc");
     }
 
     private void createWorld(int noLevel) {
