@@ -39,3 +39,5 @@ développement identique au notre, une marche à suivre est présent dans le doc
 - [Modélisation initiale](https://docs.google.com/document/d/1wnWpsQKDlJX_4ByP0mc0px0_Qe4fQX4LTtPmXnr486c/edit?usp=sharing)
 - [Javadoc](javadoc)
 
+
+*Made with 😷 in multiple locations*
