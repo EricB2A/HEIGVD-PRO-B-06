@@ -20,9 +20,9 @@ import com.gdx.uch2.entities.Trap;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.GamePhase;
 import com.gdx.uch2.networking.client.ErrorHandler;
+import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.client.GameClientHandler;
 import com.gdx.uch2.networking.client.MessageSender;
-import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.view.WorldRenderer;
 
 /**
@@ -40,7 +40,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     private Vector2 mousePosition;
     private Label[] nicknamesLabel;
 
-    private int width, height;
+    private int height;
 
     /**
      * Constructeur
@@ -152,7 +152,6 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
     @Override
     public void resize(int width, int height) {
         renderer.setSize(width, height);
-        this.width = width;
         this.height = height;
     }
 
@@ -204,7 +203,7 @@ public class PlacementScreen extends ScreenAdapter implements InputProcessor {
 
             case Input.Keys.ESCAPE:
                 World.currentWorld.stopMusic();
-                GameServer.closeConnection();
+                GameClient.closeConnection();
                 ScreenManager.getInstance().showScreen(new MainMenu());
                 return true;
             default:

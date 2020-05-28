@@ -26,7 +26,6 @@ public class GameServer implements Runnable {
     private String[] nicknames;
     //indique si la partie est pleine
     private boolean full = false;
-    private boolean gameStarted = false;
 
     private int port;
     private Level level;
@@ -100,7 +99,6 @@ public class GameServer implements Runnable {
     private void startGame(){
         if(players.length > nbPlayers) throw new RuntimeException("Nombre de joueurs trop élevé");
 
-        gameStarted = true;
         manager.init(Arrays.copyOf(players, players.length));
 
         //Notifie les joueurs et ajoute un MovementHandler aux connexions avec les joueurs
@@ -109,8 +107,8 @@ public class GameServer implements Runnable {
             ctx.out.writeMessage(MessageType.GameStart);
             ctx.out.writeMessage(ctx.getId());
             ctx.out.writeMessage(numlevel);
-            ctx.out.writeMessage(players.length - 1);
             ctx.out.writeMessage(nbRounds);
+            ctx.out.writeMessage(players.length - 1);
 
             for (PlayerContext oppCtx : players) {
                 if (oppCtx.getId() != ctx.getId()) {

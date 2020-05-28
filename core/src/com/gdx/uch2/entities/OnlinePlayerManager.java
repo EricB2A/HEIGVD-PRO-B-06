@@ -66,7 +66,6 @@ public class OnlinePlayerManager {
      * @param nickname pseudonyme du joueur
      */
     public void initPlayer(int id, String nickname) {
-        System.out.println("CLI: Nouvel adversaire " + nickname + " #" + id);
         players.put(id, new OnlinePlayer(id, nickname));
     }
 

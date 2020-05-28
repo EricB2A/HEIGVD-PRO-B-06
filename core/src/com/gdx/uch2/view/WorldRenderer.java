@@ -23,7 +23,6 @@ public class WorldRenderer {
 
     private final float camera_width;
     private final float camera_height;
-    private static final float RUNNING_FRAME_DURATION = 0.06f;
 
     private World world;
     private OrthographicCamera cam;
@@ -58,15 +57,15 @@ public class WorldRenderer {
     private TextureRegion opponentDeadLeft;
 
     /** Animations **/
-    private Animation walkLeftAnimation;
-    private Animation walkRightAnimation;
-    private Animation idleRightAnimation;
-    private Animation idleLeftAnimation;
+    private Animation<TextureAtlas.AtlasRegion>  walkLeftAnimation;
+    private Animation<TextureAtlas.AtlasRegion>  walkRightAnimation;
+    private Animation<TextureAtlas.AtlasRegion>  idleRightAnimation;
+    private Animation<TextureAtlas.AtlasRegion>  idleLeftAnimation;
 
-    private Animation opponentWalkLeftAnimation;
-    private Animation opponentWalkRightAnimation;
-    private Animation opponentIdleRightAnimation;
-    private Animation opponentIdleLeftAnimation;
+    private Animation<TextureAtlas.AtlasRegion>  opponentWalkLeftAnimation;
+    private Animation<TextureAtlas.AtlasRegion>  opponentWalkRightAnimation;
+    private Animation<TextureAtlas.AtlasRegion>  opponentIdleRightAnimation;
+    private Animation<TextureAtlas.AtlasRegion>  opponentIdleLeftAnimation;
 
     private Batch spriteBatch;
     private boolean debug = false;
@@ -83,7 +82,6 @@ public class WorldRenderer {
     public void setSize (int w, int h) {
         this.width = w;
         this.height = h;
-        float ppu = Math.min(width / camera_width, height / camera_height);
         ppuX = width / camera_width;
         ppuY = height / camera_height;
     }
@@ -146,8 +144,8 @@ public class WorldRenderer {
             tmp.flip(true, false);
             idleLeftFrames.add(tmp);
         }
-        idleRightAnimation = new Animation(Constants.LOOP_SPEED, idleRightFrames, Animation.PlayMode.LOOP);
-        idleLeftAnimation = new Animation(Constants.LOOP_SPEED, idleLeftFrames, Animation.PlayMode.LOOP);
+        idleRightAnimation = new Animation<>(Constants.LOOP_SPEED, idleRightFrames, Animation.PlayMode.LOOP);
+        idleLeftAnimation = new Animation<>(Constants.LOOP_SPEED, idleLeftFrames, Animation.PlayMode.LOOP);
 
         Array<TextureAtlas.AtlasRegion> walkingRightFrames = new Array<TextureAtlas.AtlasRegion>();
         Array<TextureAtlas.AtlasRegion> walkingLeftFrames = new Array<TextureAtlas.AtlasRegion>();
@@ -157,8 +155,8 @@ public class WorldRenderer {
             tmp.flip(true, false);
             walkingLeftFrames.add(tmp);
         }
-        walkRightAnimation = new Animation(Constants.LOOP_SPEED, walkingRightFrames, Animation.PlayMode.LOOP);
-        walkLeftAnimation = new Animation(Constants.LOOP_SPEED, walkingLeftFrames, Animation.PlayMode.LOOP);
+        walkRightAnimation = new Animation<>(Constants.LOOP_SPEED, walkingRightFrames, Animation.PlayMode.LOOP);
+        walkLeftAnimation = new Animation<>(Constants.LOOP_SPEED, walkingLeftFrames, Animation.PlayMode.LOOP);
 
         playerJumpRight = playerAtlas.findRegion("jump1");
         playerJumpLeft = new TextureRegion(playerJumpRight);
@@ -181,8 +179,8 @@ public class WorldRenderer {
             opponentIdleLeftFrames.add(tmp);
         }
 
-        opponentIdleRightAnimation = new Animation(Constants.LOOP_SPEED, opponentIdleRightFrames, Animation.PlayMode.LOOP);
-        opponentIdleLeftAnimation = new Animation(Constants.LOOP_SPEED, opponentIdleLeftFrames, Animation.PlayMode.LOOP);
+        opponentIdleRightAnimation = new Animation<>(Constants.LOOP_SPEED, opponentIdleRightFrames, Animation.PlayMode.LOOP);
+        opponentIdleLeftAnimation = new Animation<>(Constants.LOOP_SPEED, opponentIdleLeftFrames, Animation.PlayMode.LOOP);
 
         Array<TextureAtlas.AtlasRegion> opponentWalkingRightFrames = new Array<TextureAtlas.AtlasRegion>();
         Array<TextureAtlas.AtlasRegion> opponentWalkingLeftFrames = new Array<TextureAtlas.AtlasRegion>();
@@ -192,8 +190,8 @@ public class WorldRenderer {
             tmp.flip(true, false);
             opponentWalkingLeftFrames.add(tmp);
         }
-        opponentWalkRightAnimation = new Animation(Constants.LOOP_SPEED, opponentWalkingRightFrames, Animation.PlayMode.LOOP);
-        opponentWalkLeftAnimation = new Animation(Constants.LOOP_SPEED, opponentWalkingLeftFrames, Animation.PlayMode.LOOP);
+        opponentWalkRightAnimation = new Animation<>(Constants.LOOP_SPEED, opponentWalkingRightFrames, Animation.PlayMode.LOOP);
+        opponentWalkLeftAnimation = new Animation<>(Constants.LOOP_SPEED, opponentWalkingLeftFrames, Animation.PlayMode.LOOP);
 
         opponentJumpRight = opponentsAtlas.findRegion("jump1");
         opponentJumpLeft = new TextureRegion(opponentJumpRight);

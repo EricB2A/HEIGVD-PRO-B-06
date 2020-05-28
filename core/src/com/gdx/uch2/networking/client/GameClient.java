@@ -115,8 +115,8 @@ public class GameClient {
             MessageSender.getInstance().setPlayerID(ctx.getId());
             OnlinePlayerManager.getInstance().init(ctx.getId(), nickname);
             World.currentWorld = new World(ctx.in.readInt());
-            int nbPlayers = ctx.in.readInt();
             OnlinePlayerManager.getInstance().setNbRound(ctx.in.readInt());
+            int nbPlayers = ctx.in.readInt();
 
             for (int i = 0; i < nbPlayers; ++i) {
                 OnlinePlayerManager.getInstance().initPlayer(ctx.in.readInt(), ctx.in.readString());

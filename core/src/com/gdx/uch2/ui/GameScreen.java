@@ -17,8 +17,8 @@ import com.gdx.uch2.entities.OnlinePlayerManager;
 import com.gdx.uch2.entities.Player;
 import com.gdx.uch2.entities.World;
 import com.gdx.uch2.networking.client.ErrorHandler;
+import com.gdx.uch2.networking.client.GameClient;
 import com.gdx.uch2.networking.client.GameClientHandler;
-import com.gdx.uch2.networking.server.GameServer;
 import com.gdx.uch2.view.WorldRenderer;
 
 /**
@@ -126,7 +126,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor {
             controller.giveUp();
         if(keycode == Keys.ESCAPE) {
             World.currentWorld.stopMusic();
-            GameServer.closeConnection();
+            GameClient.closeConnection();
             ScreenManager.getInstance().showScreen(new MainMenu());
         }
 

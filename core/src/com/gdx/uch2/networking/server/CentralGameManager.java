@@ -134,9 +134,6 @@ public class CentralGameManager {
             }
         }
 
-        for(int i = 0; i < players.length; ++i){
-            System.out.printf("SRV: joureur#%d possède [%d] pts\n", i, scoring[i]);
-        }
         for (PlayerContext ctx : players) {
             if (!ctx.getSocket().isClosed()) {
                 ctx.out.writeMessage(scoring);

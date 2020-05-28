@@ -20,7 +20,6 @@ public class LevelLoader {
     private static final int    G_UP            = 0x222222;
     private static final int    G_DOWN          = 0x333333;
     private static final int    LETHAL          = 0x444444;
-    private static final int    EMPTY           = 0xffffff; // white
     private static final int    START_POS       = 0x00ff00; // green
     private static final int    FINISH_POS      = 0xff0000; // red
     private static final int    PROTECTED       = 0xff00ff; // ugly pink
