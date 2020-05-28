@@ -21,7 +21,7 @@ Ce projet est réalisé dans le cadre du cours de PRO de notre 4ème semestre au
 | Christian Zaccaria                             | christian.zaccaria@heig-vd.ch  | [zaccariach](https://github.com/zaccariach)       |
 
 ## Lancer le jeu :video_game:
-Le rendu du projet est présent dans [notre release](https://github.com/EricBroutba/HEIGVD-PRO-B-06/releases/tag/alpha). Vous y trouverez :   
+Le rendu du projet est présent dans [notre release](https://github.com/EricBroutba/HEIGVD-PRO-B-06/releases/tag/uch2_1.0.0). Vous y trouverez :   
 - Un exécutable ````jar````.
 - Le code source du projet.
 
