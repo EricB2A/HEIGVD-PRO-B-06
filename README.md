@@ -2,8 +2,8 @@
 
 Clone du jeu _Ultimate Chicken Horse_, qui est un jeu de plateforme participatif multijoueur sur un réseau local. Les 
 joueurs prennent possession d'un avatar et ont pour but de marquer des points en atteignant l'arrivée d'un niveau, face
-à des adversaires en sautant de plateforme en plateforme, évitant les pièges ainsi que les trous.
-Pour ce faire, les joueurs pourront placer des plateformes ainsi que les pièges sur le chemin de l'arrivée, ajoutant 
+à des adversaires, en sautant de plateforme en plateforme, évitant les pièges ainsi que les trous.
+Pour ce faire, les joueurs pourront placer des plateformes ainsi que des pièges sur le chemin de l'arrivée, ajoutant 
 ainsi des difficultés pour leurs adversaires mais pour eux aussi. 
 
 Ce projet est réalisé dans le cadre du cours de PRO de notre 4ème semestre au sein de la HEIG-VD.
