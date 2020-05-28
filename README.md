@@ -29,14 +29,14 @@ Le prérequis pour ce faire est d'avoir `Java 8` ou ultérieure. Si vous désire
 développement identique au notre, une marche à suivre est présent dans le document [d'instructions d'installation](https://docs.google.com/document/d/1ikblPXDn73oBKSoyUCjQ5hKjfRbOcuOi2C01uVChr6M/edit?usp=sharing).
 
 ## Documentation :books:
-- [Cahier des charges](https://docs.google.com/document/d/1o6veGK7PF89iihe4Ua9ICbhKglBB2uulHL7BfmSqSqA/edit?usp=sharing)
-- [Instructions d'installation](https://docs.google.com/document/d/1ikblPXDn73oBKSoyUCjQ5hKjfRbOcuOi2C01uVChr6M/edit?usp=sharing)
-- [Guide utilisateur](https://docs.google.com/document/d/1duJVLT0AHxDCp-L6vYW5bwruJ4xWXmxdjw-StV0JZdg/edit?usp=sharing)
-- [Organisation du code](https://docs.google.com/document/d/15am4Rlu4XpAetpwAMjD8tWpmMuXp_YkMw9NABVTBRDg/edit?usp=sharing)
-- [Protocoles réseau](https://docs.google.com/document/d/1RpUw3n3N-ZJ8vyjo1obBwTXlXc-Oxc5XPUv_W3gkgHM/edit?usp=sharing)
-- [Suivi qualité](https://docs.google.com/document/d/1IkEW8_Fq0e35-_h6I5RkjClDKuAJGpwmeCXDIneJDfE/edit?usp=sharing)
+- [Cahier des charges](https://drive.google.com/file/d/1fkPkEcMg4NUYqTbrv_MjHp9GfFDQ0Wu0/view?usp=sharing)
+- [Instructions d'installation](https://drive.google.com/file/d/1jwP1cFB3mP_FQjv2OUpRUdTT6sizfXTe/view?usp=sharing)
+- [Guide utilisateur](https://drive.google.com/file/d/1muTrtr2KprXZlRgCE5olMRmgToH00Nvn/view?usp=sharing)
+- [Organisation du repository](https://drive.google.com/file/d/1jhKsOtKTQzZ-MQDtzFt-sQYmGoVFG0QI/view?usp=sharing)
+- [Protocoles réseau](https://drive.google.com/file/d/1_Kc8BSw1uHqcW_UIoSwFVzuq3PDLUf-K/view?usp=sharing)
+- [Suivi qualité](https://drive.google.com/file/d/1H8kq8QlT07laIGlO9WU3kE2umqllJnqL/view?usp=sharing)
 - [Journal de travail](https://docs.google.com/spreadsheets/d/1O0yb_1Me8XkOtIK4Yzdofcxfe2MESFtjrfEvDnaefw8/edit?usp=sharing)
-- [Modélisation initiale](https://docs.google.com/document/d/1wnWpsQKDlJX_4ByP0mc0px0_Qe4fQX4LTtPmXnr486c/edit?usp=sharing)
+- [Modélisation initiale](https://drive.google.com/file/d/1mJFMHy4KNpJKia3FKfvuHl5T5B9dpw4W/view?usp=sharing)
 - [Javadoc](javadoc)
 
 
