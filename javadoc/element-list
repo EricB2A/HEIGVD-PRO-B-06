@@ -1,0 +1,13 @@
+com.gdx.uch2
+com.gdx.uch2.controller
+com.gdx.uch2.effects
+com.gdx.uch2.entities
+com.gdx.uch2.networking
+com.gdx.uch2.networking.client
+com.gdx.uch2.networking.messages
+com.gdx.uch2.networking.serialization
+com.gdx.uch2.networking.server
+com.gdx.uch2.ui
+com.gdx.uch2.ui.uiUtil
+com.gdx.uch2.util
+com.gdx.uch2.view
