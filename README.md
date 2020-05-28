@@ -26,7 +26,7 @@ Le rendu du projet est présent dans [notre release](https://github.com/EricBrou
 - Le code source du projet.
 
 Le prérequis pour ce faire est d'avoir `Java 8` ou ultérieure. Si vous désirez mettre en place un environnement de
-développement identique au notre, une marche à suivre est présent dans le document [d'instructions d'installations](https://docs.google.com/document/d/1lDGj_fB3kaPjQyGL-rL9du5zacyATebGS8-maAK1BFE/edit?usp=sharing).
+développement identique au notre, une marche à suivre est présent dans le document [d'instructions d'installations](https://docs.google.com/document/d/1ikblPXDn73oBKSoyUCjQ5hKjfRbOcuOi2C01uVChr6M/edit?usp=sharing).
 
 ## Documentation :books:
 - [Cahier des charges](https://docs.google.com/document/d/1o6veGK7PF89iihe4Ua9ICbhKglBB2uulHL7BfmSqSqA/edit?usp=sharing)
@@ -37,4 +37,5 @@ développement identique au notre, une marche à suivre est présent dans le doc
 - [Suivi qualité](https://docs.google.com/document/d/1IkEW8_Fq0e35-_h6I5RkjClDKuAJGpwmeCXDIneJDfE/edit?usp=sharing)
 - [Journal de travail](https://docs.google.com/spreadsheets/d/1O0yb_1Me8XkOtIK4Yzdofcxfe2MESFtjrfEvDnaefw8/edit?usp=sharing)
 - [Modélisation initiale](https://docs.google.com/document/d/1wnWpsQKDlJX_4ByP0mc0px0_Qe4fQX4LTtPmXnr486c/edit?usp=sharing)
+- [Javadoc](javadoc)
 
